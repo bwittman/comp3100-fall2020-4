@@ -6,8 +6,6 @@ public class GameState {
 	private Tile [][] board;
 	
 	
-	
-	
 	public GameState() {
 		board = new Tile[10][10];
 		
