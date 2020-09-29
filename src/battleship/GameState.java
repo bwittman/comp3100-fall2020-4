@@ -11,12 +11,12 @@ public class GameState {
 		
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 10; j++) {
-				board[i][j] = Tile.EMPTY;
+				board[i][j] = Tile.WATER;
 			}
 		}		
 	}
 	
-	public Tile tileAt (int x, int y) {
+	public Tile getTile (int x, int y) {
 		return board[x][y];
 	}
 	
@@ -24,9 +24,5 @@ public class GameState {
 		board[x][y] = tile;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

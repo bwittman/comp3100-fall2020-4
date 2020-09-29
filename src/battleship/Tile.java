@@ -4,5 +4,5 @@ public enum Tile {
 	SHIP,
 	HIT,
 	MISS,
-	EMPTY
+	WATER
 }
