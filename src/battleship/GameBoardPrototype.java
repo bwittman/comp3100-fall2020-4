@@ -41,15 +41,14 @@ public class GameBoardPrototype extends JFrame {
 				Tile current = gameState.getTile(i,j);
 				switch(current){
 					case WATER:
-
+						buttonArray[i][j].setIcon(new ImageIcon("water.png"));
 						break;
 					case HIT:
+						buttonArray[i][j].setIcon(new ImageIcon("hit.png"));
 						break;
 					case MISS:
+						buttonArray[i][j].setIcon(new ImageIcon("miss.png"));
 						break;
-
-
-
 
 				}
 			}
