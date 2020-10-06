@@ -4,13 +4,12 @@ package battleship;
 public class GameState {
 
 	private Tile [][] board;
-	
-	
+
 	public GameState() {
 		board = new Tile[10][10];
 		
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 10; j++) {
+		for(int i = 0; i < GameBoardPrototype.ROWS; i++) {
+			for(int j = 0; j < GameBoardPrototype.COLUMNS; j++) {
 				board[i][j] = Tile.WATER;
 			}
 		}		
@@ -24,5 +23,11 @@ public class GameState {
 		board[x][y] = tile;
 	}
 
-
+	public void reset(){
+		for(int i=0; i<GameBoardPrototype.ROWS; i++){
+			for (int j=0; j<GameBoardPrototype.COLUMNS; j++){
+				board[i][j] = Tile.WATER;
+			}
+		}
+	}
 }
