@@ -8,8 +8,8 @@ public class GameState {
 	public GameState() {
 		board = new Tile[10][10];
 		
-		for(int i = 0; i < GameBoardPrototype.ROWS; i++) {
-			for(int j = 0; j < GameBoardPrototype.COLUMNS; j++) {
+		for(int i = 0; i < BoardPrototype.ROWS; i++) {
+			for(int j = 0; j < BoardPrototype.COLUMNS; j++) {
 				board[i][j] = Tile.WATER;
 			}
 		}		
@@ -24,8 +24,8 @@ public class GameState {
 	}
 
 	public void reset(){
-		for(int i=0; i<GameBoardPrototype.ROWS; i++){
-			for (int j=0; j<GameBoardPrototype.COLUMNS; j++){
+		for(int i = 0; i< BoardPrototype.ROWS; i++){
+			for (int j = 0; j< BoardPrototype.COLUMNS; j++){
 				board[i][j] = Tile.WATER;
 			}
 		}
