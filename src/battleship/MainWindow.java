@@ -4,10 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JPanel {
+    private ImageIcon background = new ImageIcon("src\\pictures\\mainWindow.png");
+
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        g.drawImage(background.getImage(), 0, 0, null);
+    }
 
     public MainWindow() {
-        JLabel background = new JLabel(new ImageIcon("mainWindow.png"));
+
+
         JPanel panel = new JPanel(new GridLayout(1,3));
+
+        setLayout(new BorderLayout());
 
         JButton rulesButton = new JButton("Rules");
         JButton networkButton = new JButton("Networking");
@@ -17,7 +28,6 @@ public class MainWindow extends JPanel {
         panel.add(rulesButton);
         panel.add(networkButton);
 
-        this.add(background, BorderLayout.CENTER);
         this.add(panel, BorderLayout.SOUTH);
     }
 }
