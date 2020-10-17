@@ -8,6 +8,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+
+/**
+ * MainWindow Class Displays the Main Menu and handles interactions with the user until they leave the main menu.
+ * 
+ * @author poiu2
+ *
+ */
 public class MainWindow extends JPanel {
     private ImageIcon background = new ImageIcon("src\\pictures\\mainWindow.png");
 
@@ -18,8 +25,10 @@ public class MainWindow extends JPanel {
         g.drawImage(background.getImage(), 0, 0, null);
     }
 
+    /**
+     * Constructor creates a JPanel and constructs the Main Menu on it.
+     */
     public MainWindow() {
-
 
         JPanel panel = new JPanel(new GridLayout(1,3));
 
