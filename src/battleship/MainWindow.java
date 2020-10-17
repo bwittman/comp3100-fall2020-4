@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  */
 public class MainWindow extends JPanel {
-    private ImageIcon background = new ImageIcon("src\\pictures\\mainWindow.png");
+    private ImageIcon background = new ImageIcon("src\\pictures\\shipMainWindow.png");
 
     @Override
     protected void paintComponent(Graphics g) {
