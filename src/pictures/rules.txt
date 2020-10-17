@@ -1,0 +1,65 @@
+How Do You Play It Rotating Header Image
+Search Our Site Here
+ 
+
+Battleship Board Game Rules: How Do You Play Battleship?
+
+Battleship Introduction:
+
+“You sunk my battleship.” Chances are, you’ve said those words at least once in your lifetime. 
+If you are ready to teach the next generation of armchair naval combatants the rules of the classic Battleship board game, you’ll find the instructions below.
+
+What You Need:
+Some red pegs (to track the hits)
+Some white pegs (to track the misses)
+A naval fleet of five ships (to wreak havoc on the enemy)
+An ocean—or, perhaps more accurately, a partitioned game board representing an ocean
+
+
+Your Fleet:
+
+Destroyer: The two-holed ship
+
+Submarine: Three-holed vessel
+
+Cruiser: Another three-holed vessel
+
+Battleship: Four-holed vessel
+
+Carrier: Five-holed vessel, the largest in your fleet
+
+
+Preparing for Battle at Sea:
+
+Place the game board on a table or some other sturdy surface and sit across from your opponent. 
+The bottom half of the folding board is your ocean grid, while the raised half is the target grid. 
+Set your ships up strategically (and secretly) on your ocean grid.
+
+Ships can be placed in a horizontal or vertical position anywhere within the grid.
+No part of the ship can be out of the grid, nor can they overlap in any position with another ship. 
+They can be next to each other, as long as their grid positions do not overlap.
+You may not place ships diagonally within the grid.
+Ship placement is permanent and cannot be changed once the game has started.
+
+Gameplay:
+
+Choose a player who will go first. That player begins the game by calling out a letter and number position from the grid (i.e. “A9”), and the other player responds by determining if the called shot was a “hit” or a “miss.”
+Hits occur when the called shot hits any part of an enemy vessel. A miss occurs when the shot misses all enemy vessels.
+
+If a vessel was hit, the defending player must also name the vessel that was hit –“Hit. Submarine.”
+Track your hits and misses on your target grid, using red pegs for hits and white pegs for misses.
+If your vessel is hit, track the hit by placing a red peg in the hole corresponding to the shot.
+A ship has been sunk when all of it’s holes have been filled with red hit pegs. The owener of the ship must announce when a ship has been sunk (“You sunk my Battleship!”).
+After a hit or miss has been determined, play passes to the other player who then calls their shot in the same manner.
+
+
+Winning Battleship:
+
+The first player to sink the entire enemy fleet wins the game.
+
+Salvo Variant:
+Once you’ve mastered the standard rules, try the Salvo variant. For Salvo, all rules are the same as the regular game with the exception of shot-calling. 
+Instead of calling only one shot, call five shots at a time, marking them on your target board with white pegs (swap out white pegs for red on your hits). 
+Your opponent responds by stating your hits and misses, including naming the type of vessels which were struck.
+
+Whenever one of your ships is sunk, you lose a shot for each ship that has been sunk, so the game gets progressively more difficult as your fleet shrinks in size.
