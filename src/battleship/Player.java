@@ -75,10 +75,13 @@ public abstract class Player {
     public static void main(String[]args){
         JFrame frame = new JFrame("Battleship");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(600,600);
+        frame.setSize(625,625);
+        frame.setMinimumSize(new Dimension(625,625));
+        frame.setResizable(false);
 
-        BoardPrototype board = new BoardPrototype(new GameState());
-
+        //BoardPrototype board = new BoardPrototype(new GameState());
+        MainWindow board = new MainWindow();
+        
         frame.add(board);
         frame.pack();
         frame.setLocationRelativeTo(null);
