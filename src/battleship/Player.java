@@ -2,22 +2,30 @@ package battleship;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
 
+    protected enum Tile {
+        SHIP,
+        HIT,
+        MISS,
+        WATER
+    }
+
     private String playerName;
-    private List<Ship> ships;
+    private List<Ship> ships = new ArrayList<>();
     private GameState myGameState;
     private GameState enemyGameState;
     private boolean isMyTurn;
 
     protected void createShips(){
-        Ship destroyer = new Ship("Destroyer", 2);
-        Ship submarine = new Ship("Submarine", 3);
-        Ship cruiser = new Ship("Cruiser", 3);
-        Ship battleship = new Ship("Battleship", 4);
-        Ship carrier = new Ship("Carrier", 5);
+        Ship destroyer = new Ship(Ship.ShipType.DESTROYER);
+        Ship submarine = new Ship(Ship.ShipType.SUBMARINE);
+        Ship cruiser = new Ship(Ship.ShipType.CRUISER);
+        Ship battleship = new Ship(Ship.ShipType.BATTLESHIP);
+        Ship carrier = new Ship(Ship.ShipType.CARRIER);
         ships.add(destroyer);
         ships.add(submarine);
         ships.add(cruiser);
