@@ -25,8 +25,7 @@ public class Networking {
 	                InetAddress addr = addresses.nextElement();
 	                ip = addr.getHostAddress();
 	                System.out.println(iface.getDisplayName() + " " + ip);
-	                String result = iface.getDisplayName() + " " + ip; //TODO: Should we return just IP or whole string?
-	                return result;
+	                return ip;
 	            }
 	        }
 	    } catch (SocketException e) {
