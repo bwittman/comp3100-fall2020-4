@@ -1,20 +1,21 @@
-package battleship;
+package battleship.view;
 
 import java.awt.*;
 
 import javax.swing.*;
 
-import battleship.Player.Tile;
+import battleship.controller.Player;
+import battleship.model.GameState;
 
 public class BoardPrototype extends JPanel {
 	
 	protected static final int ROWS = 10;
 	protected static final int COLUMNS = 10;
-	private static final int BUTTON_SIDE = 50;
+	private static final int BUTTON_SIDE = 60;
 	private static final Color WATER_BLUE = new Color(16,129,160);
-	private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("src\\pictures\\blueX.png").getImage()
+	private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE,java.awt.Image.SCALE_SMOOTH))));
-	private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("src\\pictures\\redX.png").getImage()
+	private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
 			.getScaledInstance(BUTTON_SIDE, BUTTON_SIDE,java.awt.Image.SCALE_SMOOTH))));
 
 	private GameState gameState;
@@ -62,9 +63,9 @@ public class BoardPrototype extends JPanel {
 						for (int col = 0; col < COLUMNS; col++) {
 							if (buttonArray[row][col] == e.getSource()){
 								if(checkForHit()){
-									gameState.setTile(Tile.HIT, row, col);
+									gameState.setTile(Player.Tile.HIT, row, col);
 								}else{
-									gameState.setTile(Tile.MISS, row, col);
+									gameState.setTile(Player.Tile.MISS, row, col);
 								}
 							}
 						}
@@ -82,13 +83,13 @@ public class BoardPrototype extends JPanel {
 	}
 
 	private boolean checkForHit() {
-		return false;
+		return true;
 	}
 
 	public void updateBoard() {
 		for (int i =0; i<ROWS; i++ ){
 			for(int j=0;j < COLUMNS; j++){
-				Tile current = gameState.getTile(i,j);
+				Player.Tile current = gameState.getTile(i,j);
 				switch(current){
 					case WATER:
 						buttonArray[i][j].setIcon(null);
@@ -119,7 +120,7 @@ public class BoardPrototype extends JPanel {
 	public void enableBoard(){
 		for (int i=0; i<ROWS; i++){
 			for (int j=0; j<COLUMNS; j++){
-				if (!(gameState.getTile(i,j) == Tile.HIT || gameState.getTile(i,j) == Tile.MISS)){
+				if (!(gameState.getTile(i,j) == Player.Tile.HIT || gameState.getTile(i,j) == Player.Tile.MISS)){
 					buttonArray[i][j].setEnabled(true);
 				}
 			}

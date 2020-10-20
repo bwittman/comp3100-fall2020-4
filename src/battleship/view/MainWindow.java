@@ -1,4 +1,4 @@
-package battleship;
+package battleship.view;
 
 import javax.swing.*;
 
@@ -8,7 +8,7 @@ import java.awt.*;
 
 
 /**
- * MainWindow Class Displays the Main Menu and handles interactions with the user until they leave the main menu.
+ * Displays the Main Menu and handles interactions with the user until they leave the main menu.
  * 
  * @author poiu2
  *
@@ -78,8 +78,6 @@ public class MainWindow extends JFrame {
     public void setRulesButton(JButton newRulesButton) {
     	this.rulesButton = newRulesButton;
     }
-    
-
 }
 
 class PanelWithBackgroundImage extends JPanel {

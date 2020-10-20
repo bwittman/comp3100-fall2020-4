@@ -1,4 +1,6 @@
-package battleship;
+package battleship.view;
+
+import battleship.controller.Player;
 
 import javax.swing.*;
 

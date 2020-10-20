@@ -1,20 +1,23 @@
-package battleship;
+package battleship.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import battleship.Player.Tile;
+
+import battleship.model.GameState;
+import battleship.controller.Player;
+import battleship.controller.Player.Tile;
 
 public class Board extends JPanel {
 
-    protected static final int ROWS = 10;
-    protected static final int COLUMNS = 10;
+    private static final int ROWS = 10;
+    private static final int COLUMNS = 10;
     private static final int BUTTON_SIDE = 50;
     private static final Color WATER_BLUE = new Color(16,129,160);
-    private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("src\\pictures\\blueX.png").getImage()
-            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE,java.awt.Image.SCALE_SMOOTH))));
-    private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("src\\pictures\\redX.png").getImage()
-            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE,java.awt.Image.SCALE_SMOOTH))));
+    private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
+            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
+    private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
+            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
 
     private GameState gameState;
     private JButton[][] buttonArray = new JButton[ROWS][COLUMNS];

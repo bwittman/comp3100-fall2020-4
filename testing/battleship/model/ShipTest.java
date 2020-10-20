@@ -1,6 +1,6 @@
-package testing;
+package battleship.model;
 
-import battleship.Ship;
+import battleship.model.Ship;
 import org.junit.jupiter.api.*;
 import java.awt.*;
 

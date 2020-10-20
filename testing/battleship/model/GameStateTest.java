@@ -1,7 +1,7 @@
-package testing;
+package battleship.model;
 
-import battleship.GameState;
-import battleship.Player.Tile;
+import battleship.model.GameState;
+import battleship.controller.Player.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ class GameStateTest {
     @BeforeEach
     void setup(){
         gameState = new GameState();
-
     }
 
     @Test

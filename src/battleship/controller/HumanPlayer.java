@@ -1,8 +1,8 @@
-package battleship;
+package battleship.controller;
 
-public class ComputerPlayer extends Player {
+public class HumanPlayer extends Player {
 
-    public ComputerPlayer(){
+    public HumanPlayer(){
         createShips();
     }
 
