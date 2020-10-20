@@ -7,8 +7,8 @@ public class GameState {
 	public GameState() {
 		board = new Player.Tile[10][10];
 		
-		for(int i = 0; i < BoardPrototype.ROWS; i++) {
-			for(int j = 0; j < BoardPrototype.COLUMNS; j++) {
+		for(int i = 0; i < Board.ROWS; i++) {
+			for(int j = 0; j < Board.COLUMNS; j++) {
 				board[i][j] = Player.Tile.WATER;
 			}
 		}		
@@ -23,8 +23,8 @@ public class GameState {
 	}
 
 	public void reset(){
-		for(int i = 0; i< BoardPrototype.ROWS; i++){
-			for (int j = 0; j< BoardPrototype.COLUMNS; j++){
+		for(int i = 0; i< Board.ROWS; i++){
+			for (int j = 0; j< Board.COLUMNS; j++){
 				board[i][j] = Player.Tile.WATER;
 			}
 		}

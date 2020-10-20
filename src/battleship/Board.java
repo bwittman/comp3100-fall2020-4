@@ -3,6 +3,7 @@ package battleship;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import battleship.Player.Tile;
 
 public class Board extends JPanel {
 
@@ -46,9 +47,9 @@ public class Board extends JPanel {
             for (int col = 0; col < COLUMNS; col++) {
                 if (buttonArray[row][col] == e.getSource()){
                     if(checkHitMiss(new Point(row,col))){
-                        gameState.setTile(Player.Tile.HIT, row, col);
+                        gameState.setTile(Tile.HIT, row, col);
                     }else{
-                        gameState.setTile(Player.Tile.MISS, row, col);
+                        gameState.setTile(Tile.MISS, row, col);
                     }
                 }
             }
@@ -64,7 +65,7 @@ public class Board extends JPanel {
     public void updateBoard() {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
-                Player.Tile current = gameState.getTile(i,j);
+                Tile current = gameState.getTile(i,j);
                 switch(current){
                     case WATER:
                         buttonArray[i][j].setIcon(null);
@@ -96,7 +97,7 @@ public class Board extends JPanel {
     public void enableBoard(){
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
-                if (!(gameState.getTile(i,j) == Player.Tile.HIT || gameState.getTile(i,j) == Player.Tile.MISS)){
+                if (!(gameState.getTile(i,j) == Tile.HIT || gameState.getTile(i,j) == Tile.MISS)){
                     buttonArray[i][j].setEnabled(true);
                 }
             }
