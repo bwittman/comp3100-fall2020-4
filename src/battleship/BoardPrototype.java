@@ -4,6 +4,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import battleship.Player.Tile;
+
 public class BoardPrototype extends JPanel {
 	
 	protected static final int ROWS = 10;

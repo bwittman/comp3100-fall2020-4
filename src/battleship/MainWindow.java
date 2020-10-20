@@ -5,8 +5,6 @@ import javax.swing.*;
 
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -15,65 +13,90 @@ import java.io.IOException;
  * @author poiu2
  *
  */
-public class MainWindow extends JPanel {
-    private ImageIcon background = new ImageIcon("src\\pictures\\shipMainWindow.png");
+public class MainWindow extends JFrame {
+    private ImageIcon background;
+    private JButton rulesButton;
+    private JButton networkButton;
+    private JButton onePlayerButton;
 
-    @Override
-    protected void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-        g.drawImage(background.getImage(), 0, 0, null);
-    }
-
+    
     /**
      * Constructor creates a JPanel and constructs the Main Menu on it.
      */
     public MainWindow() {
-
-        JPanel panel = new JPanel(new GridLayout(1,3));
-
-        setLayout(new BorderLayout());
-
-        JButton rulesButton = new JButton("Rules");
-        JButton networkButton = new JButton("Networking");
-        JButton onePlayerButton = new JButton("Play Against Computer");
+    	background = new ImageIcon("src\\pictures\\shipMainWindow.png");
+        JPanel panel = new PanelWithBackgroundImage(background.getImage());
+        JPanel outerPanel = new JPanel(new BorderLayout());
         
-        networkButton.addActionListener(e->{
-        	Object[] options = {"Host", "Join"};
-        	int response = JOptionPane.showOptionDialog(null, "Will you Host or Join?", "Host or Join?", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
-        	System.out.println("Player responded: " + response);
-        	if(response == 0) { //User Selected Host
-        		System.out.println("User Selected Host");
-        		JPanel hostPanel = new JPanel(new GridLayout(4,1));
-        		setLayout(new BorderLayout());
-        		String myAddress = Networking.getLocalIP();
-        		JLabel localIP = new JLabel("Your IP Address is: " + myAddress);
-        		hostPanel.add(localIP);
-        		this.add(hostPanel, BorderLayout.CENTER);	 //TODO: asked dr. wittman about this and how to draw over the current JPanel
-        		
-        	}else if(response == 1) {				//User Selected Join 
-        		System.out.println("User Selected Join");
-        	}
-        });
-        
-        rulesButton.addActionListener(e->{
-        	Desktop myDesktop = Desktop.getDesktop();
-        	if(Desktop.isDesktopSupported()) {
-        		try {
-                	File rules = new File("src\\pictures\\rules.txt");
-                	myDesktop.open(rules);
-        		}catch(IOException ex){
-        			//TODO: warning window No application registered for opening .txt files
-        			System.err.println("No application registered for opening .txt files");
-        		}
-        	}
-        });
+        panel.setLayout(new GridLayout(1,3));
+
+        rulesButton = new JButton("Rules");
+        networkButton = new JButton("Networking");
+        onePlayerButton = new JButton("Play Against Computer");
         
         panel.add(onePlayerButton);
         panel.add(rulesButton);
         panel.add(networkButton);
         
+        outerPanel.add(panel, BorderLayout.SOUTH);
         
-        this.add(panel, BorderLayout.SOUTH);
+       
+        setTitle("Battleship: Main Menu");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(625,625);
+        setMinimumSize(new Dimension(625,625));
+        setResizable(false);
+
+
+        
+        add(outerPanel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    
+    public JButton getNetworkButton() {
+    	return networkButton;
+    }
+    
+    public JButton getOnePlayerButton() {
+    	return onePlayerButton;
+    }
+    
+    public JButton getRulesButton() {
+    	return rulesButton;
+    }
+    
+    public void setNetworkButton(JButton newNetworkButton) {
+    	this.networkButton = newNetworkButton;
+    }
+    
+    public void setGetOnePlayerButton(JButton newOnePlayerButton) {
+    	this.onePlayerButton = newOnePlayerButton;
+    }
+    
+    public void setRulesButton(JButton newRulesButton) {
+    	this.rulesButton = newRulesButton;
+    }
+    
+
+}
+
+class PanelWithBackgroundImage extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Image background;
+	
+	public PanelWithBackgroundImage (Image bg) {
+		super();
+		this.background = bg;
+	}
+	
+	@Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(background, 0, 0, null);
     }
 }
