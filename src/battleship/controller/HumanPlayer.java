@@ -4,6 +4,8 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(){
         createShips();
+        //updateBoard();
+        setEnemyActionListeners();
     }
 
     @Override

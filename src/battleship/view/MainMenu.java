@@ -13,7 +13,7 @@ import java.awt.*;
  * @author poiu2
  *
  */
-public class MainWindow extends JFrame {
+public class MainMenu extends JFrame {
     private ImageIcon background;
     private JButton rulesButton;
     private JButton networkButton;
@@ -23,7 +23,7 @@ public class MainWindow extends JFrame {
     /**
      * Constructor creates a JPanel and constructs the Main Menu on it.
      */
-    public MainWindow() {
+    public MainMenu() {
     	background = new ImageIcon("src\\pictures\\shipMainWindow.png");
         JPanel panel = new PanelWithBackgroundImage(background.getImage());
         JPanel outerPanel = new JPanel(new BorderLayout());

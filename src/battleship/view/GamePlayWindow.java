@@ -6,9 +6,19 @@ import javax.swing.*;
 
 public class GamePlayWindow extends JFrame {
 
-    Player player;
+    Board userBoard;
+    Board enemyBoard;
 
     public GamePlayWindow(){
-        //initialize two Boards each with one GameState and the player
+
     }
+
+    public Board getUserBoard() {
+        return userBoard;
+    }
+
+    public Board getEnemyBoard() {
+        return enemyBoard;
+    }
+
 }

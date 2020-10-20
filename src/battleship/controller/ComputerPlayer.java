@@ -4,6 +4,8 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(){
         createShips();
+        setEnemyActionListeners();
+        //updateBoard();
     }
 
     @Override
