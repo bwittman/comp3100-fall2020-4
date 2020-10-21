@@ -24,21 +24,21 @@ public class MainMenu extends JFrame {
      * Constructor creates a JPanel and constructs the Main Menu on it.
      */
     public MainMenu() {
-    	background = new ImageIcon("src\\pictures\\shipMainWindow.png");
-        JPanel panel = new PanelWithBackgroundImage(background.getImage());
+    	background = new ImageIcon("resources/shipMainWindow.png");
+        JPanel backgroundPanel = new PanelWithBackgroundImage(background.getImage());
+        JPanel buttonPanel = new JPanel(new GridLayout(1,3));
         JPanel outerPanel = new JPanel(new BorderLayout());
-        
-        panel.setLayout(new GridLayout(1,3));
 
         rulesButton = new JButton("Rules");
         networkButton = new JButton("Networking");
         onePlayerButton = new JButton("Play Against Computer");
         
-        panel.add(onePlayerButton);
-        panel.add(rulesButton);
-        panel.add(networkButton);
-        
-        outerPanel.add(panel, BorderLayout.SOUTH);
+        buttonPanel.add(onePlayerButton);
+        buttonPanel.add(rulesButton);
+        buttonPanel.add(networkButton);
+
+        outerPanel.add(backgroundPanel, BorderLayout.CENTER);
+        outerPanel.add(buttonPanel, BorderLayout.SOUTH);
         
        
         setTitle("Battleship: Main Menu");
@@ -48,7 +48,6 @@ public class MainMenu extends JFrame {
         setResizable(false);
 
 
-        
         add(outerPanel);
         pack();
         setLocationRelativeTo(null);
