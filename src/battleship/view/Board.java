@@ -2,11 +2,8 @@ package battleship.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
-import battleship.model.GameState;
 import battleship.controller.Player;
-import battleship.controller.Player.Tile;
 
 public class Board extends JPanel {
 
@@ -14,12 +11,10 @@ public class Board extends JPanel {
     private static final int COLUMNS = 10;
     private static final int BUTTON_SIDE = 50;
 
-    private GameState gameState;
     private JButton[][] buttonArray = new JButton[ROWS][COLUMNS];
     private Player player;
 
-    public Board(GameState gameState) {
-        this.gameState = gameState;
+    public Board() {
         this.setLayout(new GridLayout(ROWS,COLUMNS));
         setUpButtons();
     }

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Player {
     private static final int ROWS = 10;
@@ -48,7 +49,19 @@ public abstract class Player {
         ships.add(carrier);
     }
 
-    protected void setEnemyActionListeners(){
+    protected void initGameStates(){
+        myGameState = new GameState();
+        enemyGameState = new GameState();
+    }
+
+    protected void setUpView(){
+        this.viewManager = new ViewManager();
+        setEnemyActionListeners();
+        //setMainMenuActionListeners();
+        //setRulesWindowActionListener();
+    }
+
+    private void setEnemyActionListeners(){
         Board board = viewManager.getGameScreen().getEnemyBoard();
         for(int i = 0; i < ROWS; i++){
             for(int j = 0; j < COLUMNS; j++){
@@ -67,12 +80,97 @@ public abstract class Player {
 
     }
 
-    public void randomShipPlacement(){
+    private void addShipToGameState(Ship ship) throws ShipPlacementException {
+        if (ship.getLength() == 2){
+            myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+            myGameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
+        }else if(ship.getStart().x - ship.getEnd().x == 0){ //then it is vertical
+            if (ship.getStart().y < ship.getEnd().y){
+                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                for (int i = 0; i < ship.getLength()-1; i++){
+                    myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+1);
+                }
+            }else if (ship.getStart().y > ship.getEnd().y){
+                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                for (int i = 0; i < ship.getLength()-1; i++){
+                    myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-1);
+                }
+            }else {
+                throw new ShipPlacementException("Start and End were the same position");
+            }
+        }else{//then it is horizontal
+            if (ship.getStart().x < ship.getEnd().x){
+                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                for (int i = 0; i < ship.getLength()-1; i++){
+                    myGameState.setTile(Tile.SHIP, ship.getStart().x+1, ship.getStart().y);
+                }
+            }else if (ship.getStart().x > ship.getEnd().x){
+                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                for (int i = 0; i < ship.getLength()-1; i++){
+                    myGameState.setTile(Tile.SHIP, ship.getStart().x-1, ship.getStart().y);
+                }
+            }else {
+                throw new ShipPlacementException("Start and End were the same position");
+            }
+        }
+    }
 
+    public void randomShipPlacement() throws ShipPlacementException {
+        Random random = new Random();
+        for (Ship ship: ships){
+            //keep going until we have a legal starting point and at least one legal ending point
+            List<Point> legalEndPoints = new ArrayList<>();
+            while(legalEndPoints.size() == 0) {
+                Point start = new Point();
+                do {
+                    start.x = random.nextInt(9);
+                    start.y = random.nextInt(9);
+                } while (!checkPlaceLegal(start));
+
+                ship.setStart(start);
+
+                legalEndPoints = findAllLegalEndPoints(ship);
+            }
+
+            Point endPoint = legalEndPoints.get(random.nextInt(legalEndPoints.size()));
+            ship.setEnd(endPoint);
+            addShipToGameState(ship);
+        }
+    }
+
+    private List<Point> findAllLegalEndPoints(Ship ship){
+        List<Point> endPoints = new ArrayList<>();
+        Point start = ship.getStart();
+        int length = ship.getLength();
+
+        Point down = new Point(start.x, start.y + length - 1);
+        if (checkPlaceLegal(down)){
+            endPoints.add(down);
+        }
+
+        Point up = new Point (start.x, start.y - (length - 1));
+        if(checkPlaceLegal(up)){
+            endPoints.add(up);
+        }
+
+        Point left = new Point(start.x - (length -1), start.y);
+        if(checkPlaceLegal(left)){
+            endPoints.add(left);
+        }
+
+        Point right = new Point(start.x + length - 1, start.y);
+        if (checkPlaceLegal(right)){
+            endPoints.add(right);
+        }
+        return endPoints;
     }
 
     public boolean checkPlaceLegal(Point place){
-        return false;
+        if(place.x < 0 || place.x >= ROWS || place.y < 0 || place.y >= COLUMNS){
+            return false;
+        }else {
+            return myGameState.getTile(place.x, place.y) != Tile.SHIP;
+        }
     }
 
     public void resetStoredShips(){
@@ -101,7 +199,7 @@ public abstract class Player {
         return true;
     }
 
-    public abstract void placeShips();
+    public abstract void placeShips() throws ShipPlacementException;
     public abstract void guess();
     public abstract void sendMessage();
     public abstract void receiveMessage();
@@ -158,15 +256,18 @@ public abstract class Player {
                 if (currentButton == e.getSource()){
                     if(checkHitMiss(new Point(row,col))){
                         enemyGameState.setTile(Tile.HIT, row, col);
-                        currentButton.setEnabled(false);
                     }else{
                         enemyGameState.setTile(Tile.MISS, row, col);
-                        currentButton.setEnabled(false);
                     }
+                    currentButton.setEnabled(false);
                 }
             }
         }
         updateBoard(enemyGameState, board);
+    }
+
+    public GameState getMyGameState(){
+        return myGameState;
     }
 
     public static void main(String[]args){
@@ -189,5 +290,4 @@ public abstract class Player {
         RulesWindow rules = new RulesWindow();
 
     }
-
 }

@@ -4,12 +4,13 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(){
         createShips();
+        initGameStates();
+        setUpView();
         //updateBoard();
-        setEnemyActionListeners();
     }
 
     @Override
-    public void placeShips() {
+    public void placeShips() throws ShipPlacementException{
 
     }
 

@@ -1,7 +1,5 @@
 package battleship.view;
 
-import battleship.controller.Player;
-
 import javax.swing.*;
 
 public class GamePlayWindow extends JFrame {
@@ -10,7 +8,8 @@ public class GamePlayWindow extends JFrame {
     Board enemyBoard;
 
     public GamePlayWindow(){
-
+        userBoard = new Board();
+        enemyBoard = new Board();
     }
 
     public Board getUserBoard() {

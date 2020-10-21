@@ -4,12 +4,13 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(){
         createShips();
-        setEnemyActionListeners();
+        initGameStates();
+        setUpView();
         //updateBoard();
     }
 
     @Override
-    public void placeShips() {
+    public void placeShips() throws ShipPlacementException{
 
     }
 
