@@ -32,7 +32,7 @@ public class MainMenu extends JFrame {
         rulesButton = new JButton("Rules");
         networkButton = new JButton("Networking");
         onePlayerButton = new JButton("Play Against Computer");
-        
+
         buttonPanel.add(onePlayerButton);
         buttonPanel.add(rulesButton);
         buttonPanel.add(networkButton);
@@ -87,7 +87,6 @@ class PanelWithBackgroundImage extends JPanel {
 	Image background;
 	
 	public PanelWithBackgroundImage (Image bg) {
-		super();
 		this.background = bg;
 	}
 	

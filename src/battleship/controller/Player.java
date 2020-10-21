@@ -2,9 +2,7 @@ package battleship.controller;
 
 import battleship.model.GameState;
 import battleship.model.Ship;
-import battleship.view.Board;
-import battleship.view.BoardPrototype;
-import battleship.view.ViewManager;
+import battleship.view.*;
 import battleship.model.Ship.ShipType;
 
 import javax.swing.*;
@@ -57,6 +55,16 @@ public abstract class Player {
                 board.getButton(i, j).addActionListener(e -> onEnemyButtonClicked(e, board));
             }
         }
+    }
+
+    protected void setMainMenuActionListeners(){
+
+
+    }
+
+    protected void setRulesWindowActionListener(){
+
+
     }
 
     public void randomShipPlacement(){
@@ -162,6 +170,7 @@ public abstract class Player {
     }
 
     public static void main(String[]args){
+        /*
         JFrame frame = new JFrame("Battleship");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(625,625);
@@ -174,6 +183,10 @@ public abstract class Player {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        */
+
+        //MainMenu menu = new MainMenu();
+        RulesWindow rules = new RulesWindow();
 
     }
 
