@@ -1,6 +1,6 @@
 package battleship.view;
 
-import javax.swing.*;
+import  javax.swing.*;
 
 
 
