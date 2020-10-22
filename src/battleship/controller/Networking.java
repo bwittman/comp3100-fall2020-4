@@ -21,12 +21,10 @@ public class Networking {
 				}
 
 	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
-	            
                 InetAddress addr = addresses.nextElement();
                 ip = addr.getHostAddress();
                 System.out.println(iface.getDisplayName() + " " + ip);
                 ipAddress = ip;
-	            
 	        }
 	    } catch (SocketException e) {
 	        ipAddress = "0.0.0.0";
@@ -34,11 +32,8 @@ public class Networking {
 	}
 	
 	public String getIPAddress() {
+		//TODO: Needs test case to check IP Address
 		return ipAddress;
 	}
 	
-	 public static void main(String[]args){
-	       Networking test = new Networking();
-	       System.out.println(test.getIPAddress());
-	    }
 }
