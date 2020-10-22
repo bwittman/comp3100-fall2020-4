@@ -21,6 +21,9 @@ public abstract class Player {
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
     private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
+    private static final Icon SHIP_ICON = new ImageIcon(((new ImageIcon("resources/shipTile.png").getImage()
+            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
+
 
     public enum Tile {
         SHIP,
@@ -221,6 +224,10 @@ public abstract class Player {
                     case MISS:
                         currentButton.setIcon(MISS_ICON);
                         currentButton.setDisabledIcon(MISS_ICON);
+                        break;
+                    case SHIP:
+                        currentButton.setIcon(SHIP_ICON);
+                        currentButton.setDisabledIcon(SHIP_ICON);
                         break;
                 }
                 enableBoard(gameState, board);

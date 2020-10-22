@@ -1,6 +1,6 @@
 package battleship.controller;
 
-import battleship.model.GameState;
+import battleship.controller.Player.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,24 @@ class PlayerTest {
     }
 
     //checkPlaceLegalOnMiddle()
-    //test for right next to a ship
-    //test on a ship
+    @Test
+    void testCheckPlaceLegalOnMiddle(){
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(5,5)));
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(2,3)));
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(7,8)));
+    }
 
+    //test for right next to a ship and on a ship
+    @Test
+    void testCheckPlaceLegalSideBySide(){
+        player.getMyGameState().setTile(Player.Tile.SHIP, 3, 4);
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(4,4)));
+        Assertions.assertTrue(!player.checkPlaceLegal(new Point(3,4)));
+
+        player.getMyGameState().setTile(Player.Tile.SHIP, 9,9);
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(9,8)));
+
+        player.getMyGameState().setTile(Player.Tile.SHIP, 0, 4);
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(1,4)));
+    }
 }
