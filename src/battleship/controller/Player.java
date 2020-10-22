@@ -73,15 +73,6 @@ public abstract class Player {
         }
     }
 
-    protected void setMainMenuActionListeners(){
-
-
-    }
-
-    protected void setRulesWindowActionListener(){
-
-
-    }
 
     private void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
@@ -293,8 +284,6 @@ public abstract class Player {
         frame.setVisible(true);
         */
 
-        //MainMenu menu = new MainMenu();
-        RulesWindow rules = new RulesWindow();
-
+        MainMenuController menuController = new MainMenuController();
     }
 }

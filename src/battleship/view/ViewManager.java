@@ -7,9 +7,8 @@ public class ViewManager {
     //make rules, networkingHost, networkingClient, gameEndScreen classes and members
 
     public ViewManager(){
-        mainMenu = new MainMenu();
         gameScreen = new GamePlayWindow();
-        rulesWindow= new RulesWindow();
+        rulesWindow = new RulesWindow();
     }
 
     public GamePlayWindow getGameScreen() {
