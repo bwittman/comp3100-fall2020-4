@@ -42,7 +42,7 @@ public class MainMenu extends JFrame {
         
        
         setTitle("Battleship: Main Menu");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(625,625);
         setMinimumSize(new Dimension(625,625));
         setResizable(false);
