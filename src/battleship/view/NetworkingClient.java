@@ -14,8 +14,8 @@ import javax.swing.JTextField;
 
 public class NetworkingClient extends JFrame {
 	
-	JTextField IPinput;
-	JButton connectButton;
+	private JTextField IPinput;
+	private JButton connectButton;
 	
 	
 	public NetworkingClient() {
@@ -45,6 +45,22 @@ public class NetworkingClient extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
+	}
+	
+	public JButton getConnectButton() {
+		return connectButton;
+	}
+	
+	public JTextField getIPInput() {
+		return IPinput;
+	}
+	
+	public void setConnectButton(JButton newConnectButton) {
+		this.connectButton = newConnectButton;
+	}
+	
+	public void setIPInput(JTextField newIPInput) {
+		this.IPinput = newIPInput;
 	}
 	
 	public static void main(String[] args) {
