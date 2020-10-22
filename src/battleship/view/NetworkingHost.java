@@ -49,20 +49,21 @@ public class NetworkingHost extends JFrame {
 		return ipAddressInnerLabel;
 	}
 	
-	public void setIPAddressInnerLabel(JLabel newIPAddressInnerLabel) {
-		this.ipAddressInnerLabel = newIPAddressInnerLabel;
-	}
 	
 	public JLabel getIPAddressOutsideLabel() {
 		return ipAddressOutsideLabel;
 	}
 	
-	public void setIPAddressOutsideLabel(JLabel newIPAddressOutsideLabel) {
-		this.ipAddressOutsideLabel = newIPAddressOutsideLabel;
-	}
-	
 	public JLabel getConnectionStatusLabel() {
 		return connectionStatusLabel;
+	}
+	
+	public void setIPAddressInnerLabel(JLabel newIPAddressInnerLabel) {
+		this.ipAddressInnerLabel = newIPAddressInnerLabel;
+	}
+	
+	public void setIPAddressOutsideLabel(JLabel newIPAddressOutsideLabel) {
+		this.ipAddressOutsideLabel = newIPAddressOutsideLabel;
 	}
 	
 	public void setConnectionStatusLabel(JLabel newConnectionStatusLabel) {

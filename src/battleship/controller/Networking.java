@@ -7,7 +7,9 @@ import java.util.Enumeration;
 
 public class Networking {
 	
-	public static String getLocalIP() {
+	private String ipAddress;
+	
+	public Networking() {
 		String ip;
 	    try {
 	        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -19,21 +21,24 @@ public class Networking {
 				}
 
 	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
-	            while(addresses.hasMoreElements()) {
-	                InetAddress addr = addresses.nextElement();
-	                ip = addr.getHostAddress();
-	                System.out.println(iface.getDisplayName() + " " + ip);
-	                return ip;
-	            }
+	            
+                InetAddress addr = addresses.nextElement();
+                ip = addr.getHostAddress();
+                System.out.println(iface.getDisplayName() + " " + ip);
+                ipAddress = ip;
+	            
 	        }
 	    } catch (SocketException e) {
-	        throw new RuntimeException(e);
+	        ipAddress = "0.0.0.0";
 	    }
-	    return "ERROR: Could not retrieve IP Address";
+	}
+	
+	public String getIPAddress() {
+		return ipAddress;
 	}
 	
 	 public static void main(String[]args){
-	       String localIP = Networking.getLocalIP();
-	       System.out.println(localIP);
+	       Networking test = new Networking();
+	       System.out.println(test.getIPAddress());
 	    }
 }
