@@ -2,12 +2,17 @@ package battleship.controller;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 
 public class Networking {
 	
-	private String ipAddress;
+	private String hostIpAddress;
+	private ServerSocket serverSocket;
+	private Socket socket;
+	private static final int PORT = 7777;
 	
 	public Networking() {
 		String ip;
@@ -24,16 +29,27 @@ public class Networking {
                 InetAddress addr = addresses.nextElement();
                 ip = addr.getHostAddress();
                 System.out.println(iface.getDisplayName() + " " + ip);
-                ipAddress = ip;
+                hostIpAddress = ip;
 	        }
 	    } catch (SocketException e) {
-	        ipAddress = "0.0.0.0";
+	    	hostIpAddress = "0.0.0.0";
 	    }
 	}
 	
 	public String getIPAddress() {
 		//TODO: Needs test case to check IP Address
-		return ipAddress;
+		return hostIpAddress;
 	}
+	
+	public void sendMessage(String message) {
+		//TODO: implement
+	}
+	
+	public String recieveMessage() {
+		//TODO: implement
+		return "";
+	}
+	
+	
 	
 }
