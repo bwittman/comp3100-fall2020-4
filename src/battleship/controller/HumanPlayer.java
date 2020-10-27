@@ -1,12 +1,15 @@
 package battleship.controller;
 
 public class HumanPlayer extends Player {
+	
+	private Networking networkingClass;
 
     public HumanPlayer(){
         createShips();
         initGameStates();
         setUpView();
         //updateBoard();
+        networkingClass = new Networking();
     }
 
     @Override
