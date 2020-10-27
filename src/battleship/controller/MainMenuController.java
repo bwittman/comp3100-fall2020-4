@@ -16,13 +16,14 @@ public class MainMenuController {
     }
 
     private void setMainMenuActionListeners(){
-        MainMenu menu = new MainMenu();
+        MainMenu menu = viewManager.getMainMenu();
+
         menu.getRulesButton().addActionListener(e->{
             viewManager.getRulesWindow().setVisible(true);
         });
         
         //Networking Button Action Listener
-        viewManager.getMainMenu().getNetworkButton().addActionListener(e->{
+       menu.getNetworkButton().addActionListener(e->{
     		int userAnswer = JOptionPane.showConfirmDialog(null, "Are you going to be hosting the game?", "Networking Dialog", JOptionPane.YES_NO_OPTION);
     		
     		if(userAnswer == 0) { 			//User Selected YES
@@ -33,6 +34,10 @@ public class MainMenuController {
     			viewManager.createNetworkingHostWindow();
     		}
     	});
+
+        menu.getOnePlayerButton().addActionListener(e->{
+            viewManager.getGameScreen().setVisible(true);
+        });
     }
 
     private void setRulesWindowActionListener(){
