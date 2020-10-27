@@ -1,5 +1,6 @@
 package battleship.controller;
 
+import battleship.view.GamePlayWindow;
 import battleship.view.MainMenu;
 import battleship.view.ViewManager;
 
@@ -15,8 +16,13 @@ public class MainMenuController {
 
     protected void setMainMenuActionListeners(){
         MainMenu menu = new MainMenu();
+
         menu.getRulesButton().addActionListener(e->{
             viewManager.getRulesWindow().setVisible(true);
+        });
+
+        menu.getOnePlayerButton().addActionListener(e->{
+            viewManager.getGameScreen().setVisible(true);
         });
 
     }
