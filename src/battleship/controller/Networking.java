@@ -65,7 +65,6 @@ public class Networking {
 				InputStream inputStream = socket.getInputStream();
 				input = new Scanner(inputStream);
 				output = socket.getOutputStream();
-				
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = true)");
 				e.printStackTrace();
@@ -81,7 +80,6 @@ public class Networking {
 				return false;
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = false)");
-				e.printStackTrace();
 				return false;
 			}
 	    }
@@ -142,6 +140,11 @@ public class Networking {
 	}
 	
 	public boolean isConnected() {
-		return socket.isConnected();
+		if(socket != null) {
+			return socket.isConnected();
+		}else {
+			return false;
+		}
+
 	}
 }

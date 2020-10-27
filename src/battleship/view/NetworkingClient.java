@@ -16,6 +16,7 @@ public class NetworkingClient extends JFrame {
 	
 	private JTextField IPinput;
 	private JButton connectButton;
+	private JLabel statusLabel;
 	
 	
 	public NetworkingClient() {
@@ -29,11 +30,11 @@ public class NetworkingClient extends JFrame {
 		JPanel middlePanel = new JPanel(new GridBagLayout());
 		JPanel bottomPanel = new JPanel(new GridBagLayout());
 		
-		JLabel directions = new JLabel("Enter the host's IP address: ");
+		statusLabel = new JLabel("Enter the host's IP address: ");
 		IPinput = new JTextField(11);
 		connectButton = new JButton("Connect!");
 		
-		topPanel.add(directions);
+		topPanel.add(statusLabel);
 		middlePanel.add(IPinput);
 		bottomPanel.add(connectButton);
 		outerPanel.add(topPanel, BorderLayout.NORTH);
@@ -61,6 +62,10 @@ public class NetworkingClient extends JFrame {
 	
 	public void setIPInput(JTextField newIPInput) {
 		this.IPinput = newIPInput;
+	}
+	
+	public JLabel getStatusLabel() {
+		return statusLabel;
 	}
 	
 	public static void main(String[] args) {
