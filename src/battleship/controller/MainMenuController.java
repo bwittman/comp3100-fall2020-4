@@ -10,8 +10,8 @@ public class MainMenuController {
     ViewManager viewManager;
 
     public MainMenuController(){
-        setMainMenuActionListeners();
         viewManager = new ViewManager();
+        setMainMenuActionListeners();
         setRulesWindowActionListener();
     }
 
