@@ -21,9 +21,9 @@ public class MainMenuController {
         menu.getRulesButton().addActionListener(e->{
             viewManager.getRulesWindow().setVisible(true);
         });
-        
+
         //Networking Button Action Listener
-       menu.getNetworkButton().addActionListener(e->{
+        menu.getNetworkButton().addActionListener(e->{
     		int userAnswer = JOptionPane.showConfirmDialog(null, "Are you going to be hosting the game?", "Networking Dialog", JOptionPane.YES_NO_OPTION);
     		
     		if(userAnswer == 0) { 			//User Selected YES
@@ -36,15 +36,16 @@ public class MainMenuController {
     	});
 
         menu.getOnePlayerButton().addActionListener(e->{
+            //instantiate the correct players
+            //set the player's view manager to this view manager
             viewManager.getGameScreen().setVisible(true);
         });
     }
 
+    //for the closing the rules window
     private void setRulesWindowActionListener(){
         viewManager.getRulesWindow().getCloseButton().addActionListener(e->{
             viewManager.getRulesWindow().setVisible(false);
         });
-
     }
-    
 }

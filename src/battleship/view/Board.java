@@ -15,7 +15,7 @@ public class Board extends JPanel {
     private Player player;
 
     public Board() {
-        this.setLayout(new GridLayout(ROWS + 1,COLUMNS + 1));
+        this.setLayout(new GridLayout(ROWS + 1 ,COLUMNS + 1));
         setUpLabels();
         setUpButtons();
     }
@@ -25,9 +25,11 @@ public class Board extends JPanel {
     }
 
     private void setUpLabels(){
+        JLabel first = new JLabel();
+        this.add(first);
         for (int i = 0; i < COLUMNS; ++i){
             JLabel label = new JLabel();
-            label.setText(Character.toString((char) i + (int) 'A'));
+            label.setText(Character.toString((char) ((char) i + (int) 'A')));
             this.add(label);
         }
     }
