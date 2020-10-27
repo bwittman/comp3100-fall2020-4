@@ -73,6 +73,71 @@ public abstract class Player {
         }
     }
 
+    private void onEnemyButtonClicked(ActionEvent e, Board board){
+        //loop through out button array to find the location of the button which was clicked
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                JButton currentButton = board.getButton(row, col);
+                if (currentButton == e.getSource()){
+                    if(checkHitMiss(new Point(row,col))){
+                        enemyGameState.setTile(Tile.HIT, row, col);
+                    }else{
+                        enemyGameState.setTile(Tile.MISS, row, col);
+                    }
+                    currentButton.setEnabled(false);
+                }
+            }
+        }
+        updateBoard(enemyGameState, board);
+    }
+
+    public void updateBoard(GameState gameState, Board board) {
+        for (int i =0; i<ROWS; i++ ){
+            for(int j=0;j < COLUMNS; j++){
+                Tile currentTile = gameState.getTile(i,j);
+                JButton currentButton = board.getButton(i,j);
+                switch(currentTile){
+                    case WATER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(WATER_BLUE);
+                        break;
+                    case HIT:
+                        currentButton.setIcon(HIT_ICON);
+                        currentButton.setDisabledIcon(HIT_ICON);
+                        break;
+                    case MISS:
+                        currentButton.setIcon(MISS_ICON);
+                        currentButton.setDisabledIcon(MISS_ICON);
+                        break;
+                    case SHIP:
+                        currentButton.setIcon(SHIP_ICON);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                }
+                enableBoard(gameState, board);
+            }
+        }
+    }
+
+    public void enableBoard(GameState gameState, Board board){
+        for (int i=0; i<ROWS; i++){
+            for (int j=0; j<COLUMNS; j++){
+                JButton currentButton = board.getButton(i,j);
+                if (!(gameState.getTile(i,j) == Tile.HIT || gameState.getTile(i,j) == Tile.MISS)){
+                    currentButton.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    public void disableBoard(Board board){
+        for (int i=0; i<ROWS; i++){
+            for (int j=0; j<COLUMNS; j++){
+                JButton currentButton = board.getButton(i,j);
+                currentButton.setEnabled(false);
+            }
+        }
+    }
 
     private void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
@@ -167,19 +232,6 @@ public abstract class Player {
         }
     }
 
-    public void resetStoredShips(){
-        myGameState.reset();
-    }
-
-    public void resetGame(){
-        myGameState.reset();
-        enemyGameState.reset();
-        for (Ship ship: ships){
-            ship.reset();
-        }
-        //clear log
-    }
-
     public boolean checkHitMiss(Point tile){
         return false;
     }
@@ -193,79 +245,95 @@ public abstract class Player {
         return true;
     }
 
+    public void resetStoredShips(){
+        myGameState.reset();
+    }
+
+    public void resetGame(){
+        myGameState.reset();
+        enemyGameState.reset();
+        for (Ship ship: ships){
+            ship.reset();
+        }
+        //clear log
+    }
+
+    public GameState getMyGameState(){
+        return myGameState;
+    }
+
     public abstract void placeShips() throws ShipPlacementException;
     public abstract void guess();
     public abstract void sendMessage();
     public abstract void receiveMessage();
 
-    public void updateBoard(GameState gameState, Board board) {
-        for (int i =0; i<ROWS; i++ ){
-            for(int j=0;j < COLUMNS; j++){
-                Tile currentTile = gameState.getTile(i,j);
-                JButton currentButton = board.getButton(i,j);
-                switch(currentTile){
-                    case WATER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(WATER_BLUE);
-                        break;
-                    case HIT:
-                        currentButton.setIcon(HIT_ICON);
-                        currentButton.setDisabledIcon(HIT_ICON);
-                        break;
-                    case MISS:
-                        currentButton.setIcon(MISS_ICON);
-                        currentButton.setDisabledIcon(MISS_ICON);
-                        break;
-                    case SHIP:
-                        currentButton.setIcon(SHIP_ICON);
-                        currentButton.setDisabledIcon(SHIP_ICON);
-                        break;
-                }
-                enableBoard(gameState, board);
-            }
-        }
-    }
-
-    public void enableBoard(GameState gameState, Board board){
-        for (int i=0; i<ROWS; i++){
-            for (int j=0; j<COLUMNS; j++){
-                JButton currentButton = board.getButton(i,j);
-                if (!(gameState.getTile(i,j) == Tile.HIT || gameState.getTile(i,j) == Tile.MISS)){
-                    currentButton.setEnabled(true);
-                }
-            }
-        }
-    }
-
-    public void disableBoard(Board board){
-        for (int i=0; i<ROWS; i++){
-            for (int j=0; j<COLUMNS; j++){
-                JButton currentButton = board.getButton(i,j);
-                currentButton.setEnabled(false);
-            }
-        }
-    }
-
-    private void onEnemyButtonClicked(ActionEvent e, Board board){
-        //loop through out button array to find the location of the button which was clicked
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                JButton currentButton = board.getButton(row, col);
-                if (currentButton == e.getSource()){
-                    if(checkHitMiss(new Point(row,col))){
-                        enemyGameState.setTile(Tile.HIT, row, col);
-                    }else{
-                        enemyGameState.setTile(Tile.MISS, row, col);
+    //testing methods
+    public boolean intersect(Ship ship1, Ship ship2){
+        if (ship2.getStart().x < ship2.getEnd().x){
+            if (ship2.getStart().y < ship2.getEnd().y){
+                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
+                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
                     }
-                    currentButton.setEnabled(false);
+                }
+            }else{
+                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
+                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }else{
+            if (ship2.getStart().y < ship2.getEnd().y){
+                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
+                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }else{
+                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
+                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
                 }
             }
         }
-        updateBoard(enemyGameState, board);
+        return false;
     }
 
-    public GameState getMyGameState(){
-        return myGameState;
+    private boolean pointIntersectsShip(Point point, Ship ship1){
+        //first ship is horizontal
+        if (ship1.getStart().y == ship1.getEnd().y) {
+            if (ship1.getStart().x > ship1.getEnd().x) {
+                //the point from ship 2 intersects ship 1
+                if (ship1.getStart().y == point.y && ship1.getStart().x >= point.x && point.x >= ship1.getEnd().x){
+                    return true;
+                }
+            } else {
+                if (ship1.getStart().y == point.y && ship1.getStart().x <= point.x && point.x <= ship1.getEnd().x) {
+                    return true;
+                }
+            }
+        }else{
+            if (ship1.getStart().y > ship1.getEnd().y){
+                if (ship1.getStart().x == point.x && ship1.getStart().y >= point.y && point.y >= ship1.getEnd().y){
+                    return true;
+                }
+            }else{
+                if (ship1.getStart().x == point.x && ship1.getStart().y <= point.y && point.y <= ship1.getEnd().y){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void main(String[]args){
