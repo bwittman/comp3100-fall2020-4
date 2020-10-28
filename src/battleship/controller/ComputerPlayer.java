@@ -1,8 +1,11 @@
 package battleship.controller;
 
+import battleship.view.ViewManager;
+
 public class ComputerPlayer extends Player {
 
-    public ComputerPlayer(){
+    public ComputerPlayer(ViewManager viewManager){
+    	super(viewManager);
         createShips();
         initGameStates();
         setUpView();

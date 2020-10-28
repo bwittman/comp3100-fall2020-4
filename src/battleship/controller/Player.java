@@ -39,6 +39,10 @@ public abstract class Player {
     private boolean isMyTurn;
     private ViewManager viewManager;
 
+    protected Player(ViewManager viewManager) {
+    	this.viewManager = viewManager;
+    }
+    
     protected void createShips(){
         Ship destroyer = new Ship(ShipType.DESTROYER);
         Ship submarine = new Ship(ShipType.SUBMARINE);
@@ -58,7 +62,6 @@ public abstract class Player {
     }
 
     protected void setUpView(){
-        this.viewManager = new ViewManager();
         setEnemyActionListeners();
         //setMainMenuActionListeners();
         //setRulesWindowActionListener();

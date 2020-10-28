@@ -67,7 +67,6 @@ public class Networking {
 				output = socket.getOutputStream();
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = true)");
-				e.printStackTrace();
 				return false;
 			}
 	    }else {
@@ -130,11 +129,30 @@ public class Networking {
 	 */
 	public void cleanUp() {
 		try {
-			output.close();
+			if(output != null) {
+				output.close();
+			}
+		}catch (IOException e) {
+			System.out.println("Could not clean up output IOException thrown");
+			e.printStackTrace();
+		}
+		if(input != null) {
 			input.close();
-			socket.close();
-		} catch (IOException e) {
+		}		
+		try {
+			if(socket != null) {
+				socket.close();
+			}
+		}catch (IOException e) {
 			System.out.println("Could not clean up socket IOException thrown");
+			e.printStackTrace();
+		}
+		try {
+			if(serverSocket != null) {
+				serverSocket.close();
+			}
+		} catch (IOException e) {
+			System.out.println("Could not clean up serverSocket IOException thrown");
 			e.printStackTrace();
 		}
 	}

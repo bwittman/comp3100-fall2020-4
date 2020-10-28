@@ -13,15 +13,10 @@ public class ViewManager {
         gameScreen = new GamePlayWindow();
         rulesWindow = new RulesWindow();
         mainMenu = new MainMenu();
+        networkingClientWindow = new NetworkingClient();
+        networkingHostWindow = new NetworkingHost();
     }
     
-    public void createNetworkingClientWindow() {
-    	networkingClientWindow = new NetworkingClient();
-    }
-    
-    public void createNetworkingHostWindow() {
-    	networkingHostWindow = new NetworkingHost();
-    }
 
     public GamePlayWindow getGameScreen() {
         return gameScreen;

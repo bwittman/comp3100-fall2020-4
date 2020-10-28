@@ -42,7 +42,6 @@ public class NetworkingHost extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setVisible(true);
 	}
 	
 	public JLabel getIPAddressInnerLabel() {

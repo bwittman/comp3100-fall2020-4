@@ -1,31 +1,38 @@
 package battleship.controller;
 
+import battleship.view.ViewManager;
+
 public class HumanPlayer extends Player {
 	
-	private Networking networkingClass;
+	private Networking networking;
 
-    public HumanPlayer(){
+    public HumanPlayer(ViewManager viewManager){
+    	super(viewManager);
         createShips();
         initGameStates();
         setUpView();
         //updateBoard();
-        networkingClass = new Networking();
+        networking = new Networking(); 
+    }
+    
+    public void disconnect() {
+    	networking.cleanUp();
     }
     
     public boolean connectAsClient(String IP) {
-    	networkingClass.connect(false, IP);
-    	if(networkingClass.isConnected()) {
+    	networking.connect(false, IP);
+    	if(networking.isConnected()) {
     		return true;
     	}
     	return false;
     }
     
     public String getIPAdrress() {
-    	return networkingClass.getIP();
+    	return networking.getIP();
     }
     
     public void connectAsHost() {
-    	networkingClass.connect(true, "");
+    	networking.connect(true, "");
     }
 
     @Override
