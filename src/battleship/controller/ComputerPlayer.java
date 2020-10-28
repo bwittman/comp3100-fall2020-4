@@ -6,10 +6,6 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(ViewManager viewManager){
     	super(viewManager);
-        createShips();
-        initGameStates();
-        setUpView();
-        //updateBoard();
     }
 
     @Override
@@ -26,6 +22,4 @@ public class ComputerPlayer extends Player {
     public void sendMessage() {
 
     }
-
-    
 }

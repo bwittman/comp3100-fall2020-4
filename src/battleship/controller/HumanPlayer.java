@@ -3,6 +3,7 @@ package battleship.controller;
 import java.util.Scanner;
 
 import javax.swing.SwingUtilities;
+import javax.swing.text.View;
 
 import battleship.view.ViewManager;
 
@@ -10,6 +11,11 @@ public class HumanPlayer extends Player {
 	
 	private Networking networking;
 	private Thread messageListener;
+
+	public HumanPlayer(ViewManager viewManager){
+		super(viewManager);
+		networking = new Networking();
+	}
 	
 	private class MessageListener extends Thread {
 		@Override
@@ -41,15 +47,6 @@ public class HumanPlayer extends Player {
 		messageListener = new MessageListener();
 		messageListener.start();
 	}
-	
-    public HumanPlayer(ViewManager viewManager){
-    	super(viewManager);
-        createShips();
-        initGameStates();
-        setUpView();
-        //updateBoard();
-        networking = new Networking(); 
-    }
     
     public void disconnect() {
     	networking.cleanUp();
@@ -62,15 +59,11 @@ public class HumanPlayer extends Player {
     	}
     	return false;
     }
-    
-    public String getIpAdrressLocal() {
-    	return networking.getIpLocal();
-    }
-    
-    public String getIpAddressExternal() {
-    	return networking.getIpExternal();
-    }
-    
+
+    public Networking getNetworking(){
+		return networking;
+	}
+
     public void connectAsHost() {
     	networking.connect(true, "");
     }

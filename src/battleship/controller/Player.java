@@ -32,7 +32,6 @@ public abstract class Player {
         WATER
     }
 
-    private String playerName;
     private List<Ship> ships = new ArrayList<>();
     private GameState gameState;
     private GameState enemyGameState;
@@ -40,10 +39,14 @@ public abstract class Player {
     private ViewManager viewManager;
 
     protected Player(ViewManager viewManager) {
-    	this.viewManager = viewManager;
+        this.viewManager = viewManager;
+        createShips();
+        initGameStates();
+        setUpView();
+        //updateBoard();
     }
     
-    protected void createShips(){
+    private void createShips(){
         Ship destroyer = new Ship(ShipType.DESTROYER);
         Ship submarine = new Ship(ShipType.SUBMARINE);
         Ship cruiser = new Ship(ShipType.CRUISER);
@@ -56,15 +59,13 @@ public abstract class Player {
         ships.add(carrier);
     }
 
-    protected void initGameStates(){
+    private void initGameStates(){
         gameState = new GameState();
         enemyGameState = new GameState();
     }
 
-    protected void setUpView(){
+    private void setUpView(){
         setEnemyActionListeners();
-        //setMainMenuActionListeners();
-        //setRulesWindowActionListener();
     }
 
     private void setEnemyActionListeners(){
@@ -76,6 +77,7 @@ public abstract class Player {
         }
     }
 
+    //we need to be sending the message to the enemy to check if it is hit or missed
     private void onEnemyButtonClicked(ActionEvent e, Board board){
         //loop through out button array to find the location of the button which was clicked
         for (int row = 0; row < ROWS; row++) {
@@ -236,6 +238,39 @@ public abstract class Player {
     }
 
     public boolean checkHitMiss(Point tile){
+        for(Ship ship: ships){
+            if (pointIntersectsShip(tile, ship)){
+                ship.updateHits();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean pointIntersectsShip(Point point, Ship ship1){
+        //first ship is horizontal
+        if (ship1.getStart().y == ship1.getEnd().y) {
+            if (ship1.getStart().x > ship1.getEnd().x) {
+                //the point from ship 2 intersects ship 1
+                if (ship1.getStart().y == point.y && ship1.getStart().x >= point.x && point.x >= ship1.getEnd().x){
+                    return true;
+                }
+            } else {
+                if (ship1.getStart().y == point.y && ship1.getStart().x <= point.x && point.x <= ship1.getEnd().x) {
+                    return true;
+                }
+            }
+        }else{
+            if (ship1.getStart().y > ship1.getEnd().y){
+                if (ship1.getStart().x == point.x && ship1.getStart().y >= point.y && point.y >= ship1.getEnd().y){
+                    return true;
+                }
+            }else{
+                if (ship1.getStart().x == point.x && ship1.getStart().y <= point.y && point.y <= ship1.getEnd().y){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -306,33 +341,6 @@ public abstract class Player {
                             return true;
                         }
                     }
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean pointIntersectsShip(Point point, Ship ship1){
-        //first ship is horizontal
-        if (ship1.getStart().y == ship1.getEnd().y) {
-            if (ship1.getStart().x > ship1.getEnd().x) {
-                //the point from ship 2 intersects ship 1
-                if (ship1.getStart().y == point.y && ship1.getStart().x >= point.x && point.x >= ship1.getEnd().x){
-                    return true;
-                }
-            } else {
-                if (ship1.getStart().y == point.y && ship1.getStart().x <= point.x && point.x <= ship1.getEnd().x) {
-                    return true;
-                }
-            }
-        }else{
-            if (ship1.getStart().y > ship1.getEnd().y){
-                if (ship1.getStart().x == point.x && ship1.getStart().y >= point.y && point.y >= ship1.getEnd().y){
-                    return true;
-                }
-            }else{
-                if (ship1.getStart().x == point.x && ship1.getStart().y <= point.y && point.y <= ship1.getEnd().y){
-                    return true;
                 }
             }
         }
