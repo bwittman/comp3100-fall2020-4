@@ -165,4 +165,8 @@ public class Networking {
 		}
 
 	}
+	
+	public Scanner getScanner() {
+		return input;
+	}
 }

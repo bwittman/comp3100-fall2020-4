@@ -1,11 +1,47 @@
 package battleship.controller;
 
+import java.util.Scanner;
+
+import javax.swing.SwingUtilities;
+
 import battleship.view.ViewManager;
 
 public class HumanPlayer extends Player {
 	
 	private Networking networking;
-
+	private Thread messageListener;
+	
+	private class MessageListener extends Thread {
+		@Override
+		public void run() {
+			Scanner scanner = networking.getScanner();
+			while(networking.isConnected()) {
+				String message = scanner.nextLine();
+				SwingUtilities.invokeLater(new MessageDispatcher(message));
+			}
+		}
+	}
+	
+	private class MessageDispatcher extends Thread{
+		String message;
+		
+		public MessageDispatcher(String message) {
+			this.message = message;
+		}
+		
+		@Override
+		public void run() {
+			//TODO: add if to check messages incoming
+			
+		}
+	}
+	
+	private void listenForNewMessages() {
+		
+		messageListener = new MessageListener();
+		messageListener.start();
+	}
+	
     public HumanPlayer(ViewManager viewManager){
     	super(viewManager);
         createShips();
@@ -49,9 +85,11 @@ public class HumanPlayer extends Player {
     public void sendMessage() {
 
     }
-
-    @Override
-    public void receiveMessage() {
-
+    
+    public void cleanup() {
+    	if(messageListener != null) {
+        	messageListener.interrupt();
+    	}
     }
+    
 }

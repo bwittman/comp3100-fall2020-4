@@ -34,7 +34,7 @@ public abstract class Player {
 
     private String playerName;
     private List<Ship> ships = new ArrayList<>();
-    private GameState myGameState;
+    private GameState gameState;
     private GameState enemyGameState;
     private boolean isMyTurn;
     private ViewManager viewManager;
@@ -57,7 +57,7 @@ public abstract class Player {
     }
 
     protected void initGameStates(){
-        myGameState = new GameState();
+        gameState = new GameState();
         enemyGameState = new GameState();
     }
 
@@ -144,32 +144,32 @@ public abstract class Player {
 
     private void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
-            myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-            myGameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
+            gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+            gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
         }else if(ship.getStart().x - ship.getEnd().x == 0){ //then it is vertical
             if (ship.getStart().y < ship.getEnd().y){
-                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
                 for (int i = 0; i < ship.getLength()-1; i++){
-                    myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+1);
+                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+1);
                 }
             }else if (ship.getStart().y > ship.getEnd().y){
-                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
                 for (int i = 0; i < ship.getLength()-1; i++){
-                    myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-1);
+                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-1);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
             }
         }else{//then it is horizontal
             if (ship.getStart().x < ship.getEnd().x){
-                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
                 for (int i = 0; i < ship.getLength()-1; i++){
-                    myGameState.setTile(Tile.SHIP, ship.getStart().x+1, ship.getStart().y);
+                    gameState.setTile(Tile.SHIP, ship.getStart().x+1, ship.getStart().y);
                 }
             }else if (ship.getStart().x > ship.getEnd().x){
-                myGameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
+                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
                 for (int i = 0; i < ship.getLength()-1; i++){
-                    myGameState.setTile(Tile.SHIP, ship.getStart().x-1, ship.getStart().y);
+                    gameState.setTile(Tile.SHIP, ship.getStart().x-1, ship.getStart().y);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -231,7 +231,7 @@ public abstract class Player {
         if(place.x < 0 || place.x >= ROWS || place.y < 0 || place.y >= COLUMNS){
             return false;
         }else {
-            return myGameState.getTile(place.x, place.y) != Tile.SHIP;
+            return gameState.getTile(place.x, place.y) != Tile.SHIP;
         }
     }
 
@@ -249,11 +249,11 @@ public abstract class Player {
     }
 
     public void resetStoredShips(){
-        myGameState.reset();
+        gameState.reset();
     }
 
     public void resetGame(){
-        myGameState.reset();
+        gameState.reset();
         enemyGameState.reset();
         for (Ship ship: ships){
             ship.reset();
@@ -261,14 +261,14 @@ public abstract class Player {
         //clear log
     }
 
-    public GameState getMyGameState(){
-        return myGameState;
+    public GameState getGameState(){
+        return gameState;
     }
 
     public abstract void placeShips() throws ShipPlacementException;
     public abstract void guess();
     public abstract void sendMessage();
-    public abstract void receiveMessage();
+    //public abstract void receiveMessage();
 
     //testing methods
     public boolean intersect(Ship ship1, Ship ship2){
