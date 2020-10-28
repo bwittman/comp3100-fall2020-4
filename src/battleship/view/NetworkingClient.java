@@ -17,7 +17,7 @@ public class NetworkingClient extends JFrame {
 	private JTextField IPinput;
 	private JButton connectButton;
 	private JLabel statusLabel;
-	
+
 	
 	public NetworkingClient() {
 		setTitle("Battleship - Host");
@@ -45,6 +45,7 @@ public class NetworkingClient extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setVisible(false);
 	}
 	
 	public JButton getConnectButton() {
@@ -66,7 +67,7 @@ public class NetworkingClient extends JFrame {
 	public JLabel getStatusLabel() {
 		return statusLabel;
 	}
-	
+
 	public static void main(String[] args) {
 		NetworkingClient test = new NetworkingClient();
 

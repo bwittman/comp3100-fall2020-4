@@ -16,10 +16,11 @@ public class MainMenuController {
 	private ComputerPlayer computerPlayer;
 	private SwingWorker <Void, Void> hostConnectionWorker;
 
-	public MainMenuController(){
-		viewManager = new ViewManager();
-		setMainMenuActionListeners();
-		setRulesWindowActionListener();
+    public MainMenuController(){
+        viewManager = new ViewManager();
+        setMainMenuActionListeners();
+        setRulesWindowActionListener();
+		setNetworkingClientActionListener();
 	}
 
 	private void setMainMenuActionListeners(){
@@ -36,31 +37,10 @@ public class MainMenuController {
 
 			if(userAnswer == JOptionPane.YES_OPTION) { 			//User Selected YES
 				System.out.println("User Selected Yes: they are the host");
-				String getIpLocal = humanPlayer.getIpAdrressLocal();
-				String getIpExternal = humanPlayer.getIpAddressExternal();
-				viewManager.getNetworkingHostWindow().getIPAddressInnerLabel().setText("Your Local IP Address is: " + getIpLocal);
-				viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + getIpExternal);
-				viewManager.getNetworkingHostWindow().getConnectionStatusLabel().setText("Connection Status: Waiting for Client...");
+				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
-				hostConnectionWorker = new SwingWorker <Void, Void>(){
-
-					@Override
-					protected Void doInBackground() throws Exception {
-						humanPlayer.connectAsHost();
-						return null;
-					}
-					
-					public void done() {
-						//TODO: Ship Placement Screen implementation here
-						System.out.println("Connection Made!");
-					}
-
-				};
-				hostConnectionWorker.execute();
-
 			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
 				System.out.println("User Selected No: they are client");
-				setNetworkingClientActionListener();
 				viewManager.getNetworkingClientWindow().setVisible(true);
 			}
 		});
@@ -77,14 +57,34 @@ public class MainMenuController {
 			}
 		});
 
-
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(viewManager);
 			humanPlayer = new HumanPlayer(viewManager);
-			//instantiate the correct players
-			//set the player's view manager to this view manager
 			viewManager.getGameScreen().setVisible(true);
 		});
+	}
+
+	private void setUpHostWindow(){
+		String getIpLocal = humanPlayer.getNetworking().getIpLocal();;
+		String getIpExternal = humanPlayer.getNetworking().getIpExternal();
+		viewManager.getNetworkingHostWindow().getIPAddressInnerLabel().setText("Your Local IP Address is: " + getIpLocal);
+		viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + getIpExternal);
+		viewManager.getNetworkingHostWindow().getConnectionStatusLabel().setText("Connection Status: Waiting for Client...");
+		hostConnectionWorker = new SwingWorker <Void, Void>(){
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				humanPlayer.connectAsHost();
+				return null;
+			}
+
+			public void done() {
+				//TODO: Ship Placement Screen implementation here
+				System.out.println("Connection Made!");
+			}
+
+		};//end swing worker
+		hostConnectionWorker.execute();
 	}
 
 	//for the closing the rules window
@@ -98,7 +98,7 @@ public class MainMenuController {
 		viewManager.getNetworkingClientWindow().getConnectButton().addActionListener(e->{
 			boolean isConnected = humanPlayer.connectAsClient(viewManager.getNetworkingClientWindow().getIPInput().getText());
 			System.out.println("ServerStatus: " + isConnected);
-			if(isConnected == false) {
+			if(!isConnected) {
 				viewManager.getNetworkingClientWindow().getStatusLabel().setText("Couldn't Connect!");
 			}else {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
@@ -109,6 +109,4 @@ public class MainMenuController {
 	public void setHostIPLabel(String ipAddress) {
 		viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText(ipAddress);
 	}
-
-
 }

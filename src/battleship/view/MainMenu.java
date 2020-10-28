@@ -18,7 +18,6 @@ public class MainMenu extends JFrame {
     private JButton rulesButton;
     private JButton networkButton;
     private JButton onePlayerButton;
-
     
     /**
      * Constructor creates a JPanel and constructs the Main Menu on it.
@@ -39,14 +38,12 @@ public class MainMenu extends JFrame {
 
         outerPanel.add(backgroundPanel, BorderLayout.CENTER);
         outerPanel.add(buttonPanel, BorderLayout.SOUTH);
-        
-       
+
         setTitle("Battleship: Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(625,625);
         setMinimumSize(new Dimension(625,625));
         setResizable(false);
-
 
         add(outerPanel);
         pack();

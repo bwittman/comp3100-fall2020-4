@@ -7,7 +7,7 @@ public class ViewManager {
     private NetworkingClient networkingClientWindow;
     private NetworkingHost networkingHostWindow;
     
-    //make rules, networkingHost, networkingClient, gameEndScreen classes and members
+    //make gameEndScreen class and member
 
     public ViewManager(){
         gameScreen = new GamePlayWindow();
@@ -29,11 +29,11 @@ public class ViewManager {
     public RulesWindow getRulesWindow() {
         return rulesWindow;
     }
-    //make getters and setters for all
+
     public NetworkingClient getNetworkingClientWindow() {
 		return networkingClientWindow;
     }
-    
+
     public NetworkingHost getNetworkingHostWindow() {
 		return networkingHostWindow;
     }

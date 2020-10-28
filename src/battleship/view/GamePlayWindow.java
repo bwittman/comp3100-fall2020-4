@@ -24,9 +24,6 @@ public class GamePlayWindow extends JFrame {
 
         add(userBoard, BorderLayout.NORTH);
         add(enemyBoard, BorderLayout.SOUTH);
-
-
-
     }
 
     public Board getUserBoard() {

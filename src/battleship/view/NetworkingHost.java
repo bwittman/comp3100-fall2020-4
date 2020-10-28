@@ -23,7 +23,6 @@ public class NetworkingHost extends JFrame {
         setMinimumSize(new Dimension(400,200));
 		setResizable(false);
 		
-		
 		JPanel outerPanel = new JPanel(new BorderLayout());
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		JPanel middlePanel = new JPanel(new GridBagLayout());
@@ -42,12 +41,12 @@ public class NetworkingHost extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setVisible(false);
 	}
 	
 	public JLabel getIPAddressInnerLabel() {
 		return ipAddressInnerLabel;
 	}
-	
 	
 	public JLabel getIPAddressOutsideLabel() {
 		return ipAddressOutsideLabel;
