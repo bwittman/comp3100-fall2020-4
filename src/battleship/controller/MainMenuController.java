@@ -36,8 +36,11 @@ public class MainMenuController {
 
 			if(userAnswer == JOptionPane.YES_OPTION) { 			//User Selected YES
 				System.out.println("User Selected Yes: they are the host");
-				String hostIP = humanPlayer.getIPAdrress();
-				viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + hostIP);
+				String getIpLocal = humanPlayer.getIpAdrressLocal();
+				String getIpExternal = humanPlayer.getIpAddressExternal();
+				viewManager.getNetworkingHostWindow().getIPAddressInnerLabel().setText("Your Local IP Address is: " + getIpLocal);
+				viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + getIpExternal);
+				viewManager.getNetworkingHostWindow().getConnectionStatusLabel().setText("Connection Status: Waiting for Client...");
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				hostConnectionWorker = new SwingWorker <Void, Void>(){
 

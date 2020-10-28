@@ -71,6 +71,7 @@ public class NetworkingHost extends JFrame {
 	
 	public static void main(String[]args){
 	       NetworkingHost test = new NetworkingHost();
+	       test.setVisible(true);
 	}
 }
 

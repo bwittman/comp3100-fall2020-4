@@ -63,8 +63,12 @@ public class HumanPlayer extends Player {
     	return false;
     }
     
-    public String getIPAdrress() {
-    	return networking.getIP();
+    public String getIpAdrressLocal() {
+    	return networking.getIpLocal();
+    }
+    
+    public String getIpAddressExternal() {
+    	return networking.getIpExternal();
     }
     
     public void connectAsHost() {

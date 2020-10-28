@@ -3,19 +3,23 @@ package battleship.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Scanner;
 
 public class Networking {
 	
-	private String hostIpAddress;
+	private String hostIpAddressLocal;
+	private String hostIpAddressExternal;
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private static final int PORT = 7777;
@@ -42,11 +46,25 @@ public class Networking {
                 InetAddress addr = addresses.nextElement();
                 ip = addr.getHostAddress();
                 System.out.println(iface.getDisplayName() + " " + ip);
-                hostIpAddress = ip;
+                hostIpAddressLocal = ip;
 	        }
 	    } catch (SocketException e) {
-	    	hostIpAddress = "0.0.0.0";
+	    	hostIpAddressLocal = "0.0.0.0";
 	    }
+	    
+	    try {
+	    URL whatismyip = new URL("http://checkip.amazonaws.com");
+	    BufferedReader in = new BufferedReader(new InputStreamReader(
+	                    whatismyip.openStream()));
+	    hostIpAddressExternal = in.readLine(); //you get the IP as a String
+	    System.out.println(hostIpAddressExternal);
+	    }catch(MalformedURLException e) {
+	    	System.err.println("MalformedURLException thrown in Networking Contructor");
+	    }
+	    catch(IOException e) {
+	    	System.err.println("IOException Thrown in Networking Constructor (trying to get external IP)");
+	    }
+	    
 	    
 	}
 	
@@ -90,9 +108,13 @@ public class Networking {
 	 * Getter for the IPAddress
 	 * @return a string representation of the IPAddress
 	 */
-	public String getIP() {
+	public String getIpLocal() {
 		//TODO: Needs test case to check IP Address
-		return hostIpAddress;
+		return hostIpAddressLocal;
+	}
+	
+	public String getIpExternal() {
+		return hostIpAddressExternal;
 	}
 	
 	/**
