@@ -29,7 +29,7 @@ public class Board extends JPanel {
         this.add(first);
         for (int i = 0; i < COLUMNS; ++i){
             JLabel label = new JLabel();
-            label.setText(Character.toString((char) ((char) i + (int) 'A')));
+            label.setText(Character.toString((char) ( i + (int) 'A')));
             this.add(label);
         }
     }
