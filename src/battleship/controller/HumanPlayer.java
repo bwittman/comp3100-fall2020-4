@@ -17,6 +17,10 @@ public class HumanPlayer extends Player {
 		networking = new Networking();
 	}
 	
+	/**
+	 * Listens on the socket on a separate thread so that the GUI does not freeze if this takes longer than expected
+	 *
+	 */
 	private class MessageListener extends Thread {
 		@Override
 		public void run() {
@@ -28,7 +32,12 @@ public class HumanPlayer extends Player {
 		}
 	}
 	
-	private class MessageDispatcher extends Thread{
+	/**
+	 * Notifies responsible classes with the correct messages
+	 * EXAMPLE: If the MessageListener receives a win game message then it will notify gamestate
+	 * 
+	 */
+	private class MessageDispatcher extends Thread{	
 		String message;
 		
 		public MessageDispatcher(String message) {

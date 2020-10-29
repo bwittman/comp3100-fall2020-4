@@ -16,6 +16,11 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Scanner;
 
+/**
+ * Holds all the Networking Components
+ * @author poiu2
+ *
+ */
 public class Networking {
 	
 	private String hostIpAddressLocal;
@@ -42,7 +47,7 @@ public class Networking {
 					continue;
 				}
 
-	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+	            Enumeration<InetAddress> addresses = iface.getInetAddresses(); //Gets the local IP address
                 InetAddress addr = addresses.nextElement();
                 ip = addr.getHostAddress();
                 System.out.println(iface.getDisplayName() + " " + ip);
@@ -52,8 +57,10 @@ public class Networking {
 	    	hostIpAddressLocal = "0.0.0.0";
 	    }
 	    
+	    // Gets External IP Address from AWS website
 	    try {
-	    URL whatismyip = new URL("http://checkip.amazonaws.com");
+	    	//TODO: Double check that this doesn't need to happen separate from main execution thread
+	    URL whatismyip = new URL("http://checkip.amazonaws.com"); //Asks this address for our IP
 	    BufferedReader in = new BufferedReader(new InputStreamReader(
 	                    whatismyip.openStream()));
 	    hostIpAddressExternal = in.readLine(); //you get the IP as a String
@@ -179,6 +186,10 @@ public class Networking {
 		}
 	}
 	
+	/**
+	 * Checks if the socket is connected
+	 * @return true if the socket is connected, otherwise false
+	 */
 	public boolean isConnected() {
 		if(socket != null) {
 			return socket.isConnected();
@@ -188,6 +199,10 @@ public class Networking {
 
 	}
 	
+	/**
+	 * Returns the input scanner
+	 * @return Scanner object attached to the input of the socket
+	 */
 	public Scanner getScanner() {
 		return input;
 	}
