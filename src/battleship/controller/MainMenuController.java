@@ -44,7 +44,8 @@ public class MainMenuController {
 				viewManager.getNetworkingClientWindow().setVisible(true);
 			}
 		});
-
+		
+		//If the player closes the host window without connecting this closes the socket
 		viewManager.getNetworkingHostWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
 				if(hostConnectionWorker != null) {
@@ -71,7 +72,7 @@ public class MainMenuController {
 		viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + getIpExternal);
 		viewManager.getNetworkingHostWindow().getConnectionStatusLabel().setText("Connection Status: Waiting for Client...");
 		hostConnectionWorker = new SwingWorker <Void, Void>(){
-
+			
 			@Override
 			protected Void doInBackground() throws Exception {
 				humanPlayer.connectAsHost();
@@ -79,7 +80,7 @@ public class MainMenuController {
 			}
 
 			public void done() {
-				//TODO: Ship Placement Screen implementation here
+				//TODO: Ship Placement Screen setup here
 				System.out.println("Connection Made!");
 			}
 
@@ -94,6 +95,7 @@ public class MainMenuController {
 		});
 	}
 
+		
 	private void setNetworkingClientActionListener() {
 		viewManager.getNetworkingClientWindow().getConnectButton().addActionListener(e->{
 			boolean isConnected = humanPlayer.connectAsClient(viewManager.getNetworkingClientWindow().getIPInput().getText());
