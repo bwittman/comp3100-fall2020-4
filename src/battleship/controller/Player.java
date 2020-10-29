@@ -143,35 +143,31 @@ public abstract class Player {
             }
         }
     }
-
+    //Assumes start and end have been checked for legal
     private void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
             gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
             gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
         }else if(ship.getStart().x - ship.getEnd().x == 0){ //then it is vertical
             if (ship.getStart().y < ship.getEnd().y){
-                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-                for (int i = 0; i < ship.getLength()-1; i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+1);
+                for (int i = 0; i < ship.getLength(); i++){
+                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+i);
                 }
             }else if (ship.getStart().y > ship.getEnd().y){
-                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-                for (int i = 0; i < ship.getLength()-1; i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-1);
+                for (int i = 0; i < ship.getLength(); i++){
+                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-i);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
             }
         }else{//then it is horizontal
             if (ship.getStart().x < ship.getEnd().x){
-                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-                for (int i = 0; i < ship.getLength()-1; i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x+1, ship.getStart().y);
+                for (int i = 0; i < ship.getLength(); i++){
+                    gameState.setTile(Tile.SHIP, ship.getStart().x+i, ship.getStart().y);
                 }
             }else if (ship.getStart().x > ship.getEnd().x){
-                gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-                for (int i = 0; i < ship.getLength()-1; i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x-1, ship.getStart().y);
+                for (int i = 0; i < ship.getLength(); i++){
+                    gameState.setTile(Tile.SHIP, ship.getStart().x-i, ship.getStart().y);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -306,7 +302,7 @@ public abstract class Player {
     //public abstract void receiveMessage();
 
     //testing methods
-    public boolean intersect(Ship ship1, Ship ship2){
+    private boolean intersect(Ship ship1, Ship ship2){
         if (ship2.getStart().x < ship2.getEnd().x){
             if (ship2.getStart().y < ship2.getEnd().y){
                 for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
@@ -345,6 +341,15 @@ public abstract class Player {
             }
         }
         return false;
+    }
+    public static class PlayerTesting{
+        public static boolean intersect(Player player,Ship ship1, Ship ship2) {
+            return player.intersect(ship1, ship2);
+        }
+        public static void addShipToGameState(Player player, Ship ship) throws ShipPlacementException {
+            player.addShipToGameState(ship);
+        }
+
     }
 
     public static void main(String[]args){
