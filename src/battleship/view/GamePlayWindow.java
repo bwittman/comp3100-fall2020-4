@@ -15,10 +15,10 @@ public class GamePlayWindow extends JFrame {
         userBoard = new Board();
         enemyBoard = new Board();
 
-        setTitle("Battleship: Main Menu");
-        setSize(625,625);
-        setMinimumSize(new Dimension(625,625));
-        setResizable(true);
+        setTitle("Battleship: Game Board");
+        setSize(625,700);
+        setMinimumSize(new Dimension(625,700));
+        setResizable(false);
         setVisible(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //might change later
 
