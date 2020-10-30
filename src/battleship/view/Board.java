@@ -29,7 +29,8 @@ public class Board extends JPanel {
         this.add(first);
         for (int i = 0; i < COLUMNS; ++i){
             JLabel label = new JLabel();
-            label.setText(Character.toString((char) ( i + (int) 'A')));
+            label.setText(Character.toString((char) ( i + 'A')));
+            label.setHorizontalAlignment(JLabel.CENTER);
             this.add(label);
         }
     }
@@ -38,6 +39,7 @@ public class Board extends JPanel {
         for (int i = 0; i < ROWS; i++ ) {
             JLabel label = new JLabel();
             label.setText(Integer.toString(i + 1));
+            label.setHorizontalAlignment(JLabel.CENTER);
             this.add(label);
             for (int j = 0; j < COLUMNS; j++) {
                 JButton button = new JButton();

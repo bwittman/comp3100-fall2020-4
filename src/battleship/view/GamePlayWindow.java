@@ -13,8 +13,10 @@ public class GamePlayWindow extends JFrame {
     private JPanel logPanel;
     private JPanel shipPanel;
     private JPanel boardPanel;
-    private JPanel key;
-    private JPanel options;
+    private JPanel optionButtons;
+    private JButton resetButton;
+    private JButton randomButton;
+    private JButton playGameButton;
 
     public GamePlayWindow(){
         userBoard = new Board();
@@ -25,6 +27,7 @@ public class GamePlayWindow extends JFrame {
 
         scrollPane = new JScrollPane(log);
         scrollPane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
         logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.NORTH);
@@ -54,17 +57,30 @@ public class GamePlayWindow extends JFrame {
         shipPanel.add(submarineButton);
         shipPanel.add(destroyerButton);
 
-        logPanel.add(shipPanel, BorderLayout.SOUTH);
+        logPanel.add(shipPanel, BorderLayout.CENTER);
+
+        optionButtons = new JPanel(new GridLayout(1, 3));
+
+        resetButton = new JButton("Reset");
+        randomButton = new JButton("Random");
+        playGameButton = new JButton("Play Game");
+
+        optionButtons.add(resetButton);
+        optionButtons.add(randomButton);
+        optionButtons.add(playGameButton);
+        optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
         setTitle("Battleship: Game Board");
-        setSize(625,700);
-        setMinimumSize(new Dimension(625,700));
-        setResizable(true);
+        setSize(625,750);
+        setMinimumSize(new Dimension(625,750));
+        setResizable(false);
         setVisible(false);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         add(logPanel, BorderLayout.EAST);
         add(boardPanel, BorderLayout.WEST);
+        add(optionButtons, BorderLayout.SOUTH);
 
     }
 

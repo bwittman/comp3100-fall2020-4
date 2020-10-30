@@ -399,6 +399,26 @@ public abstract class Player {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         */
+        /*
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        }
+        catch (ClassNotFoundException e) {
+            // handle exception
+        }
+        catch (InstantiationException e) {
+            // handle exception
+        }
+        catch (IllegalAccessException e) {
+            // handle exception
+        }
+
+         */
 
         MainMenuController menuController = new MainMenuController();
     }

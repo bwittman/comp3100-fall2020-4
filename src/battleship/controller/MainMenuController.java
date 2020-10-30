@@ -62,6 +62,7 @@ public class MainMenuController {
 			computerPlayer = new ComputerPlayer(viewManager);
 			humanPlayer = new HumanPlayer(viewManager);
 			viewManager.getGameScreen().setVisible(true);
+			menu.setVisible(false);
 		});
 	}
 
