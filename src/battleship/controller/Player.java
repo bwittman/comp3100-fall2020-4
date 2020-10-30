@@ -42,8 +42,16 @@ public abstract class Player {
         this.viewManager = viewManager;
         createShips();
         initGameStates();
-        setUpView();
-        //updateBoard();
+        if(viewManager != null){
+            setUpView();
+            updateAllBoards();
+        }
+
+    }
+
+    private void updateAllBoards(){
+        updateBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
+        updateBoard(gameState, viewManager.getGameScreen().getUserBoard());
     }
     
     private void createShips(){
@@ -52,11 +60,11 @@ public abstract class Player {
         Ship cruiser = new Ship(ShipType.CRUISER);
         Ship battleship = new Ship(ShipType.BATTLESHIP);
         Ship carrier = new Ship(ShipType.CARRIER);
-        ships.add(destroyer);
-        ships.add(submarine);
-        ships.add(cruiser);
-        ships.add(battleship);
         ships.add(carrier);
+        ships.add(battleship);
+        ships.add(cruiser);
+        ships.add(submarine);
+        ships.add(destroyer);
     }
 
     private void initGameStates(){
@@ -177,56 +185,112 @@ public abstract class Player {
 
     public void randomShipPlacement() throws ShipPlacementException {
         Random random = new Random();
-        for (Ship ship: ships){
+        boolean placed;
+        for (int i = 0; i < ships.size(); i++){
+            Ship ship = ships.get(i);
             //keep going until we have a legal starting point and at least one legal ending point
-            List<Point> legalEndPoints = new ArrayList<>();
-            while(legalEndPoints.size() == 0) {
+            List<Point> legalEndPoints;
+            placed = false;
+            while(!placed){
                 Point start = new Point();
                 do {
-                    start.x = random.nextInt(9);
-                    start.y = random.nextInt(9);
+                    start.x = random.nextInt(10);
+                    start.y = random.nextInt(10);
                 } while (!checkPlaceLegal(start));
 
                 ship.setStart(start);
 
-                legalEndPoints = findAllLegalEndPoints(ship);
-            }
+                legalEndPoints = findInBoundsEndPoints(ship);
+                Point endPoint = legalEndPoints.get(random.nextInt(legalEndPoints.size()));
+                ship.setEnd(endPoint);
 
-            Point endPoint = legalEndPoints.get(random.nextInt(legalEndPoints.size()));
-            ship.setEnd(endPoint);
+                placed = true;
+
+                for (int j = 0; j < i && placed; j++) {
+                    Ship ship2 = ships.get(j);
+                    if (intersect(ship, ship2)){
+                        placed = false;
+                    }
+                }
+            }
             addShipToGameState(ship);
         }
     }
 
-    private List<Point> findAllLegalEndPoints(Ship ship){
+    private boolean intersect(Ship ship1, Ship ship2){
+        if (ship2.getStart().x < ship2.getEnd().x){
+            if (ship2.getStart().y < ship2.getEnd().y){
+                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
+                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }else{
+                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
+                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }else{
+            if (ship2.getStart().y < ship2.getEnd().y){
+                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
+                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }else{
+                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
+                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
+                        if(pointIntersectsShip(new Point(x,y),ship1)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private List<Point> findInBoundsEndPoints(Ship ship){
         List<Point> endPoints = new ArrayList<>();
         Point start = ship.getStart();
         int length = ship.getLength();
 
         Point down = new Point(start.x, start.y + length - 1);
-        if (checkPlaceLegal(down)){
+        if (checkPlaceInBounds(down)){
             endPoints.add(down);
         }
 
         Point up = new Point (start.x, start.y - (length - 1));
-        if(checkPlaceLegal(up)){
+        if(checkPlaceInBounds(up)){
             endPoints.add(up);
         }
 
         Point left = new Point(start.x - (length -1), start.y);
-        if(checkPlaceLegal(left)){
+        if(checkPlaceInBounds(left)){
             endPoints.add(left);
         }
 
         Point right = new Point(start.x + length - 1, start.y);
-        if (checkPlaceLegal(right)){
+        if (checkPlaceInBounds(right)){
             endPoints.add(right);
         }
         return endPoints;
     }
 
+    private static boolean checkPlaceInBounds(Point place){
+        return (place.x >= 0 && place.x < COLUMNS && place.y >= 0 && place.y < ROWS);
+    }
+
     public boolean checkPlaceLegal(Point place){
-        if(place.x < 0 || place.x >= ROWS || place.y < 0 || place.y >= COLUMNS){
+        if(!checkPlaceInBounds(place)){
             return false;
         }else {
             return gameState.getTile(place.x, place.y) != Tile.SHIP;
@@ -296,60 +360,28 @@ public abstract class Player {
         return gameState;
     }
 
+    public List<Ship> getShips(){
+        return ships;
+    }
+
     public abstract void placeShips() throws ShipPlacementException;
     public abstract void guess();
     public abstract void sendMessage();
-    //public abstract void receiveMessage();
+    public abstract void processMessage();
 
-    //testing methods
-    private boolean intersect(Ship ship1, Ship ship2){
-        if (ship2.getStart().x < ship2.getEnd().x){
-            if (ship2.getStart().y < ship2.getEnd().y){
-                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
-                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
-                        if(pointIntersectsShip(new Point(x,y),ship1)){
-                            return true;
-                        }
-                    }
-                }
-            }else{
-                for (int x = ship2.getStart().x; x <= ship2.getEnd().x; x++){
-                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
-                        if(pointIntersectsShip(new Point(x,y),ship1)){
-                            return true;
-                        }
-                    }
-                }
-            }
-        }else{
-            if (ship2.getStart().y < ship2.getEnd().y){
-                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
-                    for (int y = ship2.getStart().y; y <= ship2.getEnd().y; y++){
-                        if(pointIntersectsShip(new Point(x,y),ship1)){
-                            return true;
-                        }
-                    }
-                }
-            }else{
-                for (int x = ship2.getStart().x; x >= ship2.getEnd().x; x--){
-                    for (int y = ship2.getStart().y; y >= ship2.getEnd().y; y--){
-                        if(pointIntersectsShip(new Point(x,y),ship1)){
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    //testing class
     public static class PlayerTesting{
-        public static boolean intersect(Player player,Ship ship1, Ship ship2) {
+        public static boolean intersect(Player player, Ship ship1, Ship ship2) {
             return player.intersect(ship1, ship2);
         }
+
         public static void addShipToGameState(Player player, Ship ship) throws ShipPlacementException {
             player.addShipToGameState(ship);
         }
 
+        public static void setShips(Player player, List<Ship> ships){
+            player.ships = ships;
+        }
     }
 
     public static void main(String[]args){

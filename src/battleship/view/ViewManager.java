@@ -16,7 +16,6 @@ public class ViewManager {
         networkingClientWindow = new NetworkingClient();
         networkingHostWindow = new NetworkingHost();
     }
-    
 
     public GamePlayWindow getGameScreen() {
         return gameScreen;

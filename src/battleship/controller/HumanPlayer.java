@@ -91,8 +91,13 @@ public class HumanPlayer extends Player {
     public void sendMessage() {
 
     }
-    
-    public void cleanup() {
+
+	@Override
+	public void processMessage() {
+
+	}
+
+	public void cleanup() {
     	if(messageListener != null) {
         	messageListener.interrupt();
     	}

@@ -22,4 +22,9 @@ public class ComputerPlayer extends Player {
     public void sendMessage() {
 
     }
+
+    @Override
+    public void processMessage() {
+
+    }
 }

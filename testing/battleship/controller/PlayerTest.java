@@ -3,22 +3,17 @@ package battleship.controller;
 import battleship.model.Ship;
 import battleship.model.Ship.ShipType;
 import battleship.view.ViewManager;
-import javafx.scene.input.PickResult;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-
 import java.awt.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
 class PlayerTest {
-    private Player player = new ComputerPlayer(new ViewManager());
-
-    @BeforeEach
-    void setup(){
-        player.resetGame();
-    }
+    private Player player = new ComputerPlayer(null);
 
     @Test
     void testCheckPlaceLegalOnEdges(){
@@ -163,6 +158,46 @@ class PlayerTest {
     }
 
     @Test
+    void testMultipleShipsDoNotIntersect(){
+        List<Ship> ships = new ArrayList<>();
+
+        Ship destroyer = new Ship(ShipType.DESTROYER);
+        destroyer.setStart(new Point(1,5));
+        destroyer.setEnd(new Point(2,5));
+        ships.add(destroyer);
+
+        Ship submarine = new Ship(ShipType.SUBMARINE);
+        submarine.setStart(new Point(7,8));
+        submarine.setEnd(new Point(9,8));
+        ships.add(submarine);
+
+        Ship cruiser = new Ship(ShipType.CRUISER);
+        cruiser.setStart(new Point(5,2));
+        cruiser.setEnd(new Point(3,2));
+        ships.add(cruiser);
+
+        Ship battleShip = new Ship(ShipType.BATTLESHIP);
+        battleShip.setStart(new Point(8,6));
+        battleShip.setEnd(new Point(5,6));
+        ships.add(battleShip);
+
+        Ship carrier = new Ship(ShipType.CARRIER);
+        carrier.setStart(new Point(6,7));
+        carrier.setEnd(new Point(2,7));
+        ships.add(carrier);
+
+
+        for(int i = 0; i < ships.size(); i++){
+            for(int j = i+1; j < ships.size(); j++) {
+                Ship ship1 = ships.get(i);
+                Ship ship2 = ships.get(j);
+                boolean test = Player.PlayerTesting.intersect(player, ship1, ship2);
+                Assertions.assertTrue(!test);
+            }
+        }
+    }
+
+    @Test
     void testAddShipToGameState(){
         try {
             Ship ship = new Ship(ShipType.DESTROYER);
@@ -225,5 +260,49 @@ class PlayerTest {
         } catch (ShipPlacementException e){
             //Do nothing
         }
+    }
+
+    @RepeatedTest(10000)
+    void testRandomShipPlacement(){
+        try {
+            player.randomShipPlacement();
+
+            for (Ship ship: player.getShips()){
+                Assertions.assertTrue(!(ship.getStart().x < 0 || ship.getStart().x >= 10 || ship.getStart().y < 0 || ship.getStart().y >= 10));
+                Assertions.assertTrue(!(ship.getEnd().x < 0 || ship.getEnd().x >= 10 || ship.getEnd().y < 0 || ship.getEnd().y >= 10));
+            }
+
+            for(int i = 0; i < player.getShips().size(); i++){
+                for(int j = i+1; j < player.getShips().size(); j++){
+                    Ship ship1 = player.getShips().get(i);
+                    Ship ship2 = player.getShips().get(j);
+                    Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1, ship2));
+                }
+            }
+        }catch(ShipPlacementException e){
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    void testCheckHitMiss(){
+        List<Ship> ships = new ArrayList<>();
+
+        Ship destroyer = new Ship(ShipType.DESTROYER);
+        destroyer.setStart(new Point(3,2));
+        destroyer.setEnd(new Point(2,2));
+        ships.add(destroyer);
+
+        Ship carrier = new Ship(ShipType.CARRIER);
+        carrier.setStart(new Point(4,5));
+        carrier.setEnd(new Point(0,5));
+        ships.add(carrier);
+
+        Player.PlayerTesting.setShips(player, ships);
+
+        Assertions.assertTrue(player.checkHitMiss(new Point(3,2)));
+        Assertions.assertTrue(player.checkHitMiss(new Point(2,5)));
+        Assertions.assertTrue(!player.checkHitMiss(new Point(9,9)));
+        Assertions.assertTrue(!player.checkHitMiss(new Point(5,5)));
     }
 }
