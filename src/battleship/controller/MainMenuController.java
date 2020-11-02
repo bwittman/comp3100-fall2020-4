@@ -39,9 +39,11 @@ public class MainMenuController {
 				System.out.println("User Selected Yes: they are the host");
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
+				humanPlayer.setTurn(true);
 			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
 				System.out.println("User Selected No: they are client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
+				humanPlayer.setTurn(false);
 			}
 		});
 		
@@ -61,6 +63,8 @@ public class MainMenuController {
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(viewManager);
 			humanPlayer = new HumanPlayer(viewManager);
+			humanPlayer.setTurn(true);
+			computerPlayer.setTurn(false);
 			viewManager.getGameScreen().setVisible(true);
 			menu.setVisible(false);
 		});

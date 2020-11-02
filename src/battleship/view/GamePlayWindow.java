@@ -9,7 +9,7 @@ public class GamePlayWindow extends JFrame {
     private Board enemyBoard;
     private JTextArea log;
     private JScrollPane scrollPane;
-    private ButtonGroup radioButtonGroup;
+    private ButtonGroup shipButtonGroup;
     private JPanel logPanel;
     private JPanel shipPanel;
     private JPanel boardPanel;
@@ -33,8 +33,8 @@ public class GamePlayWindow extends JFrame {
         logPanel.add(scrollPane, BorderLayout.NORTH);
 
         boardPanel = new JPanel(new BorderLayout());
-        boardPanel.add(userBoard, BorderLayout.NORTH);
-        boardPanel.add(enemyBoard, BorderLayout.SOUTH);
+        boardPanel.add(enemyBoard, BorderLayout.NORTH);
+        boardPanel.add(userBoard, BorderLayout.SOUTH);
 
         JRadioButton carrierButton = new JRadioButton("Carrier: 5 Tiles");
         JRadioButton battleshipButton = new JRadioButton("Battleship: 4 Tiles");
@@ -42,12 +42,12 @@ public class GamePlayWindow extends JFrame {
         JRadioButton submarineButton = new JRadioButton("Submarine: 3 Tiles");
         JRadioButton destroyerButton = new JRadioButton("Destroyer: 2 Tiles");
 
-        radioButtonGroup = new ButtonGroup();
-        radioButtonGroup.add(carrierButton);
-        radioButtonGroup.add(battleshipButton);
-        radioButtonGroup.add(cruiserButton);
-        radioButtonGroup.add(submarineButton);
-        radioButtonGroup.add(destroyerButton);
+        shipButtonGroup = new ButtonGroup();
+        shipButtonGroup.add(carrierButton);
+        shipButtonGroup.add(battleshipButton);
+        shipButtonGroup.add(cruiserButton);
+        shipButtonGroup.add(submarineButton);
+        shipButtonGroup.add(destroyerButton);
 
         shipPanel = new JPanel(new GridLayout(5, 1));
 
@@ -59,16 +59,7 @@ public class GamePlayWindow extends JFrame {
 
         logPanel.add(shipPanel, BorderLayout.CENTER);
 
-        optionButtons = new JPanel(new GridLayout(1, 3));
-
-        resetButton = new JButton("Reset");
-        randomButton = new JButton("Random");
-        playGameButton = new JButton("Play Game");
-
-        optionButtons.add(resetButton);
-        optionButtons.add(randomButton);
-        optionButtons.add(playGameButton);
-        optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
+        setUpShipPlacementOptionsPanel();
 
         setTitle("Battleship: Game Board");
         setSize(625,750);
@@ -84,12 +75,17 @@ public class GamePlayWindow extends JFrame {
 
     }
 
-    public Board getUserBoard() {
-        return userBoard;
-    }
+    private void setUpShipPlacementOptionsPanel(){
+        optionButtons = new JPanel(new GridLayout(1, 3));
 
-    public Board getEnemyBoard() {
-        return enemyBoard;
+        resetButton = new JButton("Reset");
+        randomButton = new JButton("Random");
+        playGameButton = new JButton("Play Game");
+
+        optionButtons.add(resetButton);
+        optionButtons.add(randomButton);
+        optionButtons.add(playGameButton);
+        optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
     }
 
     public void writeToLog(){
@@ -107,5 +103,31 @@ public class GamePlayWindow extends JFrame {
     private void placeAShip(){
     }
 
+    public Board getUserBoard() {
+        return userBoard;
+    }
 
+    public Board getEnemyBoard() {
+        return enemyBoard;
+    }
+
+    public JButton getResetButton(){
+        return resetButton;
+    }
+
+    public JButton getRandomButton(){
+        return randomButton;
+    }
+
+    public JButton getPlayGameButton(){
+        return playGameButton;
+    }
+
+    public ButtonGroup getShipButtonGroup(){
+        return shipButtonGroup;
+    }
+
+    public JPanel getOptionButtons(){
+        return optionButtons;
+    }
 }

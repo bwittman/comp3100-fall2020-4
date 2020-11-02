@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
@@ -45,7 +46,6 @@ public abstract class Player {
             setUpView();
             updateAllBoards();
         }
-
     }
 
     private void updateAllBoards(){
@@ -73,6 +73,10 @@ public abstract class Player {
 
     private void setUpView(){
         setEnemyActionListeners();
+        setResetActionListener();
+        setRandomActionListener();
+        setPlayGameActionListener();
+        disableBoard(viewManager.getGameScreen().getEnemyBoard());
     }
 
     private void setEnemyActionListeners(){
@@ -84,6 +88,49 @@ public abstract class Player {
         }
     }
 
+    private void setResetActionListener(){
+        viewManager.getGameScreen().getResetButton().addActionListener(e ->{
+            resetGame();
+            updateAllBoards();
+        });
+    }
+
+    private void setRandomActionListener(){
+        viewManager.getGameScreen().getRandomButton().addActionListener(e -> {
+            resetGame();
+            randomShipPlacement();
+            updateAllBoards();
+        });
+    }
+
+    private void setPlayGameActionListener(){
+        viewManager.getGameScreen().getPlayGameButton().addActionListener(e -> {
+            onPlayGameClicked();
+        });
+    }
+
+    private void onPlayGameClicked(){
+        if (allShipsPlaced()) {
+            int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
+            if (confirmed == JOptionPane.YES_OPTION) {
+                disableBoard(viewManager.getGameScreen().getUserBoard());
+
+                //disable ship buttons
+                Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+                while (shipButtons.hasMoreElements()) {
+                    AbstractButton shipButton = shipButtons.nextElement();
+                    shipButton.setEnabled(false);
+                }
+
+                viewManager.getGameScreen().getOptionButtons().setVisible(false);
+
+                if (isMyTurn) {
+                    enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
+                }
+            }
+        }
+    }
+
     //we need to be sending the message to the enemy to check if it is hit or missed
     private void onEnemyButtonClicked(ActionEvent e, Board board){
         //loop through out button array to find the location of the button which was clicked
@@ -91,19 +138,13 @@ public abstract class Player {
             for (int col = 0; col < COLUMNS; col++) {
                 JButton currentButton = board.getButton(row, col);
                 if (currentButton == e.getSource()){
-                    if(checkHitMiss(new Point(row,col))){
-                        enemyGameState.setTile(Tile.HIT, row, col);
-                    }else{
-                        enemyGameState.setTile(Tile.MISS, row, col);
-                    }
-                    currentButton.setEnabled(false);
+                    sendMessage();//with the point (row,col)
                 }
             }
         }
-        updateBoard(enemyGameState, board);
     }
 
-    public void updateBoard(GameState gameState, Board board) {
+    private void updateBoard(GameState gameState, Board board) {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
                 Tile currentTile = gameState.getTile(i,j);
@@ -126,7 +167,6 @@ public abstract class Player {
                         currentButton.setDisabledIcon(SHIP_ICON);
                         break;
                 }
-                enableBoard(gameState, board);
             }
         }
     }
@@ -135,8 +175,10 @@ public abstract class Player {
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
                 JButton currentButton = board.getButton(i,j);
-                if (!(gameState.getTile(i,j) == Tile.HIT || gameState.getTile(i,j) == Tile.MISS)){
+                if (gameState.getTile(i,j) == Tile.WATER){
                     currentButton.setEnabled(true);
+                }else{
+                    currentButton.setEnabled(false);
                 }
             }
         }
@@ -149,6 +191,15 @@ public abstract class Player {
                 currentButton.setEnabled(false);
             }
         }
+    }
+
+    private boolean allShipsPlaced(){
+        for (Ship ship: ships){
+            if (ship.getStart() == null || ship.getEnd() == null){
+                return false;
+            }
+        }
+        return true;
     }
 
     //Assumes start and end have been checked for legal
@@ -185,14 +236,16 @@ public abstract class Player {
         }
     }
 
-    public void randomShipPlacement() throws ShipPlacementException {
+    public void randomShipPlacement(){
         Random random = new Random();
-        boolean placed;
-        for (int i = 0; i < ships.size(); i++){
+        boolean noExceptions = true;
+
+        int i = 0;
+        while(i < ships.size()){
             Ship ship = ships.get(i);
             //keep going until we have a legal starting point and at least one legal ending point
             List<Point> legalEndPoints;
-            placed = false;
+            boolean placed = false;
             while(!placed){
                 Point start = new Point();
                 do {
@@ -215,7 +268,13 @@ public abstract class Player {
                     }
                 }
             }
-            addShipToGameState(ship);
+
+            try {
+                addShipToGameState(ship);
+                i++;
+            }catch (ShipPlacementException e){
+                ship.reset();
+            }
         }
     }
 
@@ -345,10 +404,6 @@ public abstract class Player {
         return true;
     }
 
-    public void resetStoredShips(){
-        gameState.reset();
-    }
-
     public void resetGame(){
         gameState.reset();
         enemyGameState.reset();
@@ -364,6 +419,10 @@ public abstract class Player {
 
     public List<Ship> getShips(){
         return ships;
+    }
+
+    public void setTurn(boolean isMyTurn){
+        this.isMyTurn = isMyTurn;
     }
 
     public abstract void placeShips() throws ShipPlacementException;
