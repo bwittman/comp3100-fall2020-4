@@ -7,8 +7,8 @@ import battleship.controller.Player;
 
 public class Board extends JPanel {
 
-    private static final int ROWS = 10;
-    private static final int COLUMNS = 10;
+    private static final int ROWS = Player.ROWS;
+    private static final int COLUMNS = Player.COLUMNS;
     private static final int BUTTON_SIZE = 30;
 
     private JButton[][] buttonArray = new JButton[ROWS][COLUMNS];

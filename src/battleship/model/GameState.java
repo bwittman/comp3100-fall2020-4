@@ -6,8 +6,8 @@ import battleship.view.Board;
 public class GameState {
 
 	private Player.Tile[][] board;
-	private static final int ROWS = 10;
-	private static final int COLUMNS = 10;
+	private static final int ROWS = Player.ROWS;
+	private static final int COLUMNS = Player.COLUMNS;
 
 	public GameState() {
 		board = new Player.Tile[10][10];

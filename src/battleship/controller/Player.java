@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Player {
-    private static final int ROWS = 10;
-    private static final int COLUMNS = 10;
+    public static final int ROWS = 10;
+    public static final int COLUMNS = 10;
     private static final int BUTTON_SIDE = 50;
     private static final Color WATER_BLUE = new Color(16,129,160);
     private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
@@ -23,7 +23,6 @@ public abstract class Player {
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
     private static final Icon SHIP_ICON = new ImageIcon(((new ImageIcon("resources/shipTile.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
-
 
     public enum Tile {
         SHIP,
@@ -151,12 +150,14 @@ public abstract class Player {
             }
         }
     }
+
     //Assumes start and end have been checked for legal
     private void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
             gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
             gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
-        }else if(ship.getStart().x - ship.getEnd().x == 0){ //then it is vertical
+        //then it is horizontal
+        }else if(ship.getStart().x - ship.getEnd().x == 0){
             if (ship.getStart().y < ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
                     gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+i);
@@ -168,7 +169,8 @@ public abstract class Player {
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
             }
-        }else{//then it is horizontal
+        //then it is vertical
+        }else{
             if (ship.getStart().x < ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
                     gameState.setTile(Tile.SHIP, ship.getStart().x+i, ship.getStart().y);
@@ -194,8 +196,8 @@ public abstract class Player {
             while(!placed){
                 Point start = new Point();
                 do {
-                    start.x = random.nextInt(10);
-                    start.y = random.nextInt(10);
+                    start.x = random.nextInt(ROWS);
+                    start.y = random.nextInt(COLUMNS);
                 } while (!checkPlaceLegal(start));
 
                 ship.setStart(start);
@@ -286,7 +288,7 @@ public abstract class Player {
     }
 
     private static boolean checkPlaceInBounds(Point place){
-        return (place.x >= 0 && place.x < COLUMNS && place.y >= 0 && place.y < ROWS);
+        return (place.x >= 0 && place.x < ROWS && place.y >= 0 && place.y < COLUMNS);
     }
 
     public boolean checkPlaceLegal(Point place){
@@ -308,7 +310,7 @@ public abstract class Player {
     }
 
     private boolean pointIntersectsShip(Point point, Ship ship1){
-        //first ship is horizontal
+        //first ship is vertical
         if (ship1.getStart().y == ship1.getEnd().y) {
             if (ship1.getStart().x > ship1.getEnd().x) {
                 //the point from ship 2 intersects ship 1

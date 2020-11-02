@@ -2,10 +2,8 @@ package battleship.controller;
 
 import battleship.model.Ship;
 import battleship.model.Ship.ShipType;
-import battleship.view.ViewManager;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import java.awt.*;
@@ -14,6 +12,8 @@ import java.util.List;
 
 class PlayerTest {
     private Player player = new ComputerPlayer(null);
+    private static final int ROWS = Player.ROWS;
+    private static final int COLUMNS = Player.COLUMNS;
 
     @Test
     void testCheckPlaceLegalOnEdges(){
@@ -49,17 +49,22 @@ class PlayerTest {
     }
 
     @Test
-    void testShipsIntersect(){
+    void testShipsHorizontalAdjacentIntersect() {
         Ship ship1 = new Ship(ShipType.SUBMARINE);
         Ship ship2 = new Ship(ShipType.CRUISER);
 
-        //both vertical, different columns
-        ship1.setStart(new Point(3,7));
-        ship1.setEnd(new Point(3,5));
-        ship2.setStart(new Point(4,7));
-        ship2.setEnd(new Point(4,5));
+        ship1.setStart(new Point(3, 7));
+        ship1.setEnd(new Point(3, 5));
+        ship2.setStart(new Point(4, 7));
+        ship2.setEnd(new Point(4, 5));
 
-        Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+        Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1, ship2));
+    }
+
+    @Test
+    void testShipsHorizontalDistantIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
 
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
@@ -67,14 +72,25 @@ class PlayerTest {
         ship2.setEnd(new Point(7,2));
 
         Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //both horizontal, different rows
+    @Test
+    void testShipsVerticalAdjacentIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(2,4));
         ship1.setEnd(new Point(0,4));
         ship2.setStart(new Point(0,5));
         ship2.setEnd(new Point(2,5));
 
         Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
+
+    @Test
+    void testShipsVerticalDistantIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
 
         ship1.setStart(new Point(2,4));
         ship1.setEnd(new Point(0,4));
@@ -82,14 +98,38 @@ class PlayerTest {
         ship2.setEnd(new Point(6,9));
 
         Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //both vertical, same column
+    @Test
+    void testShipsHorizontalSameRowIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
         ship2.setStart(new Point(3,2));
         ship2.setEnd(new Point(3,4));
 
         Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
+
+    @Test
+    void testShipsVerticalSameColumnIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
+        ship1.setStart(new Point(5,5));
+        ship1.setEnd(new Point(7,5));
+        ship2.setStart(new Point(4,5));
+        ship2.setEnd(new Point(2,5));
+
+        Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
+
+    @Test
+    void testShipsHorizontalOverlapPartiallyIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
 
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
@@ -97,14 +137,12 @@ class PlayerTest {
         ship2.setEnd(new Point(3,5));
 
         Assertions.assertTrue(Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //both horizontal same row
-        ship1.setStart(new Point(5,5));
-        ship1.setEnd(new Point(7,5));
-        ship2.setStart(new Point(4,5));
-        ship2.setEnd(new Point(2,5));
-
-        Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    @Test
+    void testShipsVerticalOverlapPartiallyIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
 
         ship1.setStart(new Point(5,5));
         ship1.setEnd(new Point(7,5));
@@ -112,42 +150,64 @@ class PlayerTest {
         ship2.setEnd(new Point(4,5));
 
         Assertions.assertTrue(Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //one horizontal, one vertical
+    @Test
+    void testShipsVerticalAndHorizontalNotIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
         ship2.setStart(new Point(2,9));
         ship2.setEnd(new Point(0,9));
 
         Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //intersect at start
+    @Test
+    void testShipsStartAndMiddleIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
         ship2.setStart(new Point(4,7));
         ship2.setEnd(new Point(2,7));
 
         Assertions.assertTrue(Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //intersect in middle
+    @Test
+    void testShipsMiddlesIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
         ship2.setStart(new Point(4,6));
         ship2.setEnd(new Point(2,6));
 
         Assertions.assertTrue(Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //on top of each other
+    @Test
+    void testShipsSameLocationIntersect(){
+        Ship ship1 = new Ship(ShipType.SUBMARINE);
+        Ship ship2 = new Ship(ShipType.CRUISER);
+
         ship1.setStart(new Point(3,7));
         ship1.setEnd(new Point(3,5));
         ship2.setStart(new Point(3,7));
         ship2.setEnd(new Point(3,5));
 
         Assertions.assertTrue(Player.PlayerTesting.intersect(player, ship1,ship2));
+    }
 
-        //one ship inside another
-        ship1 = new Ship(ShipType.DESTROYER);
-        ship2 = new Ship(ShipType.CARRIER);
+    @Test
+    void testShipsInsideAnotherIntersect(){
+        Ship ship1 = new Ship(ShipType.DESTROYER);
+        Ship ship2 = new Ship(ShipType.CARRIER);
 
         ship1.setStart(new Point(6,6));
         ship1.setEnd(new Point(6, 5));
@@ -268,8 +328,8 @@ class PlayerTest {
             player.randomShipPlacement();
 
             for (Ship ship: player.getShips()){
-                Assertions.assertTrue(!(ship.getStart().x < 0 || ship.getStart().x >= 10 || ship.getStart().y < 0 || ship.getStart().y >= 10));
-                Assertions.assertTrue(!(ship.getEnd().x < 0 || ship.getEnd().x >= 10 || ship.getEnd().y < 0 || ship.getEnd().y >= 10));
+                Assertions.assertTrue(!(ship.getStart().x < 0 || ship.getStart().x >= ROWS || ship.getStart().y < 0 || ship.getStart().y >= COLUMNS));
+                Assertions.assertTrue(!(ship.getEnd().x < 0 || ship.getEnd().x >= ROWS || ship.getEnd().y < 0 || ship.getEnd().y >= COLUMNS));
             }
 
             for(int i = 0; i < player.getShips().size(); i++){
