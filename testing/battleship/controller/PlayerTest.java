@@ -342,15 +342,16 @@ class PlayerTest {
     @RepeatedTest(10000)
     void testRandomShipPlacement(){
         player.randomShipPlacement();
-            for (Ship ship: player.getShips()){
+        List<Ship> ships = Player.PlayerTesting.getShips(player);
+            for (Ship ship: ships){
                 Assertions.assertTrue(!(ship.getStart().x < 0 || ship.getStart().x >= ROWS || ship.getStart().y < 0 || ship.getStart().y >= COLUMNS));
                 Assertions.assertTrue(!(ship.getEnd().x < 0 || ship.getEnd().x >= ROWS || ship.getEnd().y < 0 || ship.getEnd().y >= COLUMNS));
             }
 
-            for(int i = 0; i < player.getShips().size(); i++){
-                for(int j = i+1; j < player.getShips().size(); j++){
-                    Ship ship1 = player.getShips().get(i);
-            Ship ship2 = player.getShips().get(j);
+            for(int i = 0; i < ships.size(); i++){
+                for(int j = i+1; j < ships.size(); j++){
+                    Ship ship1 = ships.get(i);
+            Ship ship2 = ships.get(j);
             Assertions.assertTrue(!Player.PlayerTesting.intersect(player, ship1, ship2));
             }
         }

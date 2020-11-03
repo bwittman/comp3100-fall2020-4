@@ -38,7 +38,6 @@ public abstract class Player {
     private GameState enemyGameState;
     private boolean isMyTurn;
     protected ViewManager viewManager;
-    //TODO: add boolean for if this is a computer game or human game
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -455,28 +454,48 @@ public abstract class Player {
         return gameState;
     }
 
-    public List<Ship> getShips(){
-        return ships;
-    }
-
     public void setTurn(boolean isMyTurn){
         this.isMyTurn = isMyTurn;
     }
 
     public Results processGuess(int row, int column){
-        //update my own things
-        //send the Results to the opponent
-        return null;
+        boolean hit = checkHitMiss(new Point(row, column));
+        ShipType sunkShip = null;
+        for (Ship ship: ships){
+            if (ship.checkForSunk()){
+                //write to the log
+                sunkShip = ship.getShipType();
+            }
+        }
+
+        boolean opponentWon = checkForWin();
+
+        return new Results(new Point(row, column), hit, opponentWon, sunkShip);
     }
 
     public void processResults(Results results){
+        if (results.isTileHit()){
+            gameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
+        }else{
+            gameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
+        }
+        updateAllBoards();
 
+        if (results.getSunkShip() != null){
+            //write to the log
+        }
+
+        if (results.hasPlayerWon()){
+            //display that I have won
+        }
+        isMyTurn = false;
     }
 
     public abstract Results makeGuess(int row, int column);
-        //send the guess to the oppenent
+        //send the guess to the opponent
         //wait for response
     public abstract void sendResults(Results results);
+        //send the results to the opponent
 
     //testing class
     public static class PlayerTesting{
@@ -491,44 +510,13 @@ public abstract class Player {
         public static void setShips(Player player, List<Ship> ships){
             player.ships = ships;
         }
+
+        public static List<Ship> getShips(Player player){
+            return player.ships;
+        }
     }
 
     public static void main(String[]args){
-        /*
-        JFrame frame = new JFrame("Battleship");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(625,625);
-        frame.setMinimumSize(new Dimension(625,625));
-        frame.setResizable(false);
-
-        BoardPrototype board = new BoardPrototype(new GameState());
-
-        frame.add(board);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        */
-        /*
-        try {
-            // Set cross-platform Java L&F (also called "Metal")
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (UnsupportedLookAndFeelException e) {
-            // handle exception
-        }
-        catch (ClassNotFoundException e) {
-            // handle exception
-        }
-        catch (InstantiationException e) {
-            // handle exception
-        }
-        catch (IllegalAccessException e) {
-            // handle exception
-        }
-
-         */
-
         MainMenuController menuController = new MainMenuController();
     }
 }

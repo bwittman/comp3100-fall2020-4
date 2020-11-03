@@ -7,6 +7,7 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(ViewManager viewManager){
     	super(viewManager);
+    	randomShipPlacement();
     }
 
     @Override
@@ -16,6 +17,6 @@ public class ComputerPlayer extends Player {
 
     @Override
     public void sendResults(Results results){
-
+        //now its my turn
     }
 }

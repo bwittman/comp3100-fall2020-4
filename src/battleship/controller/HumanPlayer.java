@@ -16,14 +16,17 @@ import battleship.view.ViewManager;
 
 public class HumanPlayer extends Player {
 	
-	private Networking networking;
+	private Networking networking = null;
 	private Thread messageListener;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
+	private boolean isComputerGame = false;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
-		networking = new Networking();
+		if (isComputerGame){
+			networking = new Networking();
+		}
 		setUserBoardActionListeners();
 	}
 
@@ -208,13 +211,15 @@ public class HumanPlayer extends Player {
 
     @Override
     public Results makeGuess(int row, int column) {
-		//if networking object is null computer game
-		//else human game
+		if (isComputerGame){
+
+		}else{
 			//networking.printwriter.println("GUESS")
 			//send the ints
-			//use scanner to read sunk, hit/miss
-			//if there are 17 hits I won
+			//use scanner to read sunk, hit/miss, win
 			//convert into a Results object
+		}
+
 		return null;
     }
 
@@ -229,6 +234,7 @@ public class HumanPlayer extends Player {
     	}
     }
 
-
-    
+	public void setComputerGame(boolean isComputerGame){
+		this.isComputerGame = isComputerGame;
+	}
 }

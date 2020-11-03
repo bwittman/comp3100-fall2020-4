@@ -40,6 +40,7 @@ public class MainMenuController {
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				humanPlayer.setTurn(true);
+				humanPlayer.setComputerGame(false);
 			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
 				System.out.println("User Selected No: they are client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
@@ -65,6 +66,7 @@ public class MainMenuController {
 			humanPlayer = new HumanPlayer(viewManager);
 			humanPlayer.setTurn(true);
 			computerPlayer.setTurn(false);
+			humanPlayer.setComputerGame(true);
 			viewManager.getGameScreen().setVisible(true);
 			menu.setVisible(false);
 		});

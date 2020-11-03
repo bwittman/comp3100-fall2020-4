@@ -18,25 +18,15 @@ public class Ship {
             this.name = name;
             this.length = length;
         }
-
-        public String getName(){
-            return name;
-        }
-
-        public int getLength(){
-            return length;
-        }
     }
 
-    private String name;
-    private int length;
+    private ShipType shipType;
     private int hits;
     private Point start;
     private Point end;
 
     public Ship(ShipType shipType) {
-        this.name = shipType.getName();
-        this.length = shipType.getLength();
+        this.shipType = shipType;
         this.hits = 0;
     }
 
@@ -57,7 +47,7 @@ public class Ship {
     }
 
     public int getLength() {
-        return length;
+        return shipType.length;
     }
 
     public void updateHits() {
@@ -65,7 +55,11 @@ public class Ship {
     }
 
     public String getName() {
-        return name;
+        return shipType.name;
+    }
+
+    public ShipType getShipType(){
+        return shipType;
     }
 
     public void reset(){
@@ -75,12 +69,12 @@ public class Ship {
     }
 
     public boolean checkForSunk(){
-        return hits == length;
+        return hits == shipType.length;
     }
 
     //for testing only
     public boolean equals(Ship ship){
-        return this.hits == ship.hits && this.name.equals(ship.name) && this.length == ship.length &&
+        return this.hits == ship.hits && this.shipType.name.equals(ship.shipType.name) && this.shipType.length == ship.shipType.length &&
                 ((this.start == null && ship.start == null) || this.start.equals(ship.start)) &&
                 ((this.end == null && ship.end == null) || this.end.equals(ship.end));
     }

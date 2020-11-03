@@ -1,10 +1,6 @@
 package battleship.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.NetworkInterface;
@@ -13,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -29,8 +26,8 @@ public class Networking {
 	private Socket socket;
 	private static final int PORT = 7777;
 	private boolean isHost;
-	Scanner input;//not package level
-	OutputStream output;//change to printwriter
+	private Scanner input;
+	private PrintWriter output;
 	
 	public Networking() {
 		String ip;
@@ -85,7 +82,7 @@ public class Networking {
 				socket = serverSocket.accept();
 				InputStream inputStream = socket.getInputStream();
 				input = new Scanner(inputStream);
-				output = socket.getOutputStream();
+				output = new PrintWriter(socket.getOutputStream());
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = true)");
 				return false;
@@ -126,12 +123,7 @@ public class Networking {
 	 */
 	public void sendMessage(String message) {
 		if(socket != null && socket.isConnected()) {
-			try {
-				output.write(message.getBytes());
-			} catch (IOException e) {
-				System.out.println("Could not send Message IOException thrown");
-				e.printStackTrace();
-			};
+			output.println(Arrays.toString(message.getBytes()));
 		}else {
 			System.out.println("Could not send message. Socket could be null or not connected");
 		}
@@ -141,7 +133,7 @@ public class Networking {
 	 * Tries to get a message from the socket
 	 * @return returns the string from the socket if possible. Otherwise returns an empty string.
 	 */
-	public String recieveMessage() {
+	public String receiveMessage() {
 		if(socket != null && socket.isConnected()) {
 			return input.nextLine();
 		}else {
@@ -153,13 +145,8 @@ public class Networking {
 	 * Closes all input and output streams and sockets.
 	 */
 	public void cleanUp() {
-		try {
-			if(output != null) {
-				output.close();
-			}
-		}catch (IOException e) {
-			System.out.println("Could not clean up output IOException thrown");
-			e.printStackTrace();
+		if(output != null) {
+			output.close();
 		}
 		if(input != null) {
 			input.close();
