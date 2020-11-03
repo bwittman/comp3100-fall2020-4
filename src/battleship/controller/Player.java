@@ -48,7 +48,7 @@ public abstract class Player {
         }
     }
 
-    private void updateAllBoards(){
+    void updateAllBoards(){
         updateBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
         updateBoard(gameState, viewManager.getGameScreen().getUserBoard());
     }
@@ -203,7 +203,7 @@ public abstract class Player {
     }
 
     //Assumes start and end have been checked for legal
-    private void addShipToGameState(Ship ship) throws ShipPlacementException {
+    void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
             gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
             gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
@@ -426,6 +426,9 @@ public abstract class Player {
     }
 
     public abstract void placeShips() throws ShipPlacementException;
+
+    //public abstract void placeShips(String buttonName) throws ShipPlacementException;
+
     public abstract void guess();
     public abstract void sendMessage();
     public abstract void processMessage();

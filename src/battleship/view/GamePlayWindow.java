@@ -42,12 +42,20 @@ public class GamePlayWindow extends JFrame {
         JRadioButton submarineButton = new JRadioButton("Submarine: 3 Tiles");
         JRadioButton destroyerButton = new JRadioButton("Destroyer: 2 Tiles");
 
+        carrierButton.setActionCommand("Carrier");
+        battleshipButton.setActionCommand("Battleship");
+        cruiserButton.setActionCommand("Cruiser");
+        submarineButton.setActionCommand("Submarine");
+        destroyerButton.setActionCommand("Destroyer");
+
         shipButtonGroup = new ButtonGroup();
         shipButtonGroup.add(carrierButton);
         shipButtonGroup.add(battleshipButton);
         shipButtonGroup.add(cruiserButton);
         shipButtonGroup.add(submarineButton);
         shipButtonGroup.add(destroyerButton);
+
+        shipButtonGroup.setSelected(carrierButton.getModel(), true);
 
         shipPanel = new JPanel(new GridLayout(5, 1));
 

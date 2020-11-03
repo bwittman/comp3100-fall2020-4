@@ -14,6 +14,20 @@ public class Board extends JPanel {
     private JButton[][] buttonArray = new JButton[ROWS][COLUMNS];
     private Player player;
 
+    public class BoardButton extends JButton {
+        private String name;
+
+        public BoardButton (String name){
+            super();
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
+    }
+
+
     public Board() {
         this.setLayout(new GridLayout(ROWS + 1 ,COLUMNS + 1));
         setUpLabels();
@@ -23,6 +37,7 @@ public class Board extends JPanel {
     public JButton getButton(int i, int j){
         return buttonArray[i][j];
     }
+
 
     private void setUpLabels(){
         JLabel first = new JLabel();
@@ -35,6 +50,7 @@ public class Board extends JPanel {
         }
     }
 
+
     private void setUpButtons(){
         for (int i = 0; i < ROWS; i++ ) {
             JLabel label = new JLabel();
@@ -42,7 +58,8 @@ public class Board extends JPanel {
             label.setHorizontalAlignment(JLabel.CENTER);
             this.add(label);
             for (int j = 0; j < COLUMNS; j++) {
-                JButton button = new JButton();
+                String name = i + " " + j;
+                BoardButton button = new BoardButton(name);
                 button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
                 buttonArray[i][j] = button;
                 this.add(button);
