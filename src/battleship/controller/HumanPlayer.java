@@ -1,6 +1,7 @@
 package battleship.controller;
 
 import java.awt.*;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 
@@ -98,6 +99,13 @@ public class HumanPlayer extends Player {
 		super.resetGame();
 		startPositionPoint = null;
 		endPositionPoint = null;
+		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+		while (shipButtons.hasMoreElements()) {
+			AbstractButton shipButton = shipButtons.nextElement();
+			shipButton.setEnabled(true);
+		}
+		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
+		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
 
     public void placeShips(String buttonName) throws ShipPlacementException{
@@ -108,13 +116,8 @@ public class HumanPlayer extends Player {
 		if(buttonModel != null){
 			shipType = buttonModel.getActionCommand();
 
-			for(int i = 0; i < ships.size(); i++){
-				if(ships.get(i).toString() == shipType) shipObject = ships.get(i);
-				/*
-				if((shipObject.getEnd()!=null) || (shipObject.getStart()!= null)) {
-					throw new ShipPlacementException("Ship already Initialized...");
-				}
-				*/
+			for (Ship ship : ships) {
+				if (ship.getName().equals(shipType)) shipObject = ship;
 			}
 			if(shipObject != null) System.out.println("shipObject = " + shipObject.toString());
 			else System.err.println("HumanPlayer: ShipObject Not Initialized");
@@ -130,7 +133,25 @@ public class HumanPlayer extends Player {
 			String yString = startPositionPoint[1];	//Second String
 			int x = Integer.parseInt(xString);
 			int y = Integer.parseInt(yString);
-			this.startPositionPoint = new Point(x, y);
+			Point tempStartingPoint = new Point(x, y);
+
+
+			shipObject.setStart(tempStartingPoint);
+			List<Point> legalEndPoints = findLegalEndPoints(shipObject);
+			if(legalEndPoints.size() != 0) {
+				this.startPositionPoint = new Point(x, y);
+				disableBoard(viewManager.getGameScreen().getUserBoard());
+				for (Point current : legalEndPoints) {
+					viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
+				}
+			} else{
+				this.startPositionPoint = null;
+				shipObject.reset();
+			}
+
+
+
+
 		}else{ 								//Checks end position next
 			String [] endPositionStringList = buttonName.split(" ");
 			String xString = endPositionStringList[0]; //First String
@@ -141,6 +162,7 @@ public class HumanPlayer extends Player {
 			boolean isStartLegal = checkPlaceLegal(startPositionPoint);
 			if(isStartLegal){
 				boolean isEndLegal = checkPlaceLegal(endPositionPoint);
+
 				if(isEndLegal){
 					shipObject.setStart(startPositionPoint);
 					shipObject.setEnd(endPositionPoint);
@@ -151,9 +173,18 @@ public class HumanPlayer extends Player {
 						System.err.println("HumanPlayer: Could not add ship to game state");
 					}
 					updateAllBoards();
+					viewManager.getGameScreen().getShipButtonGroup().getSelection().setEnabled(false);
+					viewManager.getGameScreen().getShipButtonGroup().clearSelection();
 					startPositionPoint = null;
 					endPositionPoint = null;		//reset first and second click counter
-
+					Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+					while (shipButtons.hasMoreElements()) {
+						AbstractButton shipButton = shipButtons.nextElement();
+						if(shipButton.isEnabled()) {
+							shipButton.setSelected(true);
+						}
+					}
+					enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
 				}else{
 					System.err.println("Human Player: End Position is not Legal");
 				}

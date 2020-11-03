@@ -85,8 +85,4 @@ public class Ship {
                 ((this.end == null && ship.end == null) || this.end.equals(ship.end));
     }
 
-    @Override
-    public String toString(){
-        return name;
-    }
 }
