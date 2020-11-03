@@ -11,28 +11,20 @@ import battleship.model.Results;
 import battleship.model.Ship;
 import battleship.view.Board;
 
+import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
 
 public class HumanPlayer extends Player {
 	
 	private Networking networking;
 	private Thread messageListener;
-	private ViewManager viewManager;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
-	private List<Ship> ships;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
-		this.viewManager = viewManager;
 		networking = new Networking();
 		setUserBoardActionListeners();
-		ships = getShips();
-	}
-
-	@Override
-	public void placeShips() throws ShipPlacementException {
-		//TODO: Resolve problem of two placeShips methods
 	}
 
 	/**
@@ -109,7 +101,67 @@ public class HumanPlayer extends Player {
 		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
 
-    public void placeShips(String buttonName) throws ShipPlacementException{
+    public void placeShip(CoordinateButton clickedButton) throws ShipPlacementException{
+		Ship shipToPlace = findSelectedShip();
+
+		if(startPositionPoint == null){
+			startPositionPoint = clickedButton.getLocation();
+			setShipStart(shipToPlace);
+		}else{
+			endPositionPoint = clickedButton.getLocation();
+			if(checkPlaceLegal(startPositionPoint) && checkPlaceLegal(endPositionPoint)){
+					setShipEnd(shipToPlace);
+			}else{
+				throw new ShipPlacementException("Illegal Position Selected");
+			}
+		}
+    }
+
+    private void setShipStart(Ship ship){
+		ship.setStart(startPositionPoint);
+
+		List<Point> legalEndPoints = findLegalEndPoints(ship);
+		if(legalEndPoints.size() != 0) {
+			disableBoard(viewManager.getGameScreen().getUserBoard());
+			for (Point current : legalEndPoints) {
+				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
+			}
+		} else{
+			startPositionPoint = null;
+			ship.reset();
+		}
+	}
+
+	private void setShipEnd(Ship ship) throws ShipPlacementException{
+		ship.setEnd(endPositionPoint);
+
+		addShipToGameState(ship);
+
+		updateAllBoards();
+		viewManager.getGameScreen().getShipButtonGroup().getSelection().setEnabled(false);
+		viewManager.getGameScreen().getShipButtonGroup().clearSelection();
+
+		boolean allShipsPlaced = true;
+		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+		while (shipButtons.hasMoreElements()) {
+			AbstractButton shipButton = shipButtons.nextElement();
+			if(shipButton.isEnabled()) {
+				allShipsPlaced = false;
+				shipButton.setSelected(true);
+			}
+		}
+
+		//reset first and second click counter
+		startPositionPoint = null;
+		endPositionPoint = null;
+		if (allShipsPlaced){
+			disableBoard(viewManager.getGameScreen().getUserBoard());
+		}else{
+			enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
+		}
+	}
+
+    private Ship findSelectedShip(){
 		String shipType = "";
 		ButtonModel buttonModel = viewManager.getGameScreen().getShipButtonGroup().getSelection();
 		Ship shipObject = null;
@@ -118,97 +170,34 @@ public class HumanPlayer extends Player {
 			shipType = buttonModel.getActionCommand();
 
 			for (Ship ship : ships) {
-				if (ship.getName().equals(shipType)) shipObject = ship;
+				if (ship.getName().equals(shipType)) {
+					shipObject = ship;
+				}
 			}
-			if(shipObject != null) System.out.println("shipObject = " + shipObject.toString());
-			else System.err.println("HumanPlayer: ShipObject Not Initialized");
+
+			if(shipObject != null) {
+				System.out.println("shipObject = " + shipObject.toString());
+			} else {
+				System.err.println("HumanPlayer: ShipObject Not Initialized");
+			}
 		}else{
 			System.err.println("HumanPlayer: Could not get ship type selected when trying to place ships");
 		}
 
 		System.out.println("Human Player current selected ship getActionCommand: " + shipType);
 
-		if(startPositionPoint == null){ 	//Checks start position first
-			String [] startPositionPoint = buttonName.split(" ");
-			String xString = startPositionPoint[0]; //First String
-			String yString = startPositionPoint[1];	//Second String
-			int x = Integer.parseInt(xString);
-			int y = Integer.parseInt(yString);
-			Point tempStartingPoint = new Point(x, y);
-
-
-			shipObject.setStart(tempStartingPoint);
-			List<Point> legalEndPoints = findLegalEndPoints(shipObject);
-			if(legalEndPoints.size() != 0) {
-				this.startPositionPoint = new Point(x, y);
-				disableBoard(viewManager.getGameScreen().getUserBoard());
-				for (Point current : legalEndPoints) {
-					viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
-				}
-			} else{
-				this.startPositionPoint = null;
-				shipObject.reset();
-			}
-
-
-
-
-		}else{ 								//Checks end position next
-			String [] endPositionStringList = buttonName.split(" ");
-			String xString = endPositionStringList[0]; //First String
-			String yString = endPositionStringList[1];	//Second String
-			int x = Integer.parseInt(xString);
-			int y = Integer.parseInt(yString);
-			endPositionPoint = new Point(x,y);
-			boolean isStartLegal = checkPlaceLegal(startPositionPoint);
-			if(isStartLegal){
-				boolean isEndLegal = checkPlaceLegal(endPositionPoint);
-
-				if(isEndLegal){
-					shipObject.setStart(startPositionPoint);
-					shipObject.setEnd(endPositionPoint);
-					System.out.println("Trying to place ships at Start: " + startPositionPoint.toString() + "\tEnd: " + endPositionPoint.toString());
-					try{
-						addShipToGameState(shipObject);
-					}catch (ShipPlacementException e){
-						System.err.println("HumanPlayer: Could not add ship to game state");
-					}
-					updateAllBoards();
-					viewManager.getGameScreen().getShipButtonGroup().getSelection().setEnabled(false);
-					viewManager.getGameScreen().getShipButtonGroup().clearSelection();
-					startPositionPoint = null;
-					endPositionPoint = null;		//reset first and second click counter
-					Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
-					while (shipButtons.hasMoreElements()) {
-						AbstractButton shipButton = shipButtons.nextElement();
-						if(shipButton.isEnabled()) {
-							shipButton.setSelected(true);
-						}
-					}
-					enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
-				}else{
-					System.err.println("Human Player: End Position is not Legal");
-				}
-			}else{
-				System.err.println("Human Player: Start Position is not Legal");
-			}
-
-
-		}
-    }
+		return shipObject;
+	}
 
     private void setUserBoardActionListeners(){
 		Board userBoard = viewManager.getGameScreen().getUserBoard();
 
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLUMNS; j++){
-				int finalI = i;
-				int finalJ = j;
-				userBoard.getButton(i, j).addActionListener(e->{
-					String name = userBoard.getButton(finalI, finalJ).getName();
+				CoordinateButton button = userBoard.getButton(i,j);
+				button.addActionListener(e ->{
 					try {
-						System.out.println("ActionListener for UserBoard: " + name);
-						placeShips(name);
+						placeShip(button);
 					} catch (ShipPlacementException shipPlacementException) {
 						shipPlacementException.printStackTrace();
 					}

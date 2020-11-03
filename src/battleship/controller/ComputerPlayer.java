@@ -10,11 +10,6 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public void placeShips() throws ShipPlacementException{
-
-    }
-
-    @Override
     public Results makeGuess(int row, int column) {
         return null;
     }

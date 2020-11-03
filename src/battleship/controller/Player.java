@@ -33,11 +33,11 @@ public abstract class Player {
         WATER
     }
 
-    private List<Ship> ships = new ArrayList<>();
+    protected List<Ship> ships = new ArrayList<>();
     private GameState gameState;
     private GameState enemyGameState;
     private boolean isMyTurn;
-    private ViewManager viewManager;
+    protected ViewManager viewManager;
     //TODO: add boolean for if this is a computer game or human game
 
     protected Player(ViewManager viewManager) {
@@ -472,10 +472,6 @@ public abstract class Player {
     public void processResults(Results results){
 
     }
-
-    public abstract void placeShips() throws ShipPlacementException;
-
-    //public abstract void placeShips(String buttonName) throws ShipPlacementException;
 
     public abstract Results makeGuess(int row, int column);
         //send the guess to the oppenent
