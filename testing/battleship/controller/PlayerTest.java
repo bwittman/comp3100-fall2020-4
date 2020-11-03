@@ -36,16 +36,33 @@ class PlayerTest {
     }
 
     @Test
-    void testCheckPlaceLegalSideBySide(){
-        player.getGameState().setTile(Player.Tile.SHIP, 3, 4);
-        Assertions.assertTrue(player.checkPlaceLegal(new Point(4,4)));
-        Assertions.assertTrue(!player.checkPlaceLegal(new Point(3,4)));
+    void testCheckPlaceLegalNextToShip(){
+        List<Ship> ships = new ArrayList<>();
+        Ship destroyer = new Ship(ShipType.DESTROYER);
+        destroyer.setStart(new Point(1,1));
+        destroyer.setEnd(new Point(1,2));
+        ships.add(destroyer);
 
-        player.getGameState().setTile(Player.Tile.SHIP, 9,9);
-        Assertions.assertTrue(player.checkPlaceLegal(new Point(9,8)));
+        Ship battleship = new Ship(ShipType.BATTLESHIP);
+        ships.add(battleship);
 
-        player.getGameState().setTile(Player.Tile.SHIP, 0, 4);
-        Assertions.assertTrue(player.checkPlaceLegal(new Point(1,4)));
+        Ship carrier = new Ship(ShipType.CARRIER);
+        carrier.setStart(new Point(5,5));
+        carrier.setEnd(new Point(5,9));
+        ships.add(carrier);
+        Player.PlayerTesting.setShips(player, ships);
+
+        try{
+            player.addShipToGameState(destroyer);
+            player.addShipToGameState(carrier);
+        }catch(ShipPlacementException e){
+            Assertions.fail();
+        }
+
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(5,4)));
+        Assertions.assertTrue(player.checkPlaceLegal(new Point(0,1)));
+        Assertions.assertTrue(!player.checkPlaceLegal(new Point(5,8)));
+        Assertions.assertTrue(!player.checkPlaceLegal(new Point(1,1)));
     }
 
     @Test

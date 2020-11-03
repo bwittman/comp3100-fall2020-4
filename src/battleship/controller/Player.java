@@ -1,6 +1,7 @@
 package battleship.controller;
 
 import battleship.model.GameState;
+import battleship.model.Results;
 import battleship.model.Ship;
 import battleship.view.*;
 import battleship.model.Ship.ShipType;
@@ -37,6 +38,7 @@ public abstract class Player {
     private GameState enemyGameState;
     private boolean isMyTurn;
     private ViewManager viewManager;
+    //TODO: add boolean for if this is a computer game or human game
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -138,7 +140,8 @@ public abstract class Player {
             for (int col = 0; col < COLUMNS; col++) {
                 JButton currentButton = board.getButton(row, col);
                 if (currentButton == e.getSource()){
-                    sendMessage();//with the point (row,col)
+                    Results result = makeGuess(row, col);//sending the enemy what our guess is
+                    processResults(result);
                 }
             }
         }
@@ -238,7 +241,6 @@ public abstract class Player {
 
     public void randomShipPlacement(){
         Random random = new Random();
-        boolean noExceptions = true;
 
         int i = 0;
         while(i < ships.size()){
@@ -256,15 +258,17 @@ public abstract class Player {
                 ship.setStart(start);
 
                 legalEndPoints = findLegalEndPoints(ship);
-                Point endPoint = legalEndPoints.get(random.nextInt(legalEndPoints.size()));
-                ship.setEnd(endPoint);
+                if(legalEndPoints.size() != 0) {
+                    Point endPoint = legalEndPoints.get(random.nextInt(legalEndPoints.size()));
+                    ship.setEnd(endPoint);
 
-                placed = true;
+                    placed = true;
 
-                for (int j = 0; j < i && placed; j++) {
-                    Ship ship2 = ships.get(j);
-                    if (intersect(ship, ship2)){
-                        placed = false;
+                    for (int j = 0; j < i && placed; j++) {
+                        Ship ship2 = ships.get(j);
+                        if (intersect(ship, ship2)) {
+                            placed = false;
+                        }
                     }
                 }
             }
@@ -346,23 +350,26 @@ public abstract class Player {
         }
 
         //Checks to make sure no ships intersect during ship placement
-        List<Point> result = new ArrayList<Point>();
-        if(endPoints.size() != 0) {
+        List<Point> result = new ArrayList<>();
+        if(endPoints.size() > 0) {
             for (Point currentEndPoint : endPoints) {
                 ship.setEnd(currentEndPoint);
+                boolean intersects = false;
                 for (Ship shipTest : ships) {
-                    if (shipTest.getEnd() != null) {
-                        if (!intersect(ship, shipTest)) {
-                            result.add(currentEndPoint);
+                    if (shipTest.getEnd() != null && !shipTest.getName().equals(ship.getName())) {
+                        if (intersect(ship, shipTest)) {
+                            intersects = true;
                         }
                     }
                 }
+                if (!intersects){
+                    result.add(currentEndPoint);
+                }
             }
-       }
+        }
         ship.setEnd(null);
         return result;
     }
-
 
     private static boolean checkPlaceInBounds(Point place){
         return (place.x >= 0 && place.x < ROWS && place.y >= 0 && place.y < COLUMNS);
@@ -382,7 +389,6 @@ public abstract class Player {
             return true;
         }
     }
-
 
     public boolean checkHitMiss(Point tile){
         for(Ship ship: ships){
@@ -457,13 +463,24 @@ public abstract class Player {
         this.isMyTurn = isMyTurn;
     }
 
+    public Results processGuess(int row, int column){
+        //update my own things
+        //send the Results to the opponent
+        return null;
+    }
+
+    public void processResults(Results results){
+
+    }
+
     public abstract void placeShips() throws ShipPlacementException;
 
     //public abstract void placeShips(String buttonName) throws ShipPlacementException;
 
-    public abstract void guess();
-    public abstract void sendMessage();
-    public abstract void processMessage();
+    public abstract Results makeGuess(int row, int column);
+        //send the guess to the oppenent
+        //wait for response
+    public abstract void sendResults(Results results);
 
     //testing class
     public static class PlayerTesting{

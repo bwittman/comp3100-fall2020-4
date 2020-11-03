@@ -1,5 +1,6 @@
 package battleship.controller;
 
+import battleship.model.Results;
 import battleship.view.ViewManager;
 
 public class ComputerPlayer extends Player {
@@ -14,17 +15,12 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public void guess() {
-
+    public Results makeGuess(int row, int column) {
+        return null;
     }
 
     @Override
-    public void sendMessage() {
-
-    }
-
-    @Override
-    public void processMessage() {
+    public void sendResults(Results results){
 
     }
 }

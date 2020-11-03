@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import battleship.model.Results;
 import battleship.model.Ship;
 import battleship.view.Board;
 
@@ -217,17 +218,19 @@ public class HumanPlayer extends Player {
 	}
 
     @Override
-    public void guess() {
-
+    public Results makeGuess(int row, int column) {
+		//if networking object is null computer game
+		//else human game
+			//networking.printwriter.println("GUESS")
+			//send the ints
+			//use scanner to read sunk, hit/miss
+			//if there are 17 hits I won
+			//convert into a Results object
+		return null;
     }
 
     @Override
-    public void sendMessage() {
-
-    }
-
-	@Override
-	public void processMessage() {
+	public void sendResults(Results results){
 
 	}
 

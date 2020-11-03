@@ -29,10 +29,8 @@ public class Networking {
 	private Socket socket;
 	private static final int PORT = 7777;
 	private boolean isHost;
-	Scanner input;
-	OutputStream output;
-	
-	
+	Scanner input;//not package level
+	OutputStream output;//change to printwriter
 	
 	public Networking() {
 		String ip;
@@ -44,7 +42,7 @@ public class Networking {
 	            NetworkInterface iface = interfaces.nextElement();
 	            // filters out 127.0.0.1 and inactive interfaces
 	            if (iface.isLoopback() || !iface.isUp()) {
-					continue;
+					continue;//TODO: don't have this here
 				}
 
 	            Enumeration<InetAddress> addresses = iface.getInetAddresses(); //Gets the local IP address
@@ -71,8 +69,6 @@ public class Networking {
 	    catch(IOException e) {
 	    	System.err.println("IOException Thrown in Networking Constructor (trying to get external IP)");
 	    }
-	    
-	    
 	}
 	
 	/**
