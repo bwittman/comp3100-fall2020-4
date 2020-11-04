@@ -17,16 +17,16 @@ import battleship.view.ViewManager;
 public class HumanPlayer extends Player {
 
 	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
-	
+
 	private Networking networking = null;
 	private Thread messageListener;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
-	private boolean isComputerGame = false;
+	private boolean isComputerGame;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
-		if (isComputerGame){
+		if (!isComputerGame){
 			networking = new Networking();
 		}
 		setUserBoardActionListeners();
@@ -218,7 +218,7 @@ public class HumanPlayer extends Player {
     @Override
     public Results makeGuess(int row, int column) {
 		if (isComputerGame){
-
+			 return opponent.processGuess(row, column);
 		}else{
 			//networking.printwriter.println("GUESS")
 			//send the ints
@@ -231,7 +231,9 @@ public class HumanPlayer extends Player {
 
     @Override
 	public void sendResults(Results results){
+		if(!isComputerGame){
 
+		}
 	}
 
 	public void cleanup() {

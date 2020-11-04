@@ -70,6 +70,9 @@ public class MainMenuController {
 			humanPlayer.setTurn(true);
 			humanPlayer.setComputerGame(true);
 
+			computerPlayer.setOpponent(humanPlayer);
+			humanPlayer.setOpponent(computerPlayer);
+
 			viewManager.getGameScreen().setVisible(true);
 			menu.setVisible(false);
 		});
