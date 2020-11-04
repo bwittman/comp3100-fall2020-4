@@ -22,11 +22,11 @@ public class HumanPlayer extends Player {
 	private Thread messageListener;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
-	private boolean isComputerGame = false;
+	private boolean isComputerGame;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
-		if (isComputerGame){
+		if (!isComputerGame){
 			networking = new Networking();
 		}
 		setUserBoardActionListeners();
