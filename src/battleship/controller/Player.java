@@ -18,7 +18,7 @@ public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
     private static final int BUTTON_SIDE = 50;
-    private static final Color WATER_BLUE = new Color(16,129,160);
+    private static final Color WATER = new Color(16,129,160);
     private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
     private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
@@ -93,6 +93,7 @@ public abstract class Player {
         viewManager.getGameScreen().getResetButton().addActionListener(e ->{
             resetGame();
             updateAllBoards();
+            viewManager.getGameScreen().getPlayGameButton().setEnabled(false);
         });
     }
 
@@ -101,6 +102,7 @@ public abstract class Player {
             resetGame();
             randomShipPlacement();
             updateAllBoards();
+            viewManager.getGameScreen().getPlayGameButton().setEnabled(true);
         });
     }
 
@@ -111,23 +113,21 @@ public abstract class Player {
     }
 
     private void onPlayGameClicked(){
-        if (allShipsPlaced()) {
-            int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
-            if (confirmed == JOptionPane.YES_OPTION) {
-                disableBoard(viewManager.getGameScreen().getUserBoard());
+        int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
+        if (confirmed == JOptionPane.YES_OPTION) {
+            disableBoard(viewManager.getGameScreen().getUserBoard());
 
-                //disable ship buttons
-                Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
-                while (shipButtons.hasMoreElements()) {
-                    AbstractButton shipButton = shipButtons.nextElement();
-                    shipButton.setEnabled(false);
-                }
+            //disable ship buttons
+            Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+            while (shipButtons.hasMoreElements()) {
+                AbstractButton shipButton = shipButtons.nextElement();
+                shipButton.setEnabled(false);
+            }
 
-                viewManager.getGameScreen().getOptionButtons().setVisible(false);
+            viewManager.getGameScreen().getOptionButtons().setVisible(false);
 
-                if (isMyTurn) {
-                    enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
-                }
+            if (isMyTurn) {
+                enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             }
         }
     }
@@ -154,7 +154,7 @@ public abstract class Player {
                 switch(currentTile){
                     case WATER:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(WATER_BLUE);
+                        currentButton.setBackground(WATER);
                         break;
                     case HIT:
                         currentButton.setIcon(HIT_ICON);
@@ -195,7 +195,7 @@ public abstract class Player {
         }
     }
 
-    private boolean allShipsPlaced(){
+    protected boolean allShipsPlaced(){
         for (Ship ship: ships){
             if (ship.getStart() == null || ship.getEnd() == null){
                 return false;

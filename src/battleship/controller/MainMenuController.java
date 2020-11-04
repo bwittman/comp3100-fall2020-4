@@ -62,11 +62,14 @@ public class MainMenuController {
 		});
 
 		menu.getOnePlayerButton().addActionListener(e->{
-			computerPlayer = new ComputerPlayer(viewManager);
+			computerPlayer = new ComputerPlayer(null);
+			computerPlayer.setTurn(false);
+			computerPlayer.placeComputerShips();
+
 			humanPlayer = new HumanPlayer(viewManager);
 			humanPlayer.setTurn(true);
-			computerPlayer.setTurn(false);
 			humanPlayer.setComputerGame(true);
+
 			viewManager.getGameScreen().setVisible(true);
 			menu.setVisible(false);
 		});

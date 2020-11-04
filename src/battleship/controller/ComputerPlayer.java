@@ -7,7 +7,10 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(ViewManager viewManager){
     	super(viewManager);
-    	randomShipPlacement();
+    }
+
+    public void placeComputerShips(){
+       randomShipPlacement();
     }
 
     @Override

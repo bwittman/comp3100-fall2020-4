@@ -70,8 +70,8 @@ public class GamePlayWindow extends JFrame {
         setUpShipPlacementOptionsPanel();
 
         setTitle("Battleship: Game Board");
-        setSize(625,750);
-        setMinimumSize(new Dimension(625,750));
+        setSize(625,650);
+        setMinimumSize(new Dimension(625,650));
         setResizable(false);
         setVisible(false);
         setLocationRelativeTo(null);
@@ -89,6 +89,7 @@ public class GamePlayWindow extends JFrame {
         resetButton = new JButton("Reset");
         randomButton = new JButton("Random");
         playGameButton = new JButton("Play Game");
+        playGameButton.setEnabled(false);
 
         optionButtons.add(resetButton);
         optionButtons.add(randomButton);

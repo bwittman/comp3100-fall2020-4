@@ -15,6 +15,8 @@ import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
 
 public class HumanPlayer extends Player {
+
+	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
 	
 	private Networking networking = null;
 	private Thread messageListener;
@@ -118,6 +120,9 @@ public class HumanPlayer extends Player {
 				throw new ShipPlacementException("Illegal Position Selected");
 			}
 		}
+		if(allShipsPlaced()){
+			viewManager.getGameScreen().getPlayGameButton().setEnabled(true);
+		}
     }
 
     private void setShipStart(Ship ship){
@@ -128,6 +133,7 @@ public class HumanPlayer extends Player {
 			disableBoard(viewManager.getGameScreen().getUserBoard());
 			for (Point current : legalEndPoints) {
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
+				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setBackground(LEGAL_ENDPOINT);
 			}
 		} else{
 			startPositionPoint = null;
