@@ -43,7 +43,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(625,625);
         setMinimumSize(new Dimension(625,625));
-        setResizable(false);
+        setResizable(true);
 
         add(outerPanel);
         pack();
