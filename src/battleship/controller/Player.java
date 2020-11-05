@@ -472,13 +472,21 @@ public abstract class Player {
         this.opponent = opponent;
     }
 
+    /**
+     * Processes enemy guess and returns Results of the guess
+     * @param row = row coordinate
+     * @param column = column coordinate
+     * @return Results object to be processed by enemy
+     */
     public Results processGuess(int row, int column){
 
         boolean hit = checkHitMiss(new Point(row, column));
         if (hit){
             gameState.setTile(Tile.HIT, row, column);
+            logMessage("Enemy HIT: " + (char)(column+'A') + (row + 1));
         }else{
             gameState.setTile(Tile.MISS, row, column);
+            logMessage("Enemy MISSED: " + (char)(column+'A') + (row + 1));
         }
 
         ShipType sunkShip = null;
@@ -490,12 +498,14 @@ public abstract class Player {
                 }
             }
         }
+        if(sunkShip != null) logMessage("My " + sunkShip.name() + " was sunk!");
 
 
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
             if (opponentWon) {
                 disableBoard(viewManager.getGameScreen().getEnemyBoard());
+                logMessage("Enemy has Won!");
                 //show end screen
             } else {
                 enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
@@ -505,15 +515,23 @@ public abstract class Player {
         return new Results(new Point(row, column), hit, opponentWon, sunkShip);
     }
 
+    /**
+     * Processes results from enemy guess
+     * @param results = an object which holds ships sunk, hit or miss, and if they have won
+     */
     public void processResults(Results results){
         if (results.isTileHit()){
             enemyGameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
+            String logMessage = "You HIT! : " + (char)(results.getGuessedTile().y + 'A') + (results.getGuessedTile().x + 1);
+            logMessage(logMessage);
         }else{
             enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
+            String logMessage = "You MISSED. : " + (char)(results.getGuessedTile().y + 'A') + (results.getGuessedTile().x + 1);
+            logMessage(logMessage);
         }
 
         if (results.getSunkShip() != null){
-                logMessage(results.getSunkShip().name() + " was Sunk!");
+                logMessage("You sunk a " + results.getSunkShip().name() + "!");
         }
 
         if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
@@ -528,6 +546,7 @@ public abstract class Player {
         if (results.hasPlayerWon() && viewManager != null){
             disableBoard(viewManager.getGameScreen().getEnemyBoard());
             playerWin();
+            logMessage("You have won!");
             //show end screen
         }
     }

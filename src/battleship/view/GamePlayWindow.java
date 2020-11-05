@@ -22,7 +22,7 @@ public class GamePlayWindow extends JFrame {
         userBoard = new Board();
         enemyBoard = new Board();
 
-        log = new JTextArea(20, 20);
+        log = new JTextArea(20,20);
         log.setEditable(false);
 
         scrollPane = new JScrollPane(log);
