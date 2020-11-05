@@ -101,7 +101,7 @@ public class MainMenuController {
 		hostConnectionWorker.execute();
 	}
 
-	//for the closing the rules window
+	//for closing the rules window
 	private void setRulesWindowActionListener(){
 		viewManager.getRulesWindow().getCloseButton().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(false);

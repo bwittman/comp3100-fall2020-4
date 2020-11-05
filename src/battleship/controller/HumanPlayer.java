@@ -123,6 +123,7 @@ public class HumanPlayer extends Player {
 		if(allShipsPlaced()){
 			viewManager.getGameScreen().getPlayGameButton().setEnabled(true);
 		}
+
     }
 
     private void setShipStart(Ship ship){

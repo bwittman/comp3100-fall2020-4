@@ -146,6 +146,10 @@ public abstract class Player {
         processResults(result);
     }
 
+    private void playerWin(){
+        JOptionPane.showMessageDialog(null,"You win!","Player Win",JOptionPane.INFORMATION_MESSAGE );
+    }
+
     private void updateBoard(GameState gameState, Board board) {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
@@ -471,6 +475,7 @@ public abstract class Player {
             gameState.setTile(Tile.HIT, row, column);
         }else{
             gameState.setTile(Tile.MISS, row, column);
+
         }
 
         ShipType sunkShip = null;
@@ -516,6 +521,7 @@ public abstract class Player {
 
         if (results.hasPlayerWon() && viewManager != null){
             disableBoard(viewManager.getGameScreen().getEnemyBoard());
+            playerWin();
             //show end screen
         }
     }

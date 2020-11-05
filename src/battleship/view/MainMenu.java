@@ -33,6 +33,7 @@ public class MainMenu extends JFrame {
         onePlayerButton = new JButton("Play Against Computer");
 
         buttonPanel.add(onePlayerButton);
+
         buttonPanel.add(rulesButton);
         buttonPanel.add(networkButton);
 
