@@ -69,7 +69,7 @@ public class Ship {
     }
 
     public boolean checkForSunk(){
-        return hits == shipType.length;
+        return hits >= shipType.length;
     }
 
     //for testing only
