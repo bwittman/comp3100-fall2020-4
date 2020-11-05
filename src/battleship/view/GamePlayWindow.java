@@ -26,7 +26,7 @@ public class GamePlayWindow extends JFrame {
         log.setEditable(false);
 
         scrollPane = new JScrollPane(log);
-        scrollPane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
         logPanel = new JPanel(new BorderLayout());

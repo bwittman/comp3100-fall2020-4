@@ -460,13 +460,13 @@ public abstract class Player {
     }
 
     public Results processGuess(int row, int column){
-        isMyTurn = true;
         boolean hit = checkHitMiss(new Point(row, column));
         if (hit){
             gameState.setTile(Tile.HIT, row, column);
         }else{
             gameState.setTile(Tile.MISS, row, column);
         }
+
         ShipType sunkShip = null;
         for (Ship ship: ships){
             if (ship.checkForSunk()){
@@ -476,13 +476,15 @@ public abstract class Player {
         }
 
         boolean opponentWon = checkForWin();
-        if (opponentWon){
-            disableBoard(viewManager.getGameScreen().getUserBoard());
-            disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            //show end screen
-        }else{
-            enableBoard(enemyGameState,viewManager.getGameScreen().getEnemyBoard());
+        if (viewManager != null) {
+            if (opponentWon) {
+                disableBoard(viewManager.getGameScreen().getEnemyBoard());
+                //show end screen
+            } else {
+                enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
+            }
         }
+
         return new Results(new Point(row, column), hit, opponentWon, sunkShip);
     }
 
@@ -497,12 +499,6 @@ public abstract class Player {
             //write to the log
         }
 
-        if (results.hasPlayerWon()){
-            disableBoard(viewManager.getGameScreen().getUserBoard());
-            disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            //show end screen
-        }
-
         if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
             ComputerPlayer computer = (ComputerPlayer) opponent;
             computer.playTurn();
@@ -512,7 +508,10 @@ public abstract class Player {
             updateAllBoards();
         }
 
-        isMyTurn = false;
+        if (results.hasPlayerWon() && viewManager != null){
+            disableBoard(viewManager.getGameScreen().getEnemyBoard());
+            //show end screen
+        }
     }
 
     public abstract Results makeGuess(int row, int column);
