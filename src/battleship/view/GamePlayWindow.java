@@ -69,10 +69,15 @@ public class GamePlayWindow extends JFrame {
 
         setUpShipPlacementOptionsPanel();
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //These numbers are based on the size of Dominic's laptop screen compared to a frame that is 625 px wide and 750 px tall
+        int screenWidth = (int) (screenSize.getWidth() / 2.5);
+        int screenHeight = (int) (screenSize.getHeight() / 1.2);
+
         setTitle("Battleship: Game Board");
-        setSize(625,750);
-        setMinimumSize(new Dimension(625,750));
-        setResizable(false);
+        setSize(screenWidth,screenHeight); //~625 ~750
+        setMinimumSize(new Dimension(screenWidth,screenHeight));
+        setResizable(true);
         setVisible(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -80,6 +85,7 @@ public class GamePlayWindow extends JFrame {
         add(logPanel, BorderLayout.EAST);
         add(boardPanel, BorderLayout.WEST);
         add(optionButtons, BorderLayout.SOUTH);
+
 
     }
 

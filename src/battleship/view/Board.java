@@ -9,7 +9,8 @@ public class Board extends JPanel {
 
     private static final int ROWS = Player.ROWS;
     private static final int COLUMNS = Player.COLUMNS;
-    private static final int BUTTON_SIZE = 30;
+    private static final int BUTTON_SIZE = Toolkit.getDefaultToolkit().getScreenResolution() / 4;
+    ;
 
     private CoordinateButton[][] buttonArray = new CoordinateButton[ROWS][COLUMNS];
 

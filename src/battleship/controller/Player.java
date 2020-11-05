@@ -101,6 +101,12 @@ public abstract class Player {
             resetGame();
             randomShipPlacement();
             updateAllBoards();
+            disableBoard(viewManager.getGameScreen().getUserBoard());
+            Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+            while (shipButtons.hasMoreElements()) {
+                AbstractButton shipButton = shipButtons.nextElement();
+                shipButton.setEnabled(false);
+            }
         });
     }
 
