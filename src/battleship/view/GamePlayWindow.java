@@ -102,8 +102,7 @@ public class GamePlayWindow extends JFrame {
         optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
     }
 
-    public void writeToLog(){
-    }
+
 
     public void placeShips(){
     }
@@ -144,4 +143,6 @@ public class GamePlayWindow extends JFrame {
     public JPanel getOptionButtons(){
         return optionButtons;
     }
+
+    public JTextArea getLog() {return log;}
 }

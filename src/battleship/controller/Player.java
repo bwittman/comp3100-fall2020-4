@@ -26,6 +26,8 @@ public abstract class Player {
     private static final Icon SHIP_ICON = new ImageIcon(((new ImageIcon("resources/shipTile.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
 
+    private List<ShipType> previousShipsSunk = new ArrayList<ShipType>();
+
     public enum Tile {
         SHIP,
         HIT,
@@ -123,6 +125,7 @@ public abstract class Player {
     private void onPlayGameClicked(){
         int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
         if (confirmed == JOptionPane.YES_OPTION) {
+            logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
 
             //disable ship buttons
@@ -470,21 +473,24 @@ public abstract class Player {
     }
 
     public Results processGuess(int row, int column){
+
         boolean hit = checkHitMiss(new Point(row, column));
         if (hit){
             gameState.setTile(Tile.HIT, row, column);
         }else{
             gameState.setTile(Tile.MISS, row, column);
-
         }
 
         ShipType sunkShip = null;
         for (Ship ship: ships){
             if (ship.checkForSunk()){
-                //write to the log
-                sunkShip = ship.getShipType();
+                if(!previousShipsSunk.contains(ship.getShipType())){
+                    sunkShip = ship.getShipType();
+                    previousShipsSunk.add(sunkShip);
+                }
             }
         }
+
 
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
@@ -507,7 +513,7 @@ public abstract class Player {
         }
 
         if (results.getSunkShip() != null){
-            //write to the log
+                logMessage(results.getSunkShip().name() + " was Sunk!");
         }
 
         if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
@@ -523,6 +529,13 @@ public abstract class Player {
             disableBoard(viewManager.getGameScreen().getEnemyBoard());
             playerWin();
             //show end screen
+        }
+    }
+
+    protected void logMessage(String message){
+        if(viewManager != null) {
+            JTextArea log = viewManager.getGameScreen().getLog();
+            log.append(message + "\n");
         }
     }
 
