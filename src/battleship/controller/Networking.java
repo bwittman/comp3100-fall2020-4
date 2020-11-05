@@ -38,15 +38,15 @@ public class Networking {
 	        while (interfaces.hasMoreElements()) {
 	            NetworkInterface iface = interfaces.nextElement();
 	            // filters out 127.0.0.1 and inactive interfaces
-	            if (iface.isLoopback() || !iface.isUp()) {
-					continue;//TODO: don't have this here
+				if (!(iface.isLoopback() || !iface.isUp())) {
+					Enumeration<InetAddress> addresses = iface.getInetAddresses(); //Gets the local IP address
+					InetAddress addr = addresses.nextElement();
+					ip = addr.getHostAddress();
+					System.out.println(iface.getDisplayName() + " " + ip);
+					hostIpAddressLocal = ip;
 				}
 
-	            Enumeration<InetAddress> addresses = iface.getInetAddresses(); //Gets the local IP address
-                InetAddress addr = addresses.nextElement();
-                ip = addr.getHostAddress();
-                System.out.println(iface.getDisplayName() + " " + ip);
-                hostIpAddressLocal = ip;
+
 	        }
 	    } catch (SocketException e) {
 	    	hostIpAddressLocal = "0.0.0.0";

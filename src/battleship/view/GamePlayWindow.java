@@ -86,7 +86,6 @@ public class GamePlayWindow extends JFrame {
         add(boardPanel, BorderLayout.WEST);
         add(optionButtons, BorderLayout.SOUTH);
 
-
     }
 
     private void setUpShipPlacementOptionsPanel(){
@@ -95,6 +94,7 @@ public class GamePlayWindow extends JFrame {
         resetButton = new JButton("Reset");
         randomButton = new JButton("Random");
         playGameButton = new JButton("Play Game");
+        playGameButton.setEnabled(false);
 
         optionButtons.add(resetButton);
         optionButtons.add(randomButton);

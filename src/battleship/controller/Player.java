@@ -18,7 +18,7 @@ public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
     private static final int BUTTON_SIDE = 50;
-    private static final Color WATER_BLUE = new Color(16,129,160);
+    private static final Color WATER = new Color(16,129,160);
     private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
     private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
@@ -38,6 +38,7 @@ public abstract class Player {
     private GameState enemyGameState;
     private boolean isMyTurn;
     protected ViewManager viewManager;
+    protected Player opponent = null;
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -84,7 +85,8 @@ public abstract class Player {
         Board board = viewManager.getGameScreen().getEnemyBoard();
         for(int i = 0; i < ROWS; i++){
             for(int j = 0; j < COLUMNS; j++){
-                board.getButton(i, j).addActionListener(e -> onEnemyButtonClicked(e, board));
+                CoordinateButton button = board.getButton(i,j);
+                button.addActionListener(e -> onEnemyButtonClicked(button));
             }
         }
     }
@@ -93,6 +95,7 @@ public abstract class Player {
         viewManager.getGameScreen().getResetButton().addActionListener(e ->{
             resetGame();
             updateAllBoards();
+            viewManager.getGameScreen().getPlayGameButton().setEnabled(false);
         });
     }
 
@@ -101,6 +104,7 @@ public abstract class Player {
             resetGame();
             randomShipPlacement();
             updateAllBoards();
+            viewManager.getGameScreen().getPlayGameButton().setEnabled(true);
             disableBoard(viewManager.getGameScreen().getUserBoard());
             Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
             while (shipButtons.hasMoreElements()) {
@@ -117,39 +121,29 @@ public abstract class Player {
     }
 
     private void onPlayGameClicked(){
-        if (allShipsPlaced()) {
-            int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
-            if (confirmed == JOptionPane.YES_OPTION) {
-                disableBoard(viewManager.getGameScreen().getUserBoard());
+        int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
+        if (confirmed == JOptionPane.YES_OPTION) {
+            disableBoard(viewManager.getGameScreen().getUserBoard());
 
-                //disable ship buttons
-                Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
-                while (shipButtons.hasMoreElements()) {
-                    AbstractButton shipButton = shipButtons.nextElement();
-                    shipButton.setEnabled(false);
-                }
+            //disable ship buttons
+            Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+            while (shipButtons.hasMoreElements()) {
+                AbstractButton shipButton = shipButtons.nextElement();
+                shipButton.setEnabled(false);
+            }
 
-                viewManager.getGameScreen().getOptionButtons().setVisible(false);
+            viewManager.getGameScreen().getOptionButtons().setVisible(false);
 
-                if (isMyTurn) {
-                    enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
-                }
+            if (isMyTurn) {
+                enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             }
         }
     }
 
     //we need to be sending the message to the enemy to check if it is hit or missed
-    private void onEnemyButtonClicked(ActionEvent e, Board board){
-        //loop through out button array to find the location of the button which was clicked
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLUMNS; col++) {
-                JButton currentButton = board.getButton(row, col);
-                if (currentButton == e.getSource()){
-                    Results result = makeGuess(row, col);//sending the enemy what our guess is
-                    processResults(result);
-                }
-            }
-        }
+    private void onEnemyButtonClicked(CoordinateButton button){
+        Results result = makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
+        processResults(result);
     }
 
     private void updateBoard(GameState gameState, Board board) {
@@ -160,7 +154,7 @@ public abstract class Player {
                 switch(currentTile){
                     case WATER:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(WATER_BLUE);
+                        currentButton.setBackground(WATER);
                         break;
                     case HIT:
                         currentButton.setIcon(HIT_ICON);
@@ -201,7 +195,7 @@ public abstract class Player {
         }
     }
 
-    private boolean allShipsPlaced(){
+    protected boolean allShipsPlaced(){
         for (Ship ship: ships){
             if (ship.getStart() == null || ship.getEnd() == null){
                 return false;
@@ -361,7 +355,7 @@ public abstract class Player {
                 ship.setEnd(currentEndPoint);
                 boolean intersects = false;
                 for (Ship shipTest : ships) {
-                    if (shipTest.getEnd() != null && !shipTest.getName().equals(ship.getName())) {
+                    if (shipTest.getEnd() != null && !(shipTest.getShipType() == ship.getShipType())){
                         if (intersect(ship, shipTest)) {
                             intersects = true;
                         }
@@ -460,12 +454,24 @@ public abstract class Player {
         return gameState;
     }
 
+    public GameState getEnemyGameState(){
+        return enemyGameState;
+    }
     public void setTurn(boolean isMyTurn){
         this.isMyTurn = isMyTurn;
     }
 
+    public void setOpponent(Player opponent){
+        this.opponent = opponent;
+    }
+
     public Results processGuess(int row, int column){
         boolean hit = checkHitMiss(new Point(row, column));
+        if (hit){
+            gameState.setTile(Tile.HIT, row, column);
+        }else{
+            gameState.setTile(Tile.MISS, row, column);
+        }
         ShipType sunkShip = null;
         for (Ship ship: ships){
             if (ship.checkForSunk()){
@@ -481,11 +487,10 @@ public abstract class Player {
 
     public void processResults(Results results){
         if (results.isTileHit()){
-            gameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
+            enemyGameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
         }else{
-            gameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
+            enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
         }
-        updateAllBoards();
 
         if (results.getSunkShip() != null){
             //write to the log
@@ -494,6 +499,15 @@ public abstract class Player {
         if (results.hasPlayerWon()){
             //display that I have won
         }
+        if(opponent != null && opponent instanceof ComputerPlayer){
+            ComputerPlayer computer = (ComputerPlayer) opponent;
+            computer.playTurn();
+        }
+
+        if (viewManager != null){
+            updateAllBoards();
+        }
+
         isMyTurn = false;
     }
 
