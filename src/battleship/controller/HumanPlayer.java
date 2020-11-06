@@ -23,6 +23,7 @@ public class HumanPlayer extends Player {
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private boolean isComputerGame;
+	private boolean isHost = false;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
@@ -31,6 +32,7 @@ public class HumanPlayer extends Player {
 		}
 		setUserBoardActionListeners();
 	}
+
 
 	/**
 	 * Listens on the socket on a separate thread so that the GUI does not freeze if this takes longer than expected
@@ -41,10 +43,14 @@ public class HumanPlayer extends Player {
 		public void run() {
 			while(networking.isConnected()) {
 				String message = networking.receiveMessage();
+				System.out.println("Message Received: " + message);
 				SwingUtilities.invokeLater(new MessageDispatcher(message));
 			}
+			System.err.println("MessageListener: Connection Ended!");
 		}
 	}
+
+
 	
 	/**
 	 * Notifies responsible classes with the correct messages
@@ -69,14 +75,12 @@ public class HumanPlayer extends Player {
 			}
 		}
 	}
-	
-	private void listenForNewMessages() {
+
+	public void listenForNewMessages() {
 		
 		messageListener = new MessageListener();
 		messageListener.start();
 	}
-
-
 
     public void disconnect() {
     	networking.cleanUp();
@@ -95,7 +99,8 @@ public class HumanPlayer extends Player {
 	}
 
     public void connectAsHost() {
-    	networking.connect(true, "");
+		networking.connect(true, "");
+		listenForNewMessages();
     }
 
     @Override

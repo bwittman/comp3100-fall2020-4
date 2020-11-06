@@ -112,7 +112,6 @@ public class Networking {
 	 * @return a string representation of the IPAddress
 	 */
 	public String getIpLocal() {
-		//TODO: Needs test case to check IP Address
 		return hostIpAddressLocal;
 	}
 	
