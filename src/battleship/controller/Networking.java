@@ -122,6 +122,7 @@ public class Networking {
 	public void sendMessage(String message) {
 		if(socket != null && socket.isConnected() && output != null) {
 			output.println(message);
+			output.flush();
 		}else {
 			System.out.println("Could not send message. Socket could be null or not connected");
 		}

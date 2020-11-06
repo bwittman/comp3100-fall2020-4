@@ -37,6 +37,7 @@ public class HumanPlayer extends Player {
 		@Override
 		public void run() {
 			while(networking.isConnected()) {
+				System.out.println("IsConnected: " + networking.isConnected());
 				String message = networking.receiveMessage();
 				if(!message.equals("")) {
 					SwingUtilities.invokeLater(new MessageDispatcher(message));
