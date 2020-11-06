@@ -78,5 +78,4 @@ public class Ship {
                 ((this.start == null && ship.start == null) || this.start.equals(ship.start)) &&
                 ((this.end == null && ship.end == null) || this.end.equals(ship.end));
     }
-
 }

@@ -1,11 +1,11 @@
 package battleship.model;
 
 import battleship.model.Ship.ShipType;
-import com.sun.org.apache.xerces.internal.xs.StringList;
 
 import java.awt.*;
 
 public class Results {
+
     private Point guessedTile;
     private boolean tileHit;
     private boolean playerWon;

@@ -48,8 +48,6 @@ public class Networking {
 					System.out.println(iface.getDisplayName() + " " + ip);
 					hostIpAddressLocal = ip;
 				}
-
-
 	        }
 	    } catch (SocketException e) {
 	    	hostIpAddressLocal = "0.0.0.0";
@@ -78,7 +76,6 @@ public class Networking {
 	 * @return returns true if connected and false if not connects
 	 */
 	public boolean connect(boolean isHost, String ipAddress) {
-		
 		if(isHost) {
 	    	try {
 				serverSocket = new ServerSocket(PORT);
@@ -103,7 +100,6 @@ public class Networking {
 				return false;
 			}
 	    }
-		
 		return true;
 	}
 	
@@ -150,9 +146,11 @@ public class Networking {
 		if(output != null) {
 			output.close();
 		}
+
 		if(input != null) {
 			input.close();
-		}		
+		}
+
 		try {
 			if(socket != null) {
 				socket.close();
@@ -161,6 +159,7 @@ public class Networking {
 			System.out.println("Could not clean up socket IOException thrown");
 			e.printStackTrace();
 		}
+
 		try {
 			if(serverSocket != null) {
 				serverSocket.close();
@@ -181,6 +180,5 @@ public class Networking {
 		}else {
 			return false;
 		}
-
 	}
 }

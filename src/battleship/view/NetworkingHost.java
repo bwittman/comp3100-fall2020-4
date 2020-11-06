@@ -2,15 +2,10 @@ package battleship.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import battleship.controller.Networking;
 
 public class NetworkingHost extends JFrame {
 	private JLabel ipAddressInnerLabel ;
@@ -54,23 +49,6 @@ public class NetworkingHost extends JFrame {
 	
 	public JLabel getConnectionStatusLabel() {
 		return connectionStatusLabel;
-	}
-	
-	public void setIPAddressInnerLabel(JLabel newIPAddressInnerLabel) {
-		this.ipAddressInnerLabel = newIPAddressInnerLabel;
-	}
-	
-	public void setIPAddressOutsideLabel(JLabel newIPAddressOutsideLabel) {
-		this.ipAddressOutsideLabel = newIPAddressOutsideLabel;
-	}
-	
-	public void setConnectionStatusLabel(JLabel newConnectionStatusLabel) {
-		this.connectionStatusLabel = newConnectionStatusLabel;
-	}
-	
-	public static void main(String[]args){
-	       NetworkingHost test = new NetworkingHost();
-	       test.setVisible(true);
 	}
 }
 

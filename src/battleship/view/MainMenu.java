@@ -1,11 +1,7 @@
 package battleship.view;
 
 import  javax.swing.*;
-
-
-
 import java.awt.*;
-
 
 /**
  * Displays the Main Menu and handles interactions with the user until they leave the main menu.
@@ -14,6 +10,7 @@ import java.awt.*;
  *
  */
 public class MainMenu extends JFrame {
+
     private ImageIcon background;
     private JButton rulesButton;
     private JButton networkButton;
@@ -33,7 +30,6 @@ public class MainMenu extends JFrame {
         onePlayerButton = new JButton("Play Against Computer");
 
         buttonPanel.add(onePlayerButton);
-
         buttonPanel.add(rulesButton);
         buttonPanel.add(networkButton);
 
@@ -63,24 +59,10 @@ public class MainMenu extends JFrame {
     public JButton getRulesButton() {
     	return rulesButton;
     }
-    
-    public void setNetworkButton(JButton newNetworkButton) {
-    	this.networkButton = newNetworkButton;
-    }
-    
-    public void setGetOnePlayerButton(JButton newOnePlayerButton) {
-    	this.onePlayerButton = newOnePlayerButton;
-    }
-    
-    public void setRulesButton(JButton newRulesButton) {
-    	this.rulesButton = newRulesButton;
-    }
 }
 
 class PanelWithBackgroundImage extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	Image background;
 	

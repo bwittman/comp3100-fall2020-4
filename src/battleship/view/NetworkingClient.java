@@ -2,10 +2,7 @@ package battleship.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,7 +14,6 @@ public class NetworkingClient extends JFrame {
 	private JTextField IPinput;
 	private JButton connectButton;
 	private JLabel statusLabel;
-
 	
 	public NetworkingClient() {
 		setTitle("Battleship - Host");
@@ -56,21 +52,7 @@ public class NetworkingClient extends JFrame {
 		return IPinput;
 	}
 	
-	public void setConnectButton(JButton newConnectButton) {
-		this.connectButton = newConnectButton;
-	}
-	
-	public void setIPInput(JTextField newIPInput) {
-		this.IPinput = newIPInput;
-	}
-	
 	public JLabel getStatusLabel() {
 		return statusLabel;
 	}
-
-	public static void main(String[] args) {
-		NetworkingClient test = new NetworkingClient();
-
-	}
-
 }

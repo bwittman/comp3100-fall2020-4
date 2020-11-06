@@ -1,6 +1,5 @@
 package battleship.model;
 
-import battleship.model.Ship;
 import org.junit.jupiter.api.*;
 import java.awt.*;
 

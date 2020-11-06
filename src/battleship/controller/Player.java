@@ -8,7 +8,6 @@ import battleship.model.Ship.ShipType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -27,8 +26,6 @@ public abstract class Player {
     private static final Icon SHIP_ICON = new ImageIcon(((new ImageIcon("resources/shipTile.png").getImage()
             .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
 
-    private List<ShipType> previousShipsSunk = new ArrayList<ShipType>();
-
     public enum Tile {
         SHIP,
         HIT,
@@ -37,6 +34,7 @@ public abstract class Player {
     }
 
     protected List<Ship> ships = new ArrayList<>();
+    private List<ShipType> previousShipsSunk = new ArrayList<>();
     private GameState gameState;
     private GameState enemyGameState;
     private boolean isMyTurn;
@@ -53,7 +51,7 @@ public abstract class Player {
         }
     }
 
-    void updateAllBoards(){
+    protected void updateAllBoards(){
         updateBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
         updateBoard(gameState, viewManager.getGameScreen().getUserBoard());
     }
@@ -145,7 +143,6 @@ public abstract class Player {
         }
     }
 
-    //we need to be sending the message to the enemy to check if it is hit or missed
     private void onEnemyButtonClicked(CoordinateButton button){
         SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
             @Override

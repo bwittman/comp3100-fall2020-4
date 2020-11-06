@@ -2,7 +2,6 @@ package battleship.controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -96,7 +95,7 @@ public class MainMenuController {
 		hostConnectionWorker = new SwingWorker <Void, Void>(){
 			
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				humanPlayer.connectAsHost();
 				return null;
 			}
@@ -111,7 +110,6 @@ public class MainMenuController {
 					System.out.println("Connection Made!");
 				}
 			}
-
 		};//end swing worker
 		hostConnectionWorker.execute();
 	}

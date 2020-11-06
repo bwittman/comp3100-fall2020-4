@@ -1,7 +1,6 @@
 package battleship.model;
 
 import battleship.controller.Player;
-import battleship.view.Board;
 
 public class GameState {
 

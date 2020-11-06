@@ -32,12 +32,11 @@ public class RulesWindow extends JFrame {
             add(rulesText, BorderLayout.CENTER);
 
         }catch(Exception e){
-
+            e.printStackTrace();
         }
     }
 
     public JButton getCloseButton(){
         return closeButton;
     }
-
 }

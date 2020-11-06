@@ -3,14 +3,11 @@ package battleship.controller;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
-
 import javax.swing.*;
 
 import battleship.model.Results;
 import battleship.model.Ship;
 import battleship.view.Board;
-
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
 
@@ -33,10 +30,8 @@ public class HumanPlayer extends Player {
 		setUserBoardActionListeners();
 	}
 
-
 	/**
 	 * Listens on the socket on a separate thread so that the GUI does not freeze if this takes longer than expected
-	 *
 	 */
 	private class MessageListener extends Thread {
 		@Override
@@ -49,13 +44,10 @@ public class HumanPlayer extends Player {
 			System.err.println("MessageListener: Connection Ended!");
 		}
 	}
-
-
 	
 	/**
 	 * Notifies responsible classes with the correct messages
 	 * EXAMPLE: If the MessageListener receives a win game message then it will notify gameState
-	 * 
 	 */
 	private class MessageDispatcher extends Thread{	
 		String message;
@@ -77,7 +69,6 @@ public class HumanPlayer extends Player {
 	}
 
 	public void listenForNewMessages() {
-		
 		messageListener = new MessageListener();
 		messageListener.start();
 	}
@@ -109,10 +100,12 @@ public class HumanPlayer extends Player {
 		startPositionPoint = null;
 		endPositionPoint = null;
 		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
 			shipButton.setEnabled(true);
 		}
+
 		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
 		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
@@ -133,10 +126,10 @@ public class HumanPlayer extends Player {
 				throw new ShipPlacementException("Illegal Position Selected");
 			}
 		}
+
 		if(allShipsPlaced()){
 			viewManager.getGameScreen().getPlayGameButton().setEnabled(true);
 		}
-
     }
 
     private void setShipStart(Ship ship){
@@ -234,15 +227,9 @@ public class HumanPlayer extends Player {
 		if (isComputerGame){
 			 return opponent.processGuess(row, column);
 		}else{
-			//networking.printwriter.println("GUESS")
-			//send the ints
-			//use scanner to read sunk, hit/miss, win
-			//convert into a Results object
-
 			networking.sendMessage("GUESS " + row + " " + column);
 			String message = networking.receiveMessage();
 			return new Results(message);
-
 		}
     }
 

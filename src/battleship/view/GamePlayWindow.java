@@ -19,9 +19,39 @@ public class GamePlayWindow extends JFrame {
     private JButton playGameButton;
 
     public GamePlayWindow(){
+        setupBoardPanel();
+        setupLogPanel();
+        setupShipPanel();
+        setupShipPlacementOptionsPanel();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //These numbers are based on the size of Dominic's laptop screen compared to a frame that is 625 px wide and 750 px tall
+        int screenWidth = (int) (screenSize.getWidth() / 2.5);
+        int screenHeight = (int) (screenSize.getHeight() / 1.2);
+
+        setTitle("Battleship: Game Board");
+        setSize(screenWidth,screenHeight); //~625 ~750
+        setMinimumSize(new Dimension(screenWidth,screenHeight));
+        setResizable(true);
+        setVisible(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        add(logPanel, BorderLayout.EAST);
+        add(boardPanel, BorderLayout.WEST);
+        add(optionButtons, BorderLayout.SOUTH);
+    }
+
+    private void setupBoardPanel(){
         userBoard = new Board();
         enemyBoard = new Board();
 
+        boardPanel = new JPanel(new BorderLayout());
+        boardPanel.add(enemyBoard, BorderLayout.NORTH);
+        boardPanel.add(userBoard, BorderLayout.SOUTH);
+    }
+
+    private void setupLogPanel(){
         log = new JTextArea(20,20);
         log.setEditable(false);
 
@@ -31,11 +61,9 @@ public class GamePlayWindow extends JFrame {
 
         logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.NORTH);
+    }
 
-        boardPanel = new JPanel(new BorderLayout());
-        boardPanel.add(enemyBoard, BorderLayout.NORTH);
-        boardPanel.add(userBoard, BorderLayout.SOUTH);
-
+    private void setupShipPanel(){
         JRadioButton carrierButton = new JRadioButton("Carrier: 5 Tiles");
         JRadioButton battleshipButton = new JRadioButton("Battleship: 4 Tiles");
         JRadioButton cruiserButton = new JRadioButton("Cruiser: 3 Tiles");
@@ -66,29 +94,9 @@ public class GamePlayWindow extends JFrame {
         shipPanel.add(destroyerButton);
 
         logPanel.add(shipPanel, BorderLayout.CENTER);
-
-        setUpShipPlacementOptionsPanel();
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        //These numbers are based on the size of Dominic's laptop screen compared to a frame that is 625 px wide and 750 px tall
-        int screenWidth = (int) (screenSize.getWidth() / 2.5);
-        int screenHeight = (int) (screenSize.getHeight() / 1.2);
-
-        setTitle("Battleship: Game Board");
-        setSize(screenWidth,screenHeight); //~625 ~750
-        setMinimumSize(new Dimension(screenWidth,screenHeight));
-        setResizable(true);
-        setVisible(false);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        add(logPanel, BorderLayout.EAST);
-        add(boardPanel, BorderLayout.WEST);
-        add(optionButtons, BorderLayout.SOUTH);
-
     }
 
-    private void setUpShipPlacementOptionsPanel(){
+    private void setupShipPlacementOptionsPanel(){
         optionButtons = new JPanel(new GridLayout(1, 3));
 
         resetButton = new JButton("Reset");
@@ -100,20 +108,6 @@ public class GamePlayWindow extends JFrame {
         optionButtons.add(randomButton);
         optionButtons.add(playGameButton);
         optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-    }
-
-
-
-    public void placeShips(){
-    }
-
-    private void selectStart(){
-    }
-
-    private void selectEnd(){
-    }
-
-    private void placeAShip(){
     }
 
     public Board getUserBoard() {
