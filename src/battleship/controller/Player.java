@@ -171,6 +171,10 @@ public abstract class Player {
         JOptionPane.showMessageDialog(null,"You win!","Player Win",JOptionPane.INFORMATION_MESSAGE );
     }
 
+    private void opponentWin(){
+        JOptionPane.showMessageDialog(null,"You lost","Opponent Won",JOptionPane.INFORMATION_MESSAGE );
+    }
+
     private void updateBoard(GameState gameState, Board board) {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
@@ -520,12 +524,12 @@ public abstract class Player {
         }
         if(sunkShip != null) logMessage("My " + sunkShip.name() + " was sunk!");
 
-
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
             if (opponentWon) {
                 disableBoard(viewManager.getGameScreen().getEnemyBoard());
                 logMessage("Enemy has Won!");
+                opponentWin();
                 //show end screen
             } else {
                 enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
