@@ -41,10 +41,17 @@ public class MainMenuController {
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				humanPlayer.setTurn(true);
 				humanPlayer.setComputerGame(false);
+				menu.getNetworkButton().setEnabled(false);
+				menu.getOnePlayerButton().setEnabled(false);
 			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
 				System.out.println("User Selected No: they are client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
 				humanPlayer.setTurn(false);
+				menu.getNetworkButton().setEnabled(false);
+				menu.getOnePlayerButton().setEnabled(false);
+			}else{
+				menu.getNetworkButton().setEnabled(true);
+				menu.getOnePlayerButton().setEnabled(true);
 			}
 		});
 		
@@ -57,6 +64,8 @@ public class MainMenuController {
 						humanPlayer.disconnect();
 					}
 					System.out.println("hostConnectionWorker canceled");
+					menu.getNetworkButton().setEnabled(true);
+					menu.getOnePlayerButton().setEnabled(true);
 				}
 			}
 		});
@@ -93,8 +102,14 @@ public class MainMenuController {
 			}
 
 			public void done() {
-				//TODO: Ship Placement Screen setup here
-				System.out.println("Connection Made!");
+				if(humanPlayer.getNetworking().isConnected()) {
+					viewManager.getGameScreen().setVisible(true);
+					viewManager.getNetworkingClientWindow().setVisible(false);
+					viewManager.getNetworkingHostWindow().setVisible(false);
+					viewManager.getMainMenu().setVisible(false);
+					JOptionPane.showMessageDialog(null, "Connection Successful!");
+					System.out.println("Connection Made!");
+				}
 			}
 
 		};//end swing worker
@@ -116,12 +131,13 @@ public class MainMenuController {
 			if(!isConnected) {
 				viewManager.getNetworkingClientWindow().getStatusLabel().setText("Couldn't Connect!");
 			}else {
+				viewManager.getGameScreen().setVisible(true);
+				viewManager.getNetworkingClientWindow().setVisible(false);
+				viewManager.getNetworkingHostWindow().setVisible(false);
+				viewManager.getMainMenu().setVisible(false);
+				humanPlayer.listenForNewMessages();
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
-	}
-
-	public void setHostIPLabel(String ipAddress) {
-		viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText(ipAddress);
 	}
 }
