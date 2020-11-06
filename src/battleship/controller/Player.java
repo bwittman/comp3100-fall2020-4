@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public abstract class Player {
     public static final int ROWS = 10;
@@ -98,6 +99,7 @@ public abstract class Player {
             resetGame();
             updateAllBoards();
             viewManager.getGameScreen().getPlayGameButton().setEnabled(false);
+            logMessage("Game was reset.");
         });
     }
 
@@ -145,8 +147,24 @@ public abstract class Player {
 
     //we need to be sending the message to the enemy to check if it is hit or missed
     private void onEnemyButtonClicked(CoordinateButton button){
-        Results result = makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
-        processResults(result);
+        SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
+            @Override
+            protected Results doInBackground() throws Exception {
+                return makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
+            }
+            protected void done(){
+                try {
+                    processResults(get());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
+
     }
 
     private void playerWin(){
@@ -286,6 +304,7 @@ public abstract class Player {
                 ship.reset();
             }
         }
+        logMessage("Ships were places randomly.");
     }
 
     private boolean intersect(Ship ship1, Ship ship2){
@@ -455,6 +474,7 @@ public abstract class Player {
             ship.reset();
         }
         //clear log
+        viewManager.getGameScreen().getLog().setText("");
     }
 
     public GameState getGameState(){

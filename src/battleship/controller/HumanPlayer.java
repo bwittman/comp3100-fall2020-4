@@ -39,9 +39,8 @@ public class HumanPlayer extends Player {
 	private class MessageListener extends Thread {
 		@Override
 		public void run() {
-			Scanner scanner = networking.getScanner();
 			while(networking.isConnected()) {
-				String message = scanner.nextLine();
+				String message = networking.receiveMessage();
 				SwingUtilities.invokeLater(new MessageDispatcher(message));
 			}
 		}
@@ -62,7 +61,12 @@ public class HumanPlayer extends Player {
 		@Override
 		public void run() {
 			//TODO: add if to check messages incoming
-			//TODO: add log message for guess received
+			if(message.startsWith("GUESS")){
+				String[] parts = message.split(" ");
+				int row = Integer.parseInt(parts[1]);
+				int column = Integer.parseInt(parts[2]);
+				Results  result = processGuess(row, column); //What to do with this info
+			}
 		}
 	}
 	
@@ -71,7 +75,9 @@ public class HumanPlayer extends Player {
 		messageListener = new MessageListener();
 		messageListener.start();
 	}
-    
+
+
+
     public void disconnect() {
     	networking.cleanUp();
     }
@@ -227,15 +233,18 @@ public class HumanPlayer extends Player {
 			//send the ints
 			//use scanner to read sunk, hit/miss, win
 			//convert into a Results object
-		}
 
-		return null;
+			networking.sendMessage("GUESS " + row + " " + column);
+			String message = networking.receiveMessage();
+			return new Results(message);
+
+		}
     }
 
     @Override
 	public void sendResults(Results results){
 		if(!isComputerGame){
-
+			networking.sendMessage(results.toString());
 		}
 	}
 

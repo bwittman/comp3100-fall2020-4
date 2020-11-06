@@ -28,7 +28,10 @@ public class Networking {
 	private boolean isHost;
 	private Scanner input;
 	private PrintWriter output;
-	
+
+	/**
+	 * Constructor for Networking Class. Gets local and
+	 */
 	public Networking() {
 		String ip;
 		serverSocket = null;
@@ -180,13 +183,5 @@ public class Networking {
 			return false;
 		}
 
-	}
-	
-	/**
-	 * Returns the input scanner
-	 * @return Scanner object attached to the input of the socket
-	 */
-	public Scanner getScanner() {
-		return input;
 	}
 }
