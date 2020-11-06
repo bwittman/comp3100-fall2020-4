@@ -38,8 +38,9 @@ public class HumanPlayer extends Player {
 		public void run() {
 			while(networking.isConnected()) {
 				String message = networking.receiveMessage();
-				System.out.println("Message Received: " + message);
-				SwingUtilities.invokeLater(new MessageDispatcher(message));
+				if(!message.equals("")) {
+					SwingUtilities.invokeLater(new MessageDispatcher(message));
+				}
 			}
 			System.err.println("MessageListener: Connection Ended!");
 		}
@@ -54,16 +55,22 @@ public class HumanPlayer extends Player {
 		
 		public MessageDispatcher(String message) {
 			this.message = message;
+			System.out.println("Message Received: " + message);
 		}
 		
 		@Override
 		public void run() {
 			//TODO: add if to check messages incoming
-			if(message.startsWith("GUESS")){
+			if(message.startsWith("GUESS")) {
 				String[] parts = message.split(" ");
 				int row = Integer.parseInt(parts[1]);
 				int column = Integer.parseInt(parts[2]);
-				Results  result = processGuess(row, column); //What to do with this info
+				Results result = processGuess(row, column); //What to do with this info
+				//sendResults(Results Object) send .toString back
+			}
+			if(message.startsWith("LOG: ")){
+				String[] parts = message.split(": ");
+				logMessage("Enemy: " + parts[1]);
 			}
 		}
 	}
@@ -80,6 +87,8 @@ public class HumanPlayer extends Player {
     public boolean connectAsClient(String IP) {
     	networking.connect(false, IP);
     	if(networking.isConnected()) {
+    		listenForNewMessages();
+    		viewManager.getGameScreen().setTitle("Battleship: Game Board [Client]");
     		return true;
     	}
     	return false;
@@ -92,6 +101,7 @@ public class HumanPlayer extends Player {
     public void connectAsHost() {
 		networking.connect(true, "");
 		listenForNewMessages();
+		viewManager.getGameScreen().setTitle("Battleship: Game Board [Host]");
     }
 
     @Override

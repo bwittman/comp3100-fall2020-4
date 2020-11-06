@@ -127,7 +127,9 @@ public abstract class Player {
         if (confirmed == JOptionPane.YES_OPTION) {
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
-
+            if(this instanceof HumanPlayer){
+                ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other Player has placed ships!");
+            }
             //disable ship buttons
             Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
             while (shipButtons.hasMoreElements()) {
@@ -305,7 +307,7 @@ public abstract class Player {
                 ship.reset();
             }
         }
-        logMessage("Ships were places randomly.");
+        logMessage("Ships were placed randomly.");
     }
 
     private boolean intersect(Ship ship1, Ship ship2){
@@ -566,17 +568,23 @@ public abstract class Player {
 
         if (results.hasPlayerWon() && viewManager != null){
             disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            playerWin();
             logMessage("You have won!");
+            playerWin();
+
             //show end screen
         }
     }
 
     protected void logMessage(String message){
-        if(viewManager != null) {
-            JTextArea log = viewManager.getGameScreen().getLog();
-            log.append(message + "\n");
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if(viewManager != null) {
+                    JTextArea log = viewManager.getGameScreen().getLog();
+                    log.append(message + "\n");
+                }
+            }
+        });
     }
 
     public abstract Results makeGuess(int row, int column);

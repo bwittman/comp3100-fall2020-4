@@ -89,8 +89,8 @@ public class MainMenuController {
 	private void setUpHostWindow(){
 		String getIpLocal = humanPlayer.getNetworking().getIpLocal();;
 		String getIpExternal = humanPlayer.getNetworking().getIpExternal();
-		viewManager.getNetworkingHostWindow().getIPAddressInnerLabel().setText("Your Local IP Address is: " + getIpLocal);
-		viewManager.getNetworkingHostWindow().getIPAddressOutsideLabel().setText("Your Outside IP Address is: " + getIpExternal);
+		viewManager.getNetworkingHostWindow().getLocalIPAddress().setText(getIpLocal);
+		viewManager.getNetworkingHostWindow().getOuterIPAddress().setText(getIpExternal);
 		viewManager.getNetworkingHostWindow().getConnectionStatusLabel().setText("Connection Status: Waiting for Client...");
 		hostConnectionWorker = new SwingWorker <Void, Void>(){
 			
@@ -133,7 +133,6 @@ public class MainMenuController {
 				viewManager.getNetworkingClientWindow().setVisible(false);
 				viewManager.getNetworkingHostWindow().setVisible(false);
 				viewManager.getMainMenu().setVisible(false);
-				humanPlayer.listenForNewMessages();
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});

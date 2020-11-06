@@ -51,9 +51,9 @@ public class Results {
     @Override
     public String toString(){
         if(sunkShip != null) {
-            return guessedTile.y + " " + guessedTile.x + " " + tileHit + " " + playerWon + " " + sunkShip.name();
+            return guessedTile.x + " " + guessedTile.y + " " + tileHit + " " + playerWon + " " + sunkShip.name();
         }else{
-            return guessedTile.y + " " + guessedTile.x + " " + tileHit + " " + playerWon;
+            return guessedTile.x + " " + guessedTile.y + " " + tileHit + " " + playerWon;
         }
     }
 }

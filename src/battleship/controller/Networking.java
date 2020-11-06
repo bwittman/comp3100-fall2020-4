@@ -80,8 +80,7 @@ public class Networking {
 	    	try {
 				serverSocket = new ServerSocket(PORT);
 				socket = serverSocket.accept();
-				InputStream inputStream = socket.getInputStream();
-				input = new Scanner(inputStream);
+				input = new Scanner(socket.getInputStream());
 				output = new PrintWriter(socket.getOutputStream());
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = true)");
@@ -90,7 +89,8 @@ public class Networking {
 	    }else {
 	    	try {
 				socket = new Socket(ipAddress, PORT);
-				
+				input = new Scanner(socket.getInputStream());
+				output = new PrintWriter(socket.getOutputStream());
 			} catch (UnknownHostException e) {
 				System.out.println("UnknownHostException thrown in Networking Class Constructor");
 				e.printStackTrace();
@@ -120,8 +120,8 @@ public class Networking {
 	 * @param message
 	 */
 	public void sendMessage(String message) {
-		if(socket != null && socket.isConnected()) {
-			output.println(Arrays.toString(message.getBytes()));
+		if(socket != null && socket.isConnected() && output != null) {
+			output.println(message);
 		}else {
 			System.out.println("Could not send message. Socket could be null or not connected");
 		}
@@ -132,7 +132,7 @@ public class Networking {
 	 * @return returns the string from the socket if possible. Otherwise returns an empty string.
 	 */
 	public String receiveMessage() {
-		if(socket != null && socket.isConnected()) {
+		if(socket != null && socket.isConnected() && input != null) {
 			return input.nextLine();
 		}else {
 			return "";

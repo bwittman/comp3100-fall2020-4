@@ -3,14 +3,14 @@ package battleship.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class NetworkingHost extends JFrame {
 	private JLabel ipAddressInnerLabel ;
 	private JLabel ipAddressOutsideLabel ;
 	private JLabel connectionStatusLabel;
+	private JTextField localIPAddress;
+	private JTextField outerIPAddress;
 	
 	public NetworkingHost () {
 		setTitle("Battleship - Host");
@@ -19,15 +19,31 @@ public class NetworkingHost extends JFrame {
 		setResizable(false);
 		
 		JPanel outerPanel = new JPanel(new BorderLayout());
-		JPanel topPanel = new JPanel(new GridBagLayout());
-		JPanel middlePanel = new JPanel(new GridBagLayout());
-		JPanel bottomPanel = new JPanel(new GridBagLayout());
-		ipAddressInnerLabel = new JLabel("Your Local IP Address is: 192.168.X.X");
-		ipAddressOutsideLabel = new JLabel("Your Outside IP Address is: XXX.XXX.X.X"); //stand in label to tell if it is working
+		JPanel topPanel = new JPanel(new BorderLayout());
+		JPanel middlePanel = new JPanel(new BorderLayout());
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		JPanel ipAddressInnerLabelPanel = new JPanel(new GridBagLayout());
+		JPanel ipAddressOutsideLabelPanel = new JPanel(new GridBagLayout());
+		JPanel connectionStatusLabelPanel = new JPanel(new GridBagLayout());
+		JPanel localIPPanel = new JPanel(new GridBagLayout());
+		JPanel outerIPPanel = new JPanel(new GridBagLayout());
+		ipAddressInnerLabel = new JLabel("Your Local IP Address is:");
+		ipAddressOutsideLabel = new JLabel("Your Outside IP Address is:");
+		localIPAddress = new JTextField("XXX.XXX.X.XXX");
+		outerIPAddress = new JTextField("XXX.XXX.X.XXX");
+		localIPAddress.setEditable(false);
+		outerIPAddress.setEditable(false);
 		connectionStatusLabel = new JLabel("Connection Status: Initialized"); // once socket is open this can be changed to waiting for connection
-		topPanel.add(ipAddressInnerLabel);
-		middlePanel.add(ipAddressOutsideLabel);
-		bottomPanel.add(connectionStatusLabel);
+		localIPPanel.add(localIPAddress);
+		outerIPPanel.add(outerIPAddress);
+		ipAddressInnerLabelPanel.add(ipAddressInnerLabel);
+		ipAddressOutsideLabelPanel.add(ipAddressOutsideLabel);
+		connectionStatusLabelPanel.add(connectionStatusLabel);
+		topPanel.add(ipAddressOutsideLabelPanel, BorderLayout.NORTH);
+		topPanel.add(outerIPPanel, BorderLayout.SOUTH);
+		middlePanel.add(ipAddressInnerLabelPanel, BorderLayout.NORTH);
+		middlePanel.add(localIPPanel, BorderLayout.SOUTH);
+		bottomPanel.add(connectionStatusLabelPanel, BorderLayout.NORTH);
 		outerPanel.add(topPanel, BorderLayout.NORTH);
 		outerPanel.add(middlePanel, BorderLayout.CENTER);
 		outerPanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -50,5 +66,9 @@ public class NetworkingHost extends JFrame {
 	public JLabel getConnectionStatusLabel() {
 		return connectionStatusLabel;
 	}
+
+	public JTextField getLocalIPAddress(){ return localIPAddress;}
+
+	public JTextField getOuterIPAddress(){ return outerIPAddress;}
 }
 
