@@ -16,11 +16,9 @@ public class HumanPlayer extends Player {
 	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
 
 	private Networking networking = null;
-	private Thread messageListener;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private boolean isComputerGame;
-	private boolean isHost = false;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
@@ -61,23 +59,24 @@ public class HumanPlayer extends Player {
 		
 		@Override
 		public void run() {
-			//TODO: add if to check messages incoming
 			if(message.startsWith("GUESS")) {
 				String[] parts = message.split(" ");
 				int row = Integer.parseInt(parts[1]);
 				int column = Integer.parseInt(parts[2]);
-				Results result = processGuess(row, column); //What to do with this info
-				//sendResults(Results Object) send .toString back
+				Results result = processGuess(row, column);
+				sendResults(result);
 			}
 			if(message.startsWith("LOG: ")){
 				String[] parts = message.split(": ");
-				logMessage("Enemy: " + parts[1]);
+				logMessage(parts[1]);
 			}
 		}
 	}
 
+
+
 	public void listenForNewMessages() {
-		messageListener = new MessageListener();
+		MessageListener messageListener = new MessageListener();
 		messageListener.start();
 	}
 
@@ -250,12 +249,6 @@ public class HumanPlayer extends Player {
 			networking.sendMessage(results.toString());
 		}
 	}
-
-	public void cleanup() {
-    	if(messageListener != null) {
-        	messageListener.interrupt();
-    	}
-    }
 
 	public void setComputerGame(boolean isComputerGame){
 		this.isComputerGame = isComputerGame;
