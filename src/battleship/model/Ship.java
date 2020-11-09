@@ -2,8 +2,14 @@ package battleship.model;
 
 import java.awt.*;
 
+/**
+ * Represents a ship, its placement, and how many hits it has received
+ */
 public class Ship {
 
+    /**
+     * The types of ships a player may have. Each player has one of each.
+     */
     public enum ShipType{
         DESTROYER("Destroyer", 2),
         SUBMARINE("Submarine", 3),
@@ -68,8 +74,12 @@ public class Ship {
         start = null;
     }
 
+    /**
+     * Check if this ship is sunk
+     * @return if this ship is sunk
+     */
     public boolean checkForSunk(){
-        return hits >= shipType.length;
+        return hits == shipType.length;
     }
 
     //for testing only

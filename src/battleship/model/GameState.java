@@ -2,6 +2,9 @@ package battleship.model;
 
 import battleship.controller.Player;
 
+/**
+ * Physical representation of the current state of a user or enemy's board
+ */
 public class GameState {
 
 	private Player.Tile[][] board;

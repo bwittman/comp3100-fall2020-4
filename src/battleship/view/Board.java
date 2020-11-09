@@ -5,6 +5,9 @@ import java.awt.*;
 
 import battleship.controller.Player;
 
+/**
+ * Visual representation of the current state of a user or enemy's board
+ */
 public class Board extends JPanel {
 
     private static final int ROWS = Player.ROWS;
@@ -19,13 +22,12 @@ public class Board extends JPanel {
         setUpButtons();
     }
 
-    public CoordinateButton getButton(int i, int j){
-        return buttonArray[i][j];
-    }
-
+    /*
+     * Sets up the labels along the top row, these are letters
+     */
     private void setUpLabels(){
         JLabel first = new JLabel();
-        this.add(first);
+        this.add(first);//the top left corner has no visual label
         for (int i = 0; i < COLUMNS; ++i){
             JLabel label = new JLabel();
             label.setText(Character.toString((char) ( i + 'A')));
@@ -34,6 +36,10 @@ public class Board extends JPanel {
         }
     }
 
+    /*
+     * Sets up the labels at the beginning of each row and adds all the buttons,
+     * note that these labels are numbers
+     */
     private void setUpButtons(){
         for (int i = 0; i < ROWS; i++ ) {
             JLabel label = new JLabel();
@@ -47,5 +53,9 @@ public class Board extends JPanel {
                 this.add(button);
             }
         }
+    }
+
+    public CoordinateButton getButton(int i, int j){
+        return buttonArray[i][j];
     }
 }
