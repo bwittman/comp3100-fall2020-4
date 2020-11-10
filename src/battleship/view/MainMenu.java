@@ -11,6 +11,8 @@ import java.awt.*;
  */
 public class MainMenu extends JFrame {
 
+    public static int frameSize;
+
     private ImageIcon background;
     private JButton rulesButton;
     private JButton networkButton;
@@ -20,7 +22,12 @@ public class MainMenu extends JFrame {
      * Constructor creates a JPanel and constructs the Main Menu on it.
      */
     public MainMenu() {
-    	background = new ImageIcon("resources/shipMainWindow.png");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frameSize = (int) (screenSize.getHeight()*.9);
+
+    	background = new ImageIcon(new ImageIcon("resources/shipMainWindow.png").getImage()
+                .getScaledInstance(frameSize,frameSize, Image.SCALE_SMOOTH));
+
         JPanel backgroundPanel = new PanelWithBackgroundImage(background.getImage());
         JPanel buttonPanel = new JPanel(new GridLayout(1,3));
         JPanel outerPanel = new JPanel(new BorderLayout());
@@ -28,6 +35,7 @@ public class MainMenu extends JFrame {
         rulesButton = new JButton("Rules");
         networkButton = new JButton("Networking");
         onePlayerButton = new JButton("Play Against Computer");
+        onePlayerButton.setFocusPainted(false);
 
         buttonPanel.add(onePlayerButton);
         buttonPanel.add(rulesButton);
@@ -38,8 +46,8 @@ public class MainMenu extends JFrame {
 
         setTitle("Battleship: Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(625,625);
-        setMinimumSize(new Dimension(625,625));
+        setSize(frameSize,frameSize);
+        setMinimumSize(new Dimension(frameSize,frameSize));
         setResizable(true);
 
         add(outerPanel);

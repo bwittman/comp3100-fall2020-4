@@ -22,8 +22,7 @@ public class GamePlayWindow extends JFrame {
     private JButton playGameButton;
 
     public GamePlayWindow(){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frameSize = (int) (screenSize.getHeight()*.9);
+        frameSize = MainMenu.frameSize;
         boardPanelHeight = (int) (frameSize*.9);
 
         setupBoardPanel();
@@ -56,6 +55,8 @@ public class GamePlayWindow extends JFrame {
 
         boardPanel.add(enemyBoard, BorderLayout.NORTH);
         boardPanel.add(userBoard, BorderLayout.SOUTH);
+
+        boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0,5,0));
     }
 
     private void setupLogPanel(){
@@ -64,11 +65,12 @@ public class GamePlayWindow extends JFrame {
 
         scrollPane = new JScrollPane(log);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setSize(frameSize/2, frameSize/2);
 
         logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.NORTH);
 
-        logPanel.setBorder(BorderFactory.createEmptyBorder(5, (int) (frameSize *.1),0,0));
+        logPanel.setBorder(BorderFactory.createEmptyBorder(5, (int) (frameSize *.1),5,0));
 
         setupShipPanel();
     }
@@ -117,7 +119,6 @@ public class GamePlayWindow extends JFrame {
         optionButtons.add(resetButton);
         optionButtons.add(randomButton);
         optionButtons.add(playGameButton);
-        optionButtons.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
     }
 
     public Board getUserBoard() {

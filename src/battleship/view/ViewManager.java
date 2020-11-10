@@ -8,9 +8,9 @@ public class ViewManager {
     private NetworkingHost networkingHostWindow;
 
     public ViewManager(){
+        mainMenu = new MainMenu();//must be set up first because of the frame sizing
         gameScreen = new GamePlayWindow();
         rulesWindow = new RulesWindow();
-        mainMenu = new MainMenu();
         networkingClientWindow = new NetworkingClient();
         networkingHostWindow = new NetworkingHost();
     }
