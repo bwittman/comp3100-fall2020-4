@@ -149,7 +149,7 @@ public abstract class Player {
         SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
             @Override
             protected Results doInBackground() throws Exception {
-                return makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
+                return makeGuess(button.getLocation().y, button.getLocation().x);//sending the enemy what our guess is
             }
             protected void done(){
                 try {
@@ -528,8 +528,6 @@ public abstract class Player {
                 logMessage("Enemy has Won!");
                 opponentWin();
                 //show end screen
-            } else {
-                enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             }
         }
 

@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -25,7 +24,6 @@ public class Networking {
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private static final int PORT = 7777;
-	private boolean isHost;
 	private Scanner input;
 	private PrintWriter output;
 
@@ -39,13 +37,13 @@ public class Networking {
 	    try {
 	        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 	        while (interfaces.hasMoreElements()) {
-	            NetworkInterface iface = interfaces.nextElement();
+	            NetworkInterface networkingInterface = interfaces.nextElement();
 	            // filters out 127.0.0.1 and inactive interfaces
-				if (!(iface.isLoopback() || !iface.isUp())) {
-					Enumeration<InetAddress> addresses = iface.getInetAddresses(); //Gets the local IP address
-					InetAddress addr = addresses.nextElement();
-					ip = addr.getHostAddress();
-					System.out.println(iface.getDisplayName() + " " + ip);
+				if (!(networkingInterface.isLoopback() || !networkingInterface.isUp())) {
+					Enumeration<InetAddress> addresses = networkingInterface.getInetAddresses(); //Gets the local IP address
+					InetAddress address = addresses.nextElement();
+					ip = address.getHostAddress();
+					System.out.println(networkingInterface.getDisplayName() + " " + ip);
 					hostIpAddressLocal = ip;
 				}
 	        }
@@ -55,14 +53,13 @@ public class Networking {
 	    
 	    // Gets External IP Address from AWS website
 	    try {
-	    	//TODO: Double check that this doesn't need to happen separate from main execution thread
-	    URL whatismyip = new URL("http://checkip.amazonaws.com"); //Asks this address for our IP
+	    URL whatIsMyIp = new URL("http://checkip.amazonaws.com"); //Asks this address for our IP
 	    BufferedReader in = new BufferedReader(new InputStreamReader(
-	                    whatismyip.openStream()));
+	                    whatIsMyIp.openStream()));
 	    hostIpAddressExternal = in.readLine(); //you get the IP as a String
 	    System.out.println(hostIpAddressExternal);
 	    }catch(MalformedURLException e) {
-	    	System.err.println("MalformedURLException thrown in Networking Contructor");
+	    	System.err.println("MalformedURLException thrown in Networking Constructor");
 	    }
 	    catch(IOException e) {
 	    	System.err.println("IOException Thrown in Networking Constructor (trying to get external IP)");
@@ -73,9 +70,8 @@ public class Networking {
 	 * Attempts to connect client to host
 	 * @param isHost tells class if it is the host or client
 	 * @param ipAddress if the class is not a host it needs to know the IP it should connect to
-	 * @return returns true if connected and false if not connects
 	 */
-	public boolean connect(boolean isHost, String ipAddress) {
+	public void connect(boolean isHost, String ipAddress) {
 		if(isHost) {
 	    	try {
 				serverSocket = new ServerSocket(PORT);
@@ -84,7 +80,6 @@ public class Networking {
 				output = new PrintWriter(socket.getOutputStream());
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = true)");
-				return false;
 			}
 	    }else {
 	    	try {
@@ -94,13 +89,10 @@ public class Networking {
 			} catch (UnknownHostException e) {
 				System.out.println("UnknownHostException thrown in Networking Class Constructor");
 				e.printStackTrace();
-				return false;
 			} catch (IOException e) {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = false)");
-				return false;
 			}
 	    }
-		return true;
 	}
 	
 	/**
@@ -117,7 +109,7 @@ public class Networking {
 	
 	/**
 	 * Tries to send a message over the socket
-	 * @param message
+	 * @param message the string to be sent over the socket
 	 */
 	public void sendMessage(String message) {
 		if(socket != null && socket.isConnected() && output != null) {
@@ -133,7 +125,7 @@ public class Networking {
 	 * @return returns the string from the socket if possible. Otherwise returns an empty string.
 	 */
 	public String receiveMessage() {
-		if(socket != null && socket.isConnected() && input != null) {
+		if(socket != null && socket.isConnected() && input.hasNext()) {
 			return input.nextLine();
 		}else {
 			return "";

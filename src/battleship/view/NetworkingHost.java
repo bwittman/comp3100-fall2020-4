@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class NetworkingHost extends JFrame {
 	private JLabel ipAddressInnerLabel ;
@@ -29,8 +31,8 @@ public class NetworkingHost extends JFrame {
 		JPanel outerIPPanel = new JPanel(new GridBagLayout());
 		ipAddressInnerLabel = new JLabel("Your Local IP Address is:");
 		ipAddressOutsideLabel = new JLabel("Your Outside IP Address is:");
-		localIPAddress = new JTextField("XXX.XXX.X.XXX");
-		outerIPAddress = new JTextField("XXX.XXX.X.XXX");
+		localIPAddress = new JTextField("0.0.0.0");
+		outerIPAddress = new JTextField("0.0.0.0");
 		localIPAddress.setEditable(false);
 		outerIPAddress.setEditable(false);
 		connectionStatusLabel = new JLabel("Connection Status: Initialized"); // once socket is open this can be changed to waiting for connection
@@ -53,14 +55,6 @@ public class NetworkingHost extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(false);
-	}
-	
-	public JLabel getIPAddressInnerLabel() {
-		return ipAddressInnerLabel;
-	}
-	
-	public JLabel getIPAddressOutsideLabel() {
-		return ipAddressOutsideLabel;
 	}
 	
 	public JLabel getConnectionStatusLabel() {

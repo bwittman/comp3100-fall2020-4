@@ -19,6 +19,7 @@ public class HumanPlayer extends Player {
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private boolean isComputerGame;
+	private volatile Results results = null;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
@@ -31,6 +32,7 @@ public class HumanPlayer extends Player {
 	/**
 	 * Listens on the socket on a separate thread so that the GUI does not freeze if this takes longer than expected
 	 */
+
 	private class MessageListener extends Thread {
 		@Override
 		public void run() {
@@ -44,6 +46,7 @@ public class HumanPlayer extends Player {
 			System.err.println("MessageListener: Connection Ended!");
 		}
 	}
+
 	
 	/**
 	 * Notifies responsible classes with the correct messages
@@ -64,9 +67,14 @@ public class HumanPlayer extends Player {
 				int row = Integer.parseInt(parts[1]);
 				int column = Integer.parseInt(parts[2]);
 				Results result = processGuess(row, column);
-				sendResults(result);
+				synchronized (HumanPlayer.this){		//Updates a volatile instance of Result
+					HumanPlayer.this.results = result;
+					HumanPlayer.this.notifyAll();
+				}
+				enableBoard(getGameState(), viewManager.getGameScreen().getEnemyBoard());
+				updateAllBoards();
 			}
-			if(message.startsWith("LOG: ")){
+			else if(message.startsWith("LOG: ")){
 				String[] parts = message.split(": ");
 				logMessage(parts[1]);
 			}
@@ -237,9 +245,22 @@ public class HumanPlayer extends Player {
 		if (isComputerGame){
 			 return opponent.processGuess(row, column);
 		}else{
+			synchronized (HumanPlayer.this){
+				results = null;
+			}
 			networking.sendMessage("GUESS " + row + " " + column);
-			String message = networking.receiveMessage();
-			return new Results(message);
+			synchronized (HumanPlayer.this){
+				while (results == null){
+					try {
+						HumanPlayer.this.wait();		//wait until results received
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			disableBoard(viewManager.getGameScreen().getEnemyBoard());
+			updateAllBoards();
+			return results;
 		}
     }
 
