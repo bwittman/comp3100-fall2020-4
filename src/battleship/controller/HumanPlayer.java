@@ -11,6 +11,10 @@ import battleship.view.Board;
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
 
+/**
+ * Manages all human interactions with the graphical user interface as well as
+ * all game play actions and networking if a two player game
+ */
 public class HumanPlayer extends Player {
 
 	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
@@ -29,10 +33,10 @@ public class HumanPlayer extends Player {
 		setUserBoardActionListeners();
 	}
 
-	/**
-	 * Listens on the socket on a separate thread so that the GUI does not freeze if this takes longer than expected
+	/*
+	 * Listens on the socket on a separate thread so that the GUI does not freeze
+	 * if this takes longer than expected
 	 */
-
 	private class MessageListener extends Thread {
 		@Override
 		public void run() {
@@ -48,7 +52,7 @@ public class HumanPlayer extends Player {
 	}
 
 	
-	/**
+	/*
 	 * Notifies responsible classes with the correct messages
 	 * EXAMPLE: If the MessageListener receives a win game message then it will notify gameState
 	 */
@@ -81,18 +85,27 @@ public class HumanPlayer extends Player {
 		}
 	}
 
-
-
+	/**
+	 * Listen over the network for messages being sent
+	 */
 	public void listenForNewMessages() {
 		MessageListener messageListener = new MessageListener();
 		messageListener.start();
 	}
 
+	/**
+	 * Disconnect from the opponent
+	 */
     public void disconnect() {
     	networking.cleanUp();
     }
-    
-    public boolean connectAsClient(String IP) {
+
+	/**
+	 * Connect to the opponent as a client
+	 * @param IP the IP Address of the host
+	 * @return if the connection was successful
+	 */
+	public boolean connectAsClient(String IP) {
     	networking.connect(false, IP);
     	if(networking.isConnected()) {
     		listenForNewMessages();
@@ -102,17 +115,19 @@ public class HumanPlayer extends Player {
     	return false;
     }
 
-    public Networking getNetworking(){
-		return networking;
-	}
-
-    public void connectAsHost() {
+	/**
+	 * Connect to the opponent as a host
+	 */
+	public void connectAsHost() {
 		networking.connect(true, "");
 		listenForNewMessages();
 		viewManager.getGameScreen().setTitle("Battleship: Game Board [Host]");
     }
 
-    @Override
+	/**
+	 * Reset the entire game including the view
+	 */
+	@Override
 	public void resetGame(){
 		super.resetGame();
 		startPositionPoint = null;
@@ -128,6 +143,11 @@ public class HumanPlayer extends Player {
 		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
 
+	/**
+	 * Place the ship that is currently selected
+	 * @param clickedButton the ship that is currently selected
+	 * @throws ShipPlacementException if the start or end point of the ship is illegal
+	 */
     public void placeShip(CoordinateButton clickedButton) throws ShipPlacementException{
 		Ship shipToPlace = findSelectedShip();
 
@@ -150,6 +170,10 @@ public class HumanPlayer extends Player {
 		}
     }
 
+    /*
+     * Choose the starting point of the ship that is currently being placed and
+     * enable only legal options for the endpoint of this ship
+     */
     private void setShipStart(Ship ship){
 		ship.setStart(startPositionPoint);
 
@@ -166,6 +190,9 @@ public class HumanPlayer extends Player {
 		}
 	}
 
+	/*
+	 * Choose the endpoint of the ship that is currently being placed
+	 */
 	private void setShipEnd(Ship ship) throws ShipPlacementException{
 		ship.setEnd(endPositionPoint);
 
@@ -195,6 +222,9 @@ public class HumanPlayer extends Player {
 		}
 	}
 
+	/*
+	 * Figure out which ship is currently being placed
+	 */
     private Ship findSelectedShip(){
 		String shipType = "";
 		ButtonModel buttonModel = viewManager.getGameScreen().getShipButtonGroup().getSelection();
@@ -223,6 +253,9 @@ public class HumanPlayer extends Player {
 		return shipObject;
 	}
 
+	/*
+	 * Set the action listeners on the user board for ship placement
+	 */
     private void setUserBoardActionListeners(){
 		Board userBoard = viewManager.getGameScreen().getUserBoard();
 
@@ -240,10 +273,17 @@ public class HumanPlayer extends Player {
 		}
 	}
 
+	/**
+	 * Make a guess and wait for the results of that guess from the opponent
+	 * @param row the row of the guessed tile
+	 * @param column the column of the guessed tile
+	 * @return the results of our guess
+	 */
     @Override
     public Results makeGuess(int row, int column) {
 		if (isComputerGame){
-			 return opponent.processGuess(row, column);
+			disableBoard(viewManager.getGameScreen().getEnemyBoard());
+			return opponent.processGuess(row, column);
 		}else{
 			synchronized (HumanPlayer.this){
 				results = null;
@@ -264,11 +304,19 @@ public class HumanPlayer extends Player {
 		}
     }
 
-    @Override
+	/**
+	 * Send the results of an opponent's guess to them
+	 * @param results the results of the opponent's guess
+	 */
+	@Override
 	public void sendResults(Results results){
 		if(!isComputerGame){
 			networking.sendMessage(results.toString());
 		}
+	}
+
+	public Networking getNetworking(){
+		return networking;
 	}
 
 	public void setComputerGame(boolean isComputerGame){

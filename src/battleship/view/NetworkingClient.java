@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Networking screen for a client connecting to a host
+ */
 public class NetworkingClient extends JFrame {
 	
 	private JTextField IPinput;

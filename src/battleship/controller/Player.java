@@ -14,18 +14,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controls interactions between the view and the model of a user's game.
+ * Game play functionality that is shared between all types of Players.
+ */
 public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
-    private static final int BUTTON_SIDE = 50;
-    private static final Color WATER = new Color(16,129,160);
-    private static final Icon MISS_ICON = new ImageIcon(((new ImageIcon("resources/blueX.png").getImage()
-            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
-    private static final Icon HIT_ICON = new ImageIcon(((new ImageIcon("resources/redX.png").getImage()
-            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
-    private static final Icon SHIP_ICON = new ImageIcon(((new ImageIcon("resources/shipTile.png").getImage()
-            .getScaledInstance(BUTTON_SIDE, BUTTON_SIDE, Image.SCALE_SMOOTH))));
+    private static int buttonSize;
 
+    private static final Color WATER = new Color(16,129,160);
+    private static ImageIcon MISS_ICON = new ImageIcon("resources/blueX.png");
+    private static ImageIcon HIT_ICON = new ImageIcon("resources/redX.png");
+    private static ImageIcon SHIP_ICON = new ImageIcon("resources/shipTile.png");
+
+    /**
+     * The types of tiles that we have encounter
+     */
     public enum Tile {
         SHIP,
         HIT,
@@ -45,17 +50,36 @@ public abstract class Player {
         this.viewManager = viewManager;
         createShips();
         initGameStates();
-        if(viewManager != null){
+        if(viewManager != null){//the view manager will be null for a computerPlayer
+            setupIcons();
             setUpView();
             updateAllBoards();
         }
     }
 
+    /*
+     * Scale the icons based on the size of the button
+     */
+    private void setupIcons(){
+        MISS_ICON = new ImageIcon((MISS_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        HIT_ICON = new ImageIcon((HIT_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        SHIP_ICON = new ImageIcon((SHIP_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+    }
+
+    /**
+     * Update both the user and enemy boards
+     */
     protected void updateAllBoards(){
         updateBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
         updateBoard(gameState, viewManager.getGameScreen().getUserBoard());
     }
-    
+
+    /*
+     * Create all the ships that a Player will have
+     */
     private void createShips(){
         Ship destroyer = new Ship(ShipType.DESTROYER);
         Ship submarine = new Ship(ShipType.SUBMARINE);
@@ -69,11 +93,17 @@ public abstract class Player {
         ships.add(destroyer);
     }
 
+    /*
+     * Initialize the game states
+     */
     private void initGameStates(){
         gameState = new GameState();
         enemyGameState = new GameState();
     }
 
+    /*
+     * Set all the action listeners for the windows
+     */
     private void setUpView(){
         setEnemyActionListeners();
         setResetActionListener();
@@ -82,6 +112,9 @@ public abstract class Player {
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
     }
 
+    /*
+     * Set the action listener of all the buttons on the enemy board
+     */
     private void setEnemyActionListeners(){
         Board board = viewManager.getGameScreen().getEnemyBoard();
         for(int i = 0; i < ROWS; i++){
@@ -92,6 +125,9 @@ public abstract class Player {
         }
     }
 
+    /*
+     * Set the action listener of the reset button for ship placement
+     */
     private void setResetActionListener(){
         viewManager.getGameScreen().getResetButton().addActionListener(e ->{
             resetGame();
@@ -101,6 +137,9 @@ public abstract class Player {
         });
     }
 
+    /*
+     * Generate and show a random ship placement during the ship placement phase
+     */
     private void setRandomActionListener(){
         viewManager.getGameScreen().getRandomButton().addActionListener(e -> {
             resetGame();
@@ -122,6 +161,9 @@ public abstract class Player {
         });
     }
 
+    /*
+     * Confirm the final ship placement of the user's board and then start the game
+     */
     private void onPlayGameClicked(){
         int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
         if (confirmed == JOptionPane.YES_OPTION) {
@@ -145,6 +187,9 @@ public abstract class Player {
         }
     }
 
+    /*
+     * Initialize the action to be taken when an enemy button is clicked
+     */
     private void onEnemyButtonClicked(CoordinateButton button){
         SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
             @Override
@@ -162,17 +207,11 @@ public abstract class Player {
         };
 
         worker.execute();
-
     }
 
-    private void playerWin(){
-        JOptionPane.showMessageDialog(null,"You win!","Player Win",JOptionPane.INFORMATION_MESSAGE );
-    }
-
-    private void opponentWin(){
-        JOptionPane.showMessageDialog(null,"You lost","Opponent Won",JOptionPane.INFORMATION_MESSAGE );
-    }
-
+    /*
+     * Update the icons of the given board
+     */
     private void updateBoard(GameState gameState, Board board) {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
@@ -200,6 +239,11 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Enable the buttons of the board that are legal to click
+     * @param gameState the corresponding game state to this board
+     * @param board the board to be enabled
+     */
     public void enableBoard(GameState gameState, Board board){
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
@@ -213,6 +257,10 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Disable all of the buttons on this board
+     * @param board the board to be disabled
+     */
     public void disableBoard(Board board){
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
@@ -222,6 +270,10 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Check if all the ships have been placed
+     * @return if all the ships have been placed
+     */
     protected boolean allShipsPlaced(){
         for (Ship ship: ships){
             if (ship.getStart() == null || ship.getEnd() == null){
@@ -231,7 +283,12 @@ public abstract class Player {
         return true;
     }
 
-    //Assumes start and end have been checked for legal
+    /**
+     * Adds a ship that has been placed to the game state.
+     * Assumes that the start and end points have been checked to be in bounds already
+     * @param ship the ships to be added
+     * @throws ShipPlacementException if the start or end points are at the same point
+     */
     protected void addShipToGameState(Ship ship) throws ShipPlacementException {
         if (ship.getLength() == 2){
             gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
@@ -265,11 +322,13 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Generate a random placement of ships
+     */
     public void randomShipPlacement(){
         Random random = new Random();
 
-        int i = 0;
-        while(i < ships.size()){
+        for(int i =0; i < ships.size();){
             Ship ship = ships.get(i);
             //keep going until we have a legal starting point and at least one legal ending point
             List<Point> legalEndPoints;
@@ -309,6 +368,12 @@ public abstract class Player {
         logMessage("Ships were placed randomly.");
     }
 
+    /*
+     * Check if two ships intersect each other.
+     * There are four cases that mirror each other,
+     * the difference is if we loop from start to end or end to start for each ship
+     * depending on if the start is bigger than the end or vice versa.
+     */
     private boolean intersect(Ship ship1, Ship ship2){
         if (ship2.getStart().x < ship2.getEnd().x){
             if (ship2.getStart().y < ship2.getEnd().y){
@@ -350,12 +415,18 @@ public abstract class Player {
         return false;
     }
 
+    /**
+     * Find all of the legal endpoints for a ship that has its starting point set
+     * @param ship the ship being placed
+     * @return the legal endpoints
+     */
     protected List<Point> findLegalEndPoints(Ship ship){
         List<Point> endPoints = new ArrayList<>();
         Point start = ship.getStart();
 
         int length = ship.getLength();
 
+        //First check if each potential endpoint would be illegal
         Point down = new Point(start.x, start.y + length - 1);
         if (checkPlaceLegal(down)){
             endPoints.add(down);
@@ -376,7 +447,8 @@ public abstract class Player {
             endPoints.add(right);
         }
 
-        //Checks to make sure no ships intersect during ship placement
+        //check to make sure that each endpoint would not make the ship
+        //intersect with another already placed ship
         List<Point> result = new ArrayList<>();
         if(endPoints.size() > 0) {
             for (Point currentEndPoint : endPoints) {
@@ -398,10 +470,18 @@ public abstract class Player {
         return result;
     }
 
+    /*
+     * Check if the point is in the bounds of the board
+     */
     private static boolean checkPlaceInBounds(Point place){
         return (place.x >= 0 && place.x < ROWS && place.y >= 0 && place.y < COLUMNS);
     }
 
+    /**
+     * Checks if this tile is a legal tile to place ships on
+     * @param place the point to be checked
+     * @return if this tile is a legal tile to place a ship on
+     */
     public boolean checkPlaceLegal(Point place){
         if(!checkPlaceInBounds(place)){
             return false;
@@ -417,6 +497,11 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Check if the guessed tile hits a ship
+     * @param tile the guessed tile
+     * @return if tile hit a ship
+     */
     public boolean checkHitMiss(Point tile){
         for(Ship ship: ships){
             if (pointIntersectsShip(tile, ship)){
@@ -428,10 +513,10 @@ public abstract class Player {
     }
 
     /**
-     * Checks for intersection of ship point
+     * Checks if this point intersects this ship
      * @param point the point on the board you want to check
      * @param ship1 The ship that your point may intersect
-     * @return true = the ship does intersect with the point
+     * @return if the ship does intersect with the point
      */
     boolean pointIntersectsShip(Point point, Ship ship1){
         //first ship is vertical
@@ -460,6 +545,10 @@ public abstract class Player {
         return false;
     }
 
+    /**
+     * Check if this Player has won the game
+     * @return if this Player has won the game
+     */
     public boolean checkForWin(){
         for (Ship ship: ships){
             if (!ship.checkForSunk()){
@@ -469,35 +558,22 @@ public abstract class Player {
         return true;
     }
 
+    /**
+     * Reset the game
+     */
     public void resetGame(){
         gameState.reset();
         enemyGameState.reset();
         for (Ship ship: ships){
             ship.reset();
         }
-        //clear log
         viewManager.getGameScreen().getLog().setText("");
     }
 
-    public GameState getGameState(){
-        return gameState;
-    }
-
-    public GameState getEnemyGameState(){
-        return enemyGameState;
-    }
-    public void setTurn(boolean isMyTurn){
-        this.isMyTurn = isMyTurn;
-    }
-
-    public void setOpponent(Player opponent){
-        this.opponent = opponent;
-    }
-
     /**
-     * Processes enemy guess and returns Results of the guess
-     * @param row = row coordinate
-     * @param column = column coordinate
+     * Processes enemy guess and returns the results of the guess
+     * @param row row coordinate
+     * @param column column coordinate
      * @return Results object to be processed by enemy
      */
     public Results processGuess(int row, int column){
@@ -527,8 +603,7 @@ public abstract class Player {
             if (opponentWon) {
                 disableBoard(viewManager.getGameScreen().getEnemyBoard());
                 logMessage("Enemy has Won!");
-                opponentWin();
-                //show end screen
+                JOptionPane.showMessageDialog(null,"You lost","Opponent Won",JOptionPane.INFORMATION_MESSAGE );
             }
         }
 
@@ -536,8 +611,8 @@ public abstract class Player {
     }
 
     /**
-     * Processes results from enemy guess
-     * @param results = an object which holds ships sunk, hit or miss, and if they have won
+     * Processes results received from enemy about our guess
+     * @param results the results of this Player's guess
      */
     public void processResults(Results results){
         if (results.isTileHit()){
@@ -561,17 +636,19 @@ public abstract class Player {
 
         if (viewManager != null){
             updateAllBoards();
-        }
-
-        if (results.hasPlayerWon() && viewManager != null){
-            disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            logMessage("You have won!");
-            playerWin();
-
-            //show end screen
+            enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
+            if (results.hasPlayerWon()){
+                disableBoard(viewManager.getGameScreen().getEnemyBoard());
+                logMessage("You have won!");
+                JOptionPane.showMessageDialog(null,"You win!","Player Win",JOptionPane.INFORMATION_MESSAGE );
+            }
         }
     }
 
+    /**
+     * Write a message to the log
+     * @param message the message to be written
+     */
     protected void logMessage(String message){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -584,13 +661,33 @@ public abstract class Player {
         });
     }
 
-    public abstract Results makeGuess(int row, int column);
-        //send the guess to the opponent
-        //wait for response
-    public abstract void sendResults(Results results);
-        //send the results to the opponent
+    public GameState getGameState(){
+        return gameState;
+    }
 
-    //testing class
+    public GameState getEnemyGameState(){
+        return enemyGameState;
+    }
+
+    public void setTurn(boolean isMyTurn){
+        this.isMyTurn = isMyTurn;
+    }
+
+    public void setOpponent(Player opponent){
+        this.opponent = opponent;
+    }
+
+    public static void setButtonSize(int buttonSize){
+        Player.buttonSize = buttonSize;
+    }
+
+    //abstract methods to be implemented
+    public abstract Results makeGuess(int row, int column);
+    public abstract void sendResults(Results results);
+
+    /**
+     * Testing class
+     */
     public static class PlayerTesting{
         public static boolean intersect(Player player, Ship ship1, Ship ship2) {
             return player.intersect(ship1, ship2);
@@ -610,6 +707,6 @@ public abstract class Player {
     }
 
     public static void main(String[]args){
-        MainMenuController menuController = new MainMenuController();
+        new MainMenuController();
     }
 }

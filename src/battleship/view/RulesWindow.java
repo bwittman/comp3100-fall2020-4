@@ -6,12 +6,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+/**
+ * Frame for displaying the background and rules of the game
+ */
 public class RulesWindow extends JFrame {
 
     JButton closeButton;
 
     public RulesWindow(){
         JTextArea rulesText = new JTextArea();
+        rulesText.setEditable(false);
+        rulesText.setWrapStyleWord(true);
+        rulesText.setLineWrap(true);
         closeButton = new JButton("Close");
 
         add(closeButton, BorderLayout.SOUTH);
@@ -24,6 +30,7 @@ public class RulesWindow extends JFrame {
         setVisible(false);
 
         try {
+            //read in the rules from the text file
             FileReader reader = new FileReader(new File("resources/rules.txt"));
             BufferedReader buffer = new BufferedReader(reader);
 

@@ -1,5 +1,8 @@
 package battleship.view;
 
+/**
+ * Manages all of the view windows
+ */
 public class ViewManager {
     private MainMenu mainMenu;
     private GamePlayWindow gameScreen;

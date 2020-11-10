@@ -4,23 +4,18 @@ import  javax.swing.*;
 import java.awt.*;
 
 /**
- * Displays the Main Menu and handles interactions with the user until they leave the main menu.
- * 
- * @author poiu2
- *
+ * Displays the Main Menu and handles interactions with the user until they leave the main menu
  */
 public class MainMenu extends JFrame {
 
+    //for sizing the frames and panels based on the screen size
     public static int frameSize;
 
     private ImageIcon background;
     private JButton rulesButton;
     private JButton networkButton;
     private JButton onePlayerButton;
-    
-    /**
-     * Constructor creates a JPanel and constructs the Main Menu on it.
-     */
+
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frameSize = (int) (screenSize.getHeight()*.9);
@@ -48,7 +43,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(frameSize,frameSize);
         setMinimumSize(new Dimension(frameSize,frameSize));
-        setResizable(true);
+        setResizable(false);
 
         add(outerPanel);
         pack();
@@ -69,6 +64,9 @@ public class MainMenu extends JFrame {
     }
 }
 
+/**
+ * Inner class for displaying the background image on the Main Menu
+ */
 class PanelWithBackgroundImage extends JPanel {
 
 	private static final long serialVersionUID = 1L;

@@ -2,17 +2,14 @@ package battleship.model;
 
 import battleship.controller.Player.Tile;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * All tests associated with the GameState class
+ */
 class GameStateTest {
 
-    private GameState gameState;
-
-    @BeforeEach
-    void setup(){
-        gameState = new GameState();
-    }
+    private GameState gameState = new GameState();
 
     @Test
     void testPartialBoardReset(){

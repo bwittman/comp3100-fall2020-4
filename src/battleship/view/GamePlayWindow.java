@@ -1,12 +1,19 @@
 package battleship.view;
 
+import battleship.controller.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Graphical interface for placing ships and playing the game
+ */
 public class GamePlayWindow extends JFrame {
 
+    //variables used for sizing the frames and panels based on the screen size
     private static int frameSize;
     public static int boardPanelHeight;
+    public static int buttonSize;
 
     private Board userBoard;
     private Board enemyBoard;
@@ -42,12 +49,15 @@ public class GamePlayWindow extends JFrame {
         add(optionButtons, BorderLayout.SOUTH);
     }
 
+    /*
+     * Set up the user and game boards
+     */
     private void setupBoardPanel(){
         boardPanel = new JPanel(new BorderLayout());
         int boardPanelWidth = boardPanelHeight/2;
         boardPanel.setSize(new Dimension(boardPanelWidth, boardPanelHeight));
 
-        int buttonSize = boardPanelWidth/11;
+        buttonSize = boardPanelWidth/11;
         Board.setButtonSize(buttonSize);
 
         userBoard = new Board();
@@ -59,6 +69,9 @@ public class GamePlayWindow extends JFrame {
         boardPanel.setBorder(BorderFactory.createEmptyBorder(0, 0,5,0));
     }
 
+    /*
+     * Set up the log
+     */
     private void setupLogPanel(){
         log = new JTextArea(20,20);
         log.setEditable(false);
@@ -75,6 +88,9 @@ public class GamePlayWindow extends JFrame {
         setupShipPanel();
     }
 
+    /*
+     * Set up all the ship buttons for ship placement
+     */
     private void setupShipPanel(){
         JRadioButton carrierButton = new JRadioButton("Carrier: 5 Tiles");
         JRadioButton battleshipButton = new JRadioButton("Battleship: 4 Tiles");
@@ -108,6 +124,9 @@ public class GamePlayWindow extends JFrame {
         logPanel.add(shipPanel, BorderLayout.CENTER);
     }
 
+    /*
+     * Set up the options that are available only during the ship placement phase
+     */
     private void setupShipPlacementOptionsPanel(){
         optionButtons = new JPanel(new GridLayout(1, 3));
 

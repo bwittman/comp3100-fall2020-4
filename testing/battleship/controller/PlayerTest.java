@@ -10,6 +10,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * All tests associated with the Player, HumanPlayer, and ComputerPlayer classes
+ */
 class PlayerTest {
     private Player player = new ComputerPlayer(null);
     private static final int ROWS = Player.ROWS;

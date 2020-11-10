@@ -5,9 +5,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import battleship.view.GamePlayWindow;
 import battleship.view.MainMenu;
 import battleship.view.ViewManager;
 
+/**
+ * Initializes the main menu and game
+ */
 public class MainMenuController {
 
 	private ViewManager viewManager;
@@ -20,8 +24,12 @@ public class MainMenuController {
         setMainMenuActionListeners();
         setRulesWindowActionListener();
 		setNetworkingClientActionListener();
+		Player.setButtonSize(GamePlayWindow.buttonSize);
 	}
 
+	/*
+	 * Set up all the action listeners for buttons on the main menu screen
+	 */
 	private void setMainMenuActionListeners(){
 		MainMenu menu = viewManager.getMainMenu();
 
@@ -69,6 +77,7 @@ public class MainMenuController {
 			}
 		});
 
+		//one player button action listener
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
@@ -86,6 +95,9 @@ public class MainMenuController {
 		});
 	}
 
+	/*
+	 * Initializes and populates the host networking window
+	 */
 	private void setUpHostWindow(){
 		String getIpLocal = humanPlayer.getNetworking().getIpLocal();;
 		String getIpExternal = humanPlayer.getNetworking().getIpExternal();
@@ -114,14 +126,18 @@ public class MainMenuController {
 		hostConnectionWorker.execute();
 	}
 
-	//for closing the rules window
+	/*
+	 * Close the rules window when close button is clicked
+	 */
 	private void setRulesWindowActionListener(){
 		viewManager.getRulesWindow().getCloseButton().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(false);
 		});
 	}
 
-		
+	/*
+	 * Initialize the networking client window with input fields
+	 */
 	private void setNetworkingClientActionListener() {
 		viewManager.getNetworkingClientWindow().getConnectButton().addActionListener(e->{
 			boolean isConnected = humanPlayer.connectAsClient(viewManager.getNetworkingClientWindow().getIPInput().getText());

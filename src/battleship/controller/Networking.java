@@ -13,9 +13,7 @@ import java.util.Enumeration;
 import java.util.Scanner;
 
 /**
- * Holds all the Networking Components
- * @author poiu2
- *
+ * Holds all the Networking Components for a two player game
  */
 public class Networking {
 	
@@ -27,9 +25,6 @@ public class Networking {
 	private Scanner input;
 	private PrintWriter output;
 
-	/**
-	 * Constructor for Networking Class. Gets local and
-	 */
 	public Networking() {
 		String ip;
 		serverSocket = null;
@@ -93,18 +88,6 @@ public class Networking {
 				System.out.println("IOException thrown in Networking Class Constructor (isHost = false)");
 			}
 	    }
-	}
-	
-	/**
-	 * Getter for the IPAddress
-	 * @return a string representation of the IPAddress
-	 */
-	public String getIpLocal() {
-		return hostIpAddressLocal;
-	}
-	
-	public String getIpExternal() {
-		return hostIpAddressExternal;
 	}
 	
 	/**
@@ -173,5 +156,13 @@ public class Networking {
 		}else {
 			return false;
 		}
+	}
+
+	public String getIpLocal() {
+		return hostIpAddressLocal;
+	}
+
+	public String getIpExternal() {
+		return hostIpAddressExternal;
 	}
 }

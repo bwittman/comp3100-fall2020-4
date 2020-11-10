@@ -4,9 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
+/**
+ * Networking screen for a user to host a game
+ */
 public class NetworkingHost extends JFrame {
 	private JLabel ipAddressInnerLabel ;
 	private JLabel ipAddressOutsideLabel ;

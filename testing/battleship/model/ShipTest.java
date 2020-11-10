@@ -1,15 +1,15 @@
 package battleship.model;
 
+import battleship.model.Ship.ShipType;
+
 import org.junit.jupiter.api.*;
 import java.awt.*;
 
+/**
+ * All tests associated with the Ship class
+ */
 class ShipTest {
-    private Ship ship;
-
-    @BeforeEach
-    void setup(){
-        ship = new Ship(Ship.ShipType.DESTROYER);
-    }
+    private Ship ship = new Ship(ShipType.DESTROYER);
 
     @Test
     void resetTest() {
@@ -18,7 +18,7 @@ class ShipTest {
         ship.setEnd(new Point(1,2));
         ship.reset();
 
-        Assertions.assertTrue(ship.equals(new Ship(Ship.ShipType.DESTROYER)));
+        Assertions.assertTrue(ship.equals(new Ship(ShipType.DESTROYER)));
     }
 
     @Test
