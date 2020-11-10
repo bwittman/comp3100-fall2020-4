@@ -12,9 +12,11 @@ public class Board extends JPanel {
 
     private static final int ROWS = Player.ROWS;
     private static final int COLUMNS = Player.COLUMNS;
-    private static final int BUTTON_SIZE = Toolkit.getDefaultToolkit().getScreenResolution() / 4;
+    private static int buttonSize;
 
     private CoordinateButton[][] buttonArray = new CoordinateButton[ROWS][COLUMNS];
+
+
 
     public Board() {
         this.setLayout(new GridLayout(ROWS + 1 ,COLUMNS + 1));
@@ -48,7 +50,7 @@ public class Board extends JPanel {
             this.add(label);
             for (int j = 0; j < COLUMNS; j++) {
                 CoordinateButton button = new CoordinateButton(new Point(i,j));
-                button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+                button.setPreferredSize(new Dimension(buttonSize, buttonSize));
                 buttonArray[i][j] = button;
                 this.add(button);
             }
@@ -57,5 +59,9 @@ public class Board extends JPanel {
 
     public CoordinateButton getButton(int i, int j){
         return buttonArray[i][j];
+    }
+
+    public static void setButtonSize(int buttonSize){
+        Board.buttonSize = buttonSize;
     }
 }
