@@ -18,6 +18,7 @@ public class MainMenuController {
 	private HumanPlayer humanPlayer;
 	private ComputerPlayer computerPlayer;
 	private SwingWorker <Void, Void> hostConnectionWorker;
+	private boolean initialStart = true;
 
     public MainMenuController(){
         viewManager = new ViewManager();
@@ -83,7 +84,11 @@ public class MainMenuController {
 			computerPlayer.setTurn(false);
 			computerPlayer.placeComputerShips();
 
-			humanPlayer = new HumanPlayer(viewManager);
+			if(initialStart) {
+				humanPlayer = new HumanPlayer(viewManager);
+				initialStart = false;
+			}
+
 			humanPlayer.setTurn(true);
 			humanPlayer.setComputerGame(true);
 

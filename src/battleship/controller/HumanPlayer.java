@@ -129,6 +129,7 @@ public class HumanPlayer extends Player {
 	 */
 	@Override
 	public void resetGame(){
+		results = null;
 		super.resetGame();
 		startPositionPoint = null;
 		endPositionPoint = null;
@@ -138,7 +139,7 @@ public class HumanPlayer extends Player {
 			AbstractButton shipButton = shipButtons.nextElement();
 			shipButton.setEnabled(true);
 		}
-
+		viewManager.getGameScreen().getLog().setText("");
 		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
 		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
