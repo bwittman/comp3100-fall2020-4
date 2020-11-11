@@ -119,7 +119,7 @@ public abstract class Player {
         Board board = viewManager.getGameScreen().getEnemyBoard();
         for(int i = 0; i < ROWS; i++){
             for(int j = 0; j < COLUMNS; j++){
-                CoordinateButton button = board.getButton(i,j);
+                CoordinateButton button = board.getButton(j,i);
                 button.addActionListener(e -> onEnemyButtonClicked(button));
             }
         }
@@ -194,9 +194,9 @@ public abstract class Player {
         SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
             @Override
             protected Results doInBackground() throws Exception {
-                //TODO:x and y are reversed
                 return makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
             }
+
             protected void done(){
                 try {
                     processResults(get());
@@ -215,8 +215,8 @@ public abstract class Player {
     private void updateBoard(GameState gameState, Board board) {
         for (int i =0; i<ROWS; i++ ){
             for(int j=0;j < COLUMNS; j++){
-                Tile currentTile = gameState.getTile(i,j);
-                JButton currentButton = board.getButton(i,j);
+                Tile currentTile = gameState.getTile(j,i);
+                JButton currentButton = board.getButton(j,i);
                 switch(currentTile){
                     case WATER:
                         currentButton.setIcon(null);
@@ -247,8 +247,8 @@ public abstract class Player {
     public void enableBoard(GameState gameState, Board board){
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
-                JButton currentButton = board.getButton(i,j);
-                if (gameState.getTile(i,j) == Tile.WATER){
+                JButton currentButton = board.getButton(j,i);
+                if (gameState.getTile(j,i) == Tile.WATER){
                     currentButton.setEnabled(true);
                 }else{
                     currentButton.setEnabled(false);
@@ -264,7 +264,7 @@ public abstract class Player {
     public void disableBoard(Board board){
         for (int i=0; i<ROWS; i++){
             for (int j=0; j<COLUMNS; j++){
-                JButton currentButton = board.getButton(i,j);
+                JButton currentButton = board.getButton(j,i);
                 currentButton.setEnabled(false);
             }
         }
@@ -474,7 +474,7 @@ public abstract class Player {
      * Check if the point is in the bounds of the board
      */
     private static boolean checkPlaceInBounds(Point place){
-        return (place.x >= 0 && place.x < ROWS && place.y >= 0 && place.y < COLUMNS);
+        return (place.x >= 0 && place.x < COLUMNS && place.y >= 0 && place.y < ROWS);
     }
 
     /**
@@ -578,7 +578,7 @@ public abstract class Player {
      */
     public Results processGuess(int row, int column){
 
-        boolean hit = checkHitMiss(new Point(row, column));
+        boolean hit = checkHitMiss(new Point(column, row));
         if (hit){
             gameState.setTile(Tile.HIT, row, column);
             logMessage("Enemy HIT: " + (char)(column+'A') + (row + 1));

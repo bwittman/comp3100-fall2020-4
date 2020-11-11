@@ -261,7 +261,7 @@ public class HumanPlayer extends Player {
 
 		for(int i = 0; i < ROWS; i++){
 			for(int j = 0; j < COLUMNS; j++){
-				CoordinateButton button = userBoard.getButton(i,j);
+				CoordinateButton button = userBoard.getButton(j,i);
 				button.addActionListener(e ->{
 					try {
 						placeShip(button);
