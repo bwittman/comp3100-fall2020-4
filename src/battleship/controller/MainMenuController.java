@@ -18,6 +18,7 @@ public class MainMenuController {
 	private HumanPlayer humanPlayer;
 	private ComputerPlayer computerPlayer;
 	private SwingWorker <Void, Void> hostConnectionWorker;
+	private boolean initialStart = true;
 
     public MainMenuController(){
         viewManager = new ViewManager();
@@ -77,13 +78,24 @@ public class MainMenuController {
 			}
 		});
 
+		viewManager.getNetworkingClientWindow().addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				viewManager.getMainMenu().getOnePlayerButton().setEnabled(true);
+				viewManager.getMainMenu().getNetworkButton().setEnabled(true);
+			}
+		});
+
 		//one player button action listener
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
 			computerPlayer.placeComputerShips();
 
-			humanPlayer = new HumanPlayer(viewManager);
+			if(initialStart) {
+				humanPlayer = new HumanPlayer(viewManager);
+				initialStart = false;
+			}
+
 			humanPlayer.setTurn(true);
 			humanPlayer.setComputerGame(true);
 
@@ -152,5 +164,9 @@ public class MainMenuController {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
+
+
 	}
+
+
 }

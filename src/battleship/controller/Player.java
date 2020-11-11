@@ -23,6 +23,7 @@ public abstract class Player {
     public static final int COLUMNS = 10;
     private static int buttonSize;
     private static Object[] endOptions = {"Play Again", "Quit"};
+    private ComputerPlayer computer;
 
     private static final Color WATER = new Color(16,129,160);
     private static ImageIcon MISS_ICON = new ImageIcon("resources/blueX.png");
@@ -568,7 +569,7 @@ public abstract class Player {
         for (Ship ship: ships){
             ship.reset();
         }
-        viewManager.getGameScreen().getLog().setText("");
+
     }
 
     /**
@@ -608,10 +609,23 @@ public abstract class Player {
                 int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
                 if(endDecision == 0){
                     resetGame();
+                    opponent.resetGame();
+                    updateAllBoards();
+                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
                     viewManager.getGameScreen().getOptionButtons().setVisible(true);
+                    computer.placeComputerShips();
                 }else{
+                    resetGame();
+                    opponent.resetGame();
+                    updateAllBoards();
+                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
+                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
                     viewManager.getGameScreen().setVisible(false);
-                    new MainMenuController();
+                    viewManager.getMainMenu().setVisible(true);
+                    opponent.setOpponent(null);
+                    opponent = null;
                 }
             }
         }
@@ -639,7 +653,7 @@ public abstract class Player {
         }
 
         if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
-            ComputerPlayer computer = (ComputerPlayer) opponent;
+            computer = (ComputerPlayer) opponent;
             computer.playTurn();
         }
 
@@ -652,10 +666,23 @@ public abstract class Player {
                 int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
                 if(endDecision == 0){
                     resetGame();
+                    opponent.resetGame();
+                    updateAllBoards();
+                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
                     viewManager.getGameScreen().getOptionButtons().setVisible(true);
+                    computer.placeComputerShips();
                 }else{
+                    resetGame();
+                    opponent.resetGame();
+                    updateAllBoards();
+                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
+                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
                     viewManager.getGameScreen().setVisible(false);
-                    new MainMenuController();
+                    viewManager.getMainMenu().setVisible(true);
+                    opponent.setOpponent(null);
+                    opponent = null;
                 }
             }
         }
