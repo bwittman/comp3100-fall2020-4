@@ -22,6 +22,7 @@ public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
     private static int buttonSize;
+    private static Object[] endOptions = {"Play Again", "Quit"};
 
     private static final Color WATER = new Color(16,129,160);
     private static ImageIcon MISS_ICON = new ImageIcon("resources/blueX.png");
@@ -601,9 +602,17 @@ public abstract class Player {
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
             if (opponentWon) {
+                updateAllBoards();
                 disableBoard(viewManager.getGameScreen().getEnemyBoard());
                 logMessage("Enemy has Won!");
-                JOptionPane.showMessageDialog(null,"You lost","Opponent Won",JOptionPane.INFORMATION_MESSAGE );
+                int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+                if(endDecision == 0){
+                    resetGame();
+                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
+                }else{
+                    viewManager.getGameScreen().setVisible(false);
+                    new MainMenuController();
+                }
             }
         }
 
@@ -640,7 +649,14 @@ public abstract class Player {
             if (results.hasPlayerWon()){
                 disableBoard(viewManager.getGameScreen().getEnemyBoard());
                 logMessage("You have won!");
-                JOptionPane.showMessageDialog(null,"You win!","Player Win",JOptionPane.INFORMATION_MESSAGE );
+                int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+                if(endDecision == 0){
+                    resetGame();
+                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
+                }else{
+                    viewManager.getGameScreen().setVisible(false);
+                    new MainMenuController();
+                }
             }
         }
     }
