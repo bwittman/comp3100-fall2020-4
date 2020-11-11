@@ -78,6 +78,13 @@ public class MainMenuController {
 			}
 		});
 
+		viewManager.getNetworkingClientWindow().addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				viewManager.getMainMenu().getOnePlayerButton().setEnabled(true);
+				viewManager.getMainMenu().getNetworkButton().setEnabled(true);
+			}
+		});
+
 		//one player button action listener
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
@@ -157,5 +164,9 @@ public class MainMenuController {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
+
+
 	}
+
+
 }

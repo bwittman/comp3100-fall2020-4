@@ -22,11 +22,11 @@ public class GameState {
 	}
 	
 	public Player.Tile getTile (int x, int y) {
-		return board[x][y];
+		return board[y][x];
 	}
 	
 	public void setTile (Player.Tile tile, int x, int y) {
-		board[x][y] = tile;
+		board[y][x] = tile;
 	}
 
 	public void reset(){
