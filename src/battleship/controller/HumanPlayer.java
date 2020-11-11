@@ -1,6 +1,7 @@
 package battleship.controller;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class HumanPlayer extends Player {
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
+	private List<Ship.ShipType> placedShips = new ArrayList<>(5);
 	private boolean isComputerGame;
 	private volatile Results results = null;
 
@@ -132,6 +134,7 @@ public class HumanPlayer extends Player {
 		super.resetGame();
 		startPositionPoint = null;
 		endPositionPoint = null;
+		placedShips.clear();
 		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
 
 		while (shipButtons.hasMoreElements()) {
@@ -176,10 +179,18 @@ public class HumanPlayer extends Player {
      */
     private void setShipStart(Ship ship){
 		ship.setStart(startPositionPoint);
+		placedShips.add(ship.getShipType());
 
 		List<Point> legalEndPoints = findLegalEndPoints(ship);
 		if(legalEndPoints.size() != 0) {
 			disableBoard(viewManager.getGameScreen().getUserBoard());
+
+			Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+			while (shipButtons.hasMoreElements()) {
+				AbstractButton shipButton = shipButtons.nextElement();
+				shipButton.setEnabled(false);
+			}
+
 			for (Point current : legalEndPoints) {
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setBackground(LEGAL_ENDPOINT);
@@ -204,6 +215,27 @@ public class HumanPlayer extends Player {
 
 		boolean allShipsPlaced = true;
 		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
+
+		while (shipButtons.hasMoreElements()) {
+			AbstractButton shipButton = shipButtons.nextElement();
+			if(shipButton.getText().contains("Carrier") && !placedShips.contains(Ship.ShipType.CARRIER)){
+				shipButton.setEnabled(true);
+			}
+			if(shipButton.getText().contains("Battleship") && !placedShips.contains(Ship.ShipType.BATTLESHIP)){
+				shipButton.setEnabled(true);
+			}
+			if(shipButton.getText().contains("Cruiser") && !placedShips.contains(Ship.ShipType.CRUISER)){
+				shipButton.setEnabled(true);
+			}
+			if(shipButton.getText().contains("Submarine") && !placedShips.contains(Ship.ShipType.SUBMARINE)){
+				shipButton.setEnabled(true);
+			}
+			if(shipButton.getText().contains("Destroyer") && !placedShips.contains(Ship.ShipType.DESTROYER)){
+				shipButton.setEnabled(true);
+			}
+		}
+
+		shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
 			if(shipButton.isEnabled()) {
