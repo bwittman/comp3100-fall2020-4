@@ -195,7 +195,7 @@ public abstract class Player {
         SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
             @Override
             protected Results doInBackground() throws Exception {
-                return makeGuess(button.getLocation().x, button.getLocation().y);//sending the enemy what our guess is
+                return makeGuess(button.getLocation().y, button.getLocation().x);//sending the enemy what our guess is
             }
 
             protected void done(){
@@ -337,8 +337,8 @@ public abstract class Player {
             while(!placed){
                 Point start = new Point();
                 do {
-                    start.x = random.nextInt(ROWS);
-                    start.y = random.nextInt(COLUMNS);
+                    start.x = random.nextInt(COLUMNS);
+                    start.y = random.nextInt(ROWS);
                 } while (!checkPlaceLegal(start));
 
                 ship.setStart(start);
@@ -581,10 +581,10 @@ public abstract class Player {
 
         boolean hit = checkHitMiss(new Point(column, row));
         if (hit){
-            gameState.setTile(Tile.HIT, row, column);
+            gameState.setTile(Tile.HIT, column, row);
             logMessage("Enemy HIT: " + (char)(column+'A') + (row + 1));
         }else{
-            gameState.setTile(Tile.MISS, row, column);
+            gameState.setTile(Tile.MISS, column, row);
             logMessage("Enemy MISSED: " + (char)(column+'A') + (row + 1));
         }
 
@@ -616,7 +616,7 @@ public abstract class Player {
             }
         }
 
-        return new Results(new Point(row, column), hit, opponentWon, sunkShip);
+        return new Results(new Point(column, row), hit, opponentWon, sunkShip);
     }
 
     /**
@@ -626,11 +626,11 @@ public abstract class Player {
     public void processResults(Results results){
         if (results.isTileHit()){
             enemyGameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You HIT! : " + (char)(results.getGuessedTile().y + 'A') + (results.getGuessedTile().x + 1);
+            String logMessage = "You HIT! : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }else{
             enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You MISSED. : " + (char)(results.getGuessedTile().y + 'A') + (results.getGuessedTile().x + 1);
+            String logMessage = "You MISSED. : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }
 
