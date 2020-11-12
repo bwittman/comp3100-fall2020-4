@@ -78,7 +78,6 @@ public class HumanPlayer extends Player {
 					HumanPlayer.this.results = result;
 					HumanPlayer.this.notifyAll();
 				}
-				enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
 				updateAllBoards();
 			} else if(message.startsWith("LOG: ")){
 				String[] parts = message.split(": ");
@@ -167,7 +166,7 @@ public class HumanPlayer extends Player {
 			endPositionPoint = clickedButton.getLocation();
 			if(checkPlaceLegal(startPositionPoint) && checkPlaceLegal(endPositionPoint)){
 					setShipEnd(shipToPlace);
-					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().y + 'A')+ (shipToPlace.getStart().x + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().y + 'A') + (shipToPlace.getEnd().x + 1);
+					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().x + 'A')+ (shipToPlace.getStart().y + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().x + 'A') + (shipToPlace.getEnd().y + 1);
 					logMessage(logMessage);
 			}else{
 				throw new ShipPlacementException("Illegal Position Selected");

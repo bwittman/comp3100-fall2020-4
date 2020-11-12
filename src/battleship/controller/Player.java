@@ -575,7 +575,6 @@ public abstract class Player {
         for (Ship ship: ships){
             ship.reset();
         }
-
     }
 
     /**
@@ -608,35 +607,37 @@ public abstract class Player {
 
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
+            updateAllBoards();
+            enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
             if (opponentWon) {
-                updateAllBoards();
-                disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                logMessage("Enemy has Won!");
-                int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
-                if(endDecision == 0){
-                    resetGame();
-                    opponent.resetGame();
-                    updateAllBoards();
-                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
-                    computer.placeComputerShips();
-                }else{
-                    resetGame();
-                    opponent.resetGame();
-                    updateAllBoards();
-                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
-                    viewManager.getGameScreen().setVisible(false);
-                    viewManager.getMainMenu().setVisible(true);
-                    opponent.setOpponent(null);
-                    opponent = null;
-                }
+                opponentWon();
             }
         }
 
         return new Results(new Point(column, row), hit, opponentWon, sunkShip);
+    }
+
+    private void opponentWon(){
+        disableBoard(viewManager.getGameScreen().getEnemyBoard());
+        logMessage("Enemy has Won!");
+        int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+
+        resetGame();
+        opponent.resetGame();
+        updateAllBoards();
+        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        viewManager.getGameScreen().getOptionButtons().setVisible(true);
+        opponentPlacedShips = false;
+        playerStarted = false;
+
+        if(endDecision == 0){
+            computer.placeComputerShips();
+        }else{
+            viewManager.getGameScreen().setVisible(false);
+            viewManager.getMainMenu().setVisible(true);
+            opponent.setOpponent(null);
+            opponent = null;
+        }
     }
 
     /**
@@ -658,11 +659,6 @@ public abstract class Player {
                 logMessage("You sunk a " + results.getSunkShip().name() + "!");
         }
 
-        if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
-            computer = (ComputerPlayer) opponent;
-            computer.playTurn();
-        }
-
         if (viewManager != null){
             updateAllBoards();
             enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
@@ -672,27 +668,30 @@ public abstract class Player {
             HumanPlayer human = (HumanPlayer) this;
             human.results = null;
         }
+
+        //play the computers turn now
+        if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
+            computer = (ComputerPlayer) opponent;
+            computer.playTurn();
+        }
     }
 
     private void playerWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("You have won!");
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+
+        resetGame();
+        opponent.resetGame();
+        updateAllBoards();
+        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        viewManager.getGameScreen().getOptionButtons().setVisible(true);
+        opponentPlacedShips = false;
+        playerStarted = false;
+
         if(endDecision == 0){
-            resetGame();
-            opponent.resetGame();
-            updateAllBoards();
-            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-            disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            viewManager.getGameScreen().getOptionButtons().setVisible(true);
             computer.placeComputerShips();
         }else{
-            resetGame();
-            opponent.resetGame();
-            updateAllBoards();
-            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-            disableBoard(viewManager.getGameScreen().getEnemyBoard());
-            viewManager.getGameScreen().getOptionButtons().setVisible(true);
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
             opponent.setOpponent(null);
