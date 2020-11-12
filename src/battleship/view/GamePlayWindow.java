@@ -11,9 +11,9 @@ import java.awt.*;
 public class GamePlayWindow extends JFrame {
 
     //variables used for sizing the frames and panels based on the screen size
-    private static int frameSize;
-    public static int boardPanelHeight;
-    public static int buttonSize;
+    private final int frameSize;
+    private final int boardPanelHeight;
+    private final int buttonSize;
 
     private Board userBoard;
     private Board enemyBoard;
@@ -28,9 +28,10 @@ public class GamePlayWindow extends JFrame {
     private JButton randomButton;
     private JButton playGameButton;
 
-    public GamePlayWindow(){
-        frameSize = MainMenu.frameSize;
+    public GamePlayWindow(int frameSize){
+        this.frameSize = frameSize;
         boardPanelHeight = (int) (frameSize*.9);
+        buttonSize = (boardPanelHeight/2)/11;
 
         setupBoardPanel();
         setupLogPanel();
@@ -54,14 +55,11 @@ public class GamePlayWindow extends JFrame {
      */
     private void setupBoardPanel(){
         boardPanel = new JPanel(new BorderLayout());
-        int boardPanelWidth = boardPanelHeight/2;
-        boardPanel.setSize(new Dimension(boardPanelWidth, boardPanelHeight));
 
-        buttonSize = boardPanelWidth/11;
-        Board.setButtonSize(buttonSize);
+        boardPanel.setSize(new Dimension(boardPanelHeight/2, boardPanelHeight));
 
-        userBoard = new Board();
-        enemyBoard = new Board();
+        userBoard = new Board(buttonSize);
+        enemyBoard = new Board(buttonSize);
 
         boardPanel.add(enemyBoard, BorderLayout.NORTH);
         boardPanel.add(userBoard, BorderLayout.SOUTH);
@@ -169,4 +167,8 @@ public class GamePlayWindow extends JFrame {
     }
 
     public JTextArea getLog() {return log;}
+
+    public int getButtonSize(){
+        return buttonSize;
+    }
 }

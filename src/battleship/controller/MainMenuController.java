@@ -25,7 +25,6 @@ public class MainMenuController {
         setMainMenuActionListeners();
         setRulesWindowActionListener();
 		setNetworkingClientActionListener();
-		Player.setButtonSize(GamePlayWindow.buttonSize);
 	}
 
 	/*

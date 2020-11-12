@@ -26,7 +26,6 @@ public class HumanPlayer extends Player {
 	private Point endPositionPoint;
 	private List<ShipType> placedShips = new ArrayList<>(5);
 	private boolean isComputerGame;
-	protected volatile Results results = null;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
@@ -73,11 +72,7 @@ public class HumanPlayer extends Player {
 				int row = Integer.parseInt(parts[1]);
 				int column = Integer.parseInt(parts[2]);
 				Results result = processGuess(row, column);
-				synchronized (HumanPlayer.this){		//Updates a volatile instance of Result
-					//we should be sending the results back not updating our own copy of them???
-					HumanPlayer.this.results = result;
-					HumanPlayer.this.notifyAll();
-				}
+				sendResults(result);
 				updateAllBoards();
 			} else if(message.startsWith("LOG: ")){
 				String[] parts = message.split(": ");
@@ -87,6 +82,10 @@ public class HumanPlayer extends Player {
 				if (playerStarted && isMyTurn){
 					enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
 				}
+			}else if(message.startsWith("RESULTS: ")){
+				String[] parts = message.split(": ");
+				Results results = new Results(parts[1]);
+				SwingUtilities.invokeLater(()->processResults(results));
 			}
 		}
 	}
@@ -135,7 +134,6 @@ public class HumanPlayer extends Player {
 	 */
 	@Override
 	public void resetGame(){
-		results = null;
 		super.resetGame();
 		startPositionPoint = null;
 		endPositionPoint = null;
@@ -314,30 +312,14 @@ public class HumanPlayer extends Player {
 	 * Make a guess and wait for the results of that guess from the opponent
 	 * @param row the row of the guessed tile
 	 * @param column the column of the guessed tile
-	 * @return the results of our guess
 	 */
     @Override
-    public Results makeGuess(int row, int column) {
+    public void makeGuess(int row, int column) {
 		if (isComputerGame){
-			disableBoard(viewManager.getGameScreen().getEnemyBoard());
-			return opponent.processGuess(row, column);
+			Results results = opponent.processGuess(row, column);
+			processResults(results);
 		}else{
-			synchronized (HumanPlayer.this){
-				results = null;
-			}
 			networking.sendMessage("GUESS " + row + " " + column);
-			synchronized (HumanPlayer.this){
-				while (results == null){
-					try {
-						HumanPlayer.this.wait();		//wait until results received
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			disableBoard(viewManager.getGameScreen().getEnemyBoard());
-			updateAllBoards();
-			return results;
 		}
     }
 
@@ -345,11 +327,8 @@ public class HumanPlayer extends Player {
 	 * Send the results of an opponent's guess to them
 	 * @param results the results of the opponent's guess
 	 */
-	@Override
 	public void sendResults(Results results){
-		if(!isComputerGame){
-			networking.sendMessage(results.toString());
-		}
+		networking.sendMessage("RESULTS: " + results.toString());
 	}
 
 	public Networking getNetworking(){

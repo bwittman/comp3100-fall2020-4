@@ -12,16 +12,13 @@ public class Board extends JPanel {
 
     private static final int ROWS = Player.ROWS;
     private static final int COLUMNS = Player.COLUMNS;
-    private static int buttonSize;
 
     private CoordinateButton[][] buttonArray = new CoordinateButton[ROWS][COLUMNS];
 
-
-
-    public Board() {
+    public Board(int buttonSize) {
         this.setLayout(new GridLayout(ROWS + 1 ,COLUMNS + 1));
         setUpLabels();
-        setUpButtons();
+        setUpButtons(buttonSize);
     }
 
     /*
@@ -43,7 +40,7 @@ public class Board extends JPanel {
      * note that these labels are numbers
      * x is stored as columns, y is stored as rows
      */
-    private void setUpButtons(){
+    private void setUpButtons(int buttonSize){
         for (int i = 0; i < ROWS; i++ ) {
             JLabel label = new JLabel();
             label.setText(Integer.toString(i + 1));
@@ -60,9 +57,5 @@ public class Board extends JPanel {
 
     public CoordinateButton getButton(int x, int y){
         return buttonArray[y][x];
-    }
-
-    public static void setButtonSize(int buttonSize){
-        Board.buttonSize = buttonSize;
     }
 }

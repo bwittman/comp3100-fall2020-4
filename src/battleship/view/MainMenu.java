@@ -9,19 +9,18 @@ import java.awt.*;
 public class MainMenu extends JFrame {
 
     //for sizing the frames and panels based on the screen size
-    public static int frameSize;
+    private final int frameSize;
 
-    private ImageIcon background;
-    private JButton rulesButton;
-    private JButton networkButton;
-    private JButton onePlayerButton;
+    private final JButton rulesButton;
+    private final JButton networkButton;
+    private final JButton onePlayerButton;
 
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frameSize = (int) (screenSize.getHeight()*.9);
 
-    	background = new ImageIcon(new ImageIcon("resources/shipMainWindow.png").getImage()
-                .getScaledInstance(frameSize,frameSize, Image.SCALE_SMOOTH));
+        ImageIcon background = new ImageIcon(new ImageIcon("resources/shipMainWindow.png").getImage()
+                .getScaledInstance(frameSize, frameSize, Image.SCALE_SMOOTH));
 
         JPanel backgroundPanel = new PanelWithBackgroundImage(background.getImage());
         JPanel buttonPanel = new JPanel(new GridLayout(1,3));
@@ -61,6 +60,10 @@ public class MainMenu extends JFrame {
     
     public JButton getRulesButton() {
     	return rulesButton;
+    }
+
+    public int getFrameSize(){
+        return frameSize;
     }
 }
 

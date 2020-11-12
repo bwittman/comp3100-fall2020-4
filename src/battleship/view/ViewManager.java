@@ -12,7 +12,7 @@ public class ViewManager {
 
     public ViewManager(){
         mainMenu = new MainMenu();//must be set up first because of the frame sizing
-        gameScreen = new GamePlayWindow();
+        gameScreen = new GamePlayWindow(mainMenu.getFrameSize());
         rulesWindow = new RulesWindow();
         networkingClientWindow = new NetworkingClient();
         networkingHostWindow = new NetworkingHost();

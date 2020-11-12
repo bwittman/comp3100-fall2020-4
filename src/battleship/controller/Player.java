@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
-    private static int buttonSize;
     private static Object[] endOptions = {"Play Again", "Quit"};
 
     private static final Color WATER = new Color(16,129,160);
@@ -55,7 +54,7 @@ public abstract class Player {
         createShips();
         initGameStates();
         if(viewManager != null){//the view manager will be null for a computerPlayer
-            setupIcons();
+            setupIcons(viewManager.getGameScreen().getButtonSize());
             setUpView();
             updateAllBoards();
         }
@@ -64,7 +63,7 @@ public abstract class Player {
     /*
      * Scale the icons based on the size of the button
      */
-    private void setupIcons(){
+    private void setupIcons(int buttonSize){
         MISS_ICON = new ImageIcon((MISS_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
         HIT_ICON = new ImageIcon((HIT_ICON.getImage()
@@ -174,7 +173,7 @@ public abstract class Player {
             playerStarted = true;
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
-            if(this instanceof HumanPlayer){
+            if(this instanceof HumanPlayer && opponent == null){
                 ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other Player has placed ships!");
                 ((HumanPlayer) this).getNetworking().sendMessage("START");//tell the other player we are ready to start
             }
@@ -198,22 +197,9 @@ public abstract class Player {
      * Initialize the action to be taken when an enemy button is clicked
      */
     private void onEnemyButtonClicked(CoordinateButton button){
-        SwingWorker<Results, Void> worker = new SwingWorker<Results, Void>() {
-            @Override
-            protected Results doInBackground() throws Exception {
-                return makeGuess(button.getLocation().y, button.getLocation().x);//sending the enemy what our guess is
-            }
-
-            protected void done(){
-                try {
-                    processResults(get());
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        worker.execute();
+        disableBoard(viewManager.getGameScreen().getEnemyBoard());
+        Runnable worker = ()->makeGuess(button.getLocation().y, button.getLocation().x);//sending the enemy what our guess is
+        new Thread(worker).start();
     }
 
     /*
@@ -651,7 +637,7 @@ public abstract class Player {
             logMessage(logMessage);
         }else{
             enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You MISSED. : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
+            String logMessage = "You MISSED : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }
 
@@ -661,15 +647,12 @@ public abstract class Player {
 
         if (viewManager != null){
             updateAllBoards();
-            enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             if (results.hasPlayerWon()){
                 playerWon();
             }
-            HumanPlayer human = (HumanPlayer) this;
-            human.results = null;
         }
 
-        //play the computers turn now
+        //play the computers turn now only if we didn't just win
         if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
             computer = (ComputerPlayer) opponent;
             computer.playTurn();
@@ -731,13 +714,8 @@ public abstract class Player {
         this.opponent = opponent;
     }
 
-    public static void setButtonSize(int buttonSize){
-        Player.buttonSize = buttonSize;
-    }
-
     //abstract methods to be implemented
-    public abstract Results makeGuess(int row, int column);
-    public abstract void sendResults(Results results);
+    public abstract void makeGuess(int row, int column);
 
     /**
      * Testing class

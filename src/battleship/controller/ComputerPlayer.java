@@ -35,10 +35,7 @@ public class ComputerPlayer extends Player {
      */
     public void playTurn(){
         Point guess = generateGuess();
-        Results results = makeGuess(guess.y, guess.x);
-        previousGuess = results.getGuessedTile();
-        shipSunk = results.getSunkShip() != null;
-        processResults(results);
+        makeGuess(guess.y, guess.x);
     }
 
     private void findNextGuesses(Point previousGuess){
@@ -285,16 +282,10 @@ public class ComputerPlayer extends Player {
      * @return the results of our guess
      */
     @Override
-    public Results makeGuess(int row, int column) {
-        return opponent.processGuess(row, column);
-    }
-
-    /**
-     * Send the results of an opponent's guess to them
-     * @param results the results of an opponent's guess
-     */
-    @Override
-    public void sendResults(Results results){
-        opponent.processResults(results);
+    public void makeGuess(int row, int column) {
+        Results results = opponent.processGuess(row, column);
+        previousGuess = results.getGuessedTile();
+        shipSunk = results.getSunkShip() != null;
+        processResults(results);
     }
 }

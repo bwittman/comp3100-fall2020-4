@@ -99,7 +99,7 @@ public class Networking {
 			output.println(message);
 			output.flush();
 		}else {
-			System.out.println("Could not send message. Socket could be null or not connected");
+			System.out.println("Could not send message: "+ message +"\nSocket could be null or not connected");
 		}
 	}
 	
