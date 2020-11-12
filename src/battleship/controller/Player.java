@@ -566,6 +566,7 @@ public abstract class Player {
     public void resetGame(){
         gameState.reset();
         enemyGameState.reset();
+        previousShipsSunk.clear();
         for (Ship ship: ships){
             ship.reset();
         }
