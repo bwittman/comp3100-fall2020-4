@@ -26,7 +26,8 @@ public class ComputerPlayer extends Player {
      * Computer places its ships
      */
     public void placeComputerShips(){
-       randomShipPlacement();
+        opponent.opponentPlacedShips = true;//tell the human that the computer placed its ships
+        randomShipPlacement();
     }
 
     /**

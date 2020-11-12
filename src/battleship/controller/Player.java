@@ -23,7 +23,6 @@ public abstract class Player {
     public static final int COLUMNS = 10;
     private static int buttonSize;
     private static Object[] endOptions = {"Play Again", "Quit"};
-    private ComputerPlayer computer;
 
     private static final Color WATER = new Color(16,129,160);
     private static ImageIcon MISS_ICON = new ImageIcon("resources/blueX.png");
@@ -44,9 +43,12 @@ public abstract class Player {
     private List<ShipType> previousShipsSunk = new ArrayList<>();
     private GameState gameState;
     private GameState enemyGameState;
-    private boolean isMyTurn;
+    protected boolean isMyTurn;
     protected ViewManager viewManager;
     protected Player opponent = null;
+    private ComputerPlayer computer;
+    protected boolean opponentPlacedShips = false;
+    protected boolean playerStarted = false;
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -169,11 +171,14 @@ public abstract class Player {
     private void onPlayGameClicked(){
         int confirmed = JOptionPane.showConfirmDialog(null, "Are you satisfied with this ship placement?", "Confirm Final Ship Placement", JOptionPane.YES_NO_OPTION);
         if (confirmed == JOptionPane.YES_OPTION) {
+            playerStarted = true;
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
             if(this instanceof HumanPlayer){
                 ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other Player has placed ships!");
+                ((HumanPlayer) this).getNetworking().sendMessage("START");//tell the other player we are ready to start
             }
+
             //disable ship buttons
             Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
             while (shipButtons.hasMoreElements()) {
@@ -183,7 +188,7 @@ public abstract class Player {
 
             viewManager.getGameScreen().getOptionButtons().setVisible(false);
 
-            if (isMyTurn) {
+            if (isMyTurn && opponentPlacedShips) {
                 enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             }
         }
@@ -661,30 +666,36 @@ public abstract class Player {
             updateAllBoards();
             enableBoard(enemyGameState, viewManager.getGameScreen().getEnemyBoard());
             if (results.hasPlayerWon()){
-                disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                logMessage("You have won!");
-                int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
-                if(endDecision == 0){
-                    resetGame();
-                    opponent.resetGame();
-                    updateAllBoards();
-                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
-                    computer.placeComputerShips();
-                }else{
-                    resetGame();
-                    opponent.resetGame();
-                    updateAllBoards();
-                    enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
-                    disableBoard(viewManager.getGameScreen().getEnemyBoard());
-                    viewManager.getGameScreen().getOptionButtons().setVisible(true);
-                    viewManager.getGameScreen().setVisible(false);
-                    viewManager.getMainMenu().setVisible(true);
-                    opponent.setOpponent(null);
-                    opponent = null;
-                }
+                playerWon();
             }
+            HumanPlayer human = (HumanPlayer) this;
+            human.results = null;
+        }
+    }
+
+    private void playerWon(){
+        disableBoard(viewManager.getGameScreen().getEnemyBoard());
+        logMessage("You have won!");
+        int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+        if(endDecision == 0){
+            resetGame();
+            opponent.resetGame();
+            updateAllBoards();
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+            disableBoard(viewManager.getGameScreen().getEnemyBoard());
+            viewManager.getGameScreen().getOptionButtons().setVisible(true);
+            computer.placeComputerShips();
+        }else{
+            resetGame();
+            opponent.resetGame();
+            updateAllBoards();
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+            disableBoard(viewManager.getGameScreen().getEnemyBoard());
+            viewManager.getGameScreen().getOptionButtons().setVisible(true);
+            viewManager.getGameScreen().setVisible(false);
+            viewManager.getMainMenu().setVisible(true);
+            opponent.setOpponent(null);
+            opponent = null;
         }
     }
 

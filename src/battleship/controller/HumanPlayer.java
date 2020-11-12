@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import battleship.model.Results;
 import battleship.model.Ship;
+import battleship.model.Ship.ShipType;
 import battleship.view.Board;
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
@@ -23,9 +24,9 @@ public class HumanPlayer extends Player {
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
-	private List<Ship.ShipType> placedShips = new ArrayList<>(5);
+	private List<ShipType> placedShips = new ArrayList<>(5);
 	private boolean isComputerGame;
-	private volatile Results results = null;
+	protected volatile Results results = null;
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
@@ -52,7 +53,6 @@ public class HumanPlayer extends Player {
 			System.err.println("MessageListener: Connection Ended!");
 		}
 	}
-
 	
 	/*
 	 * Notifies responsible classes with the correct messages
@@ -74,15 +74,20 @@ public class HumanPlayer extends Player {
 				int column = Integer.parseInt(parts[2]);
 				Results result = processGuess(row, column);
 				synchronized (HumanPlayer.this){		//Updates a volatile instance of Result
+					//we should be sending the results back not updating our own copy of them???
 					HumanPlayer.this.results = result;
 					HumanPlayer.this.notifyAll();
 				}
-				enableBoard(getGameState(), viewManager.getGameScreen().getEnemyBoard());
+				enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
 				updateAllBoards();
-			}
-			else if(message.startsWith("LOG: ")){
+			} else if(message.startsWith("LOG: ")){
 				String[] parts = message.split(": ");
 				logMessage(parts[1]);
+			}else if(message.startsWith("START")){
+				opponentPlacedShips = true;
+				if (playerStarted && isMyTurn){
+					enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
+				}
 			}
 		}
 	}

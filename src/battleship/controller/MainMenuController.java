@@ -89,7 +89,6 @@ public class MainMenuController {
 		menu.getOnePlayerButton().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
-			computerPlayer.placeComputerShips();
 
 			if(initialStart) {
 				humanPlayer = new HumanPlayer(viewManager);
@@ -101,6 +100,8 @@ public class MainMenuController {
 
 			computerPlayer.setOpponent(humanPlayer);
 			humanPlayer.setOpponent(computerPlayer);
+
+			computerPlayer.placeComputerShips();
 
 			viewManager.getGameScreen().setVisible(true);
 			menu.setVisible(false);
@@ -164,9 +165,5 @@ public class MainMenuController {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
-
-
 	}
-
-
 }
