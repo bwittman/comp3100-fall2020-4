@@ -31,7 +31,7 @@ public class RulesWindow extends JFrame {
 
         try {
             //read in the rules from the text file
-            FileReader reader = new FileReader(new File(String.valueOf(this.getClass().getResource("/rules.txt"))));
+            FileReader reader = new FileReader(new File(this.getClass().getResource("/rules.txt").toURI()));
             BufferedReader buffer = new BufferedReader(reader);
 
             rulesText.read(buffer, null);
