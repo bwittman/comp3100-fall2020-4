@@ -15,7 +15,11 @@ class GameStateTest {
     void testPartialBoardReset(){
         gameState.setTile(Tile.HIT, 3,6);
         gameState.setTile(Tile.MISS, 4,2);
-        gameState.setTile(Tile.SHIP, 9,9);
+        gameState.setTile(Tile.CARRIER, 9,9);
+        gameState.setTile(Tile.BATTLESHIP, 2,4);
+        gameState.setTile(Tile.CRUISER, 1,3);
+        gameState.setTile(Tile.SUBMARINE, 6,1);
+        gameState.setTile(Tile.DESTROYER, 3,1);
         gameState.setTile(Tile.HIT, 1,1);
 
         gameState.reset();

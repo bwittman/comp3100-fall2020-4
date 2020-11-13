@@ -32,7 +32,11 @@ public abstract class Player {
      * The types of tiles that we have encounter
      */
     public enum Tile {
-        SHIP,
+        CARRIER,
+        BATTLESHIP,
+        CRUISER,
+        SUBMARINE,
+        DESTROYER,
         HIT,
         MISS,
         WATER
@@ -223,8 +227,29 @@ public abstract class Player {
                         currentButton.setIcon(MISS_ICON);
                         currentButton.setDisabledIcon(MISS_ICON);
                         break;
-                    case SHIP:
-                        currentButton.setIcon(SHIP_ICON);
+                    case CARRIER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.BLACK);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case BATTLESHIP:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.GRAY);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case CRUISER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(new Color(200,150,0));
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case SUBMARINE:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.BLUE);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case DESTROYER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(new Color(215,0,215));
                         currentButton.setDisabledIcon(SHIP_ICON);
                         break;
                 }
@@ -283,18 +308,30 @@ public abstract class Player {
      * @throws ShipPlacementException if the start or end points are at the same point
      */
     protected void addShipToGameState(Ship ship) throws ShipPlacementException {
+        Tile shipTile = null;
+        if(ship.getName().equals("Carrier")){
+            shipTile = Tile.CARRIER;
+        }else if(ship.getName().equals("Battleship")){
+            shipTile = Tile.BATTLESHIP;
+        }else if(ship.getName().equals("Cruiser")){
+            shipTile = Tile.CRUISER;
+        }else if(ship.getName().equals("Submarine")){
+            shipTile = Tile.SUBMARINE;
+        }else{
+            shipTile =Tile.DESTROYER;
+        }
         if (ship.getLength() == 2){
-            gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-            gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
+            gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y);
+            gameState.setTile(shipTile, ship.getEnd().x, ship.getEnd().y);
         //then it is horizontal
         }else if(ship.getStart().x - ship.getEnd().x == 0){
             if (ship.getStart().y < ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y+i);
                 }
             }else if (ship.getStart().y > ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y-i);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -303,11 +340,11 @@ public abstract class Player {
         }else{
             if (ship.getStart().x < ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x+i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x+i, ship.getStart().y);
                 }
             }else if (ship.getStart().x > ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x-i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x-i, ship.getStart().y);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");

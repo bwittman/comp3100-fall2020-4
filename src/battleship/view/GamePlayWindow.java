@@ -96,6 +96,12 @@ public class GamePlayWindow extends JFrame {
         JRadioButton submarineButton = new JRadioButton("Submarine: 3 Tiles");
         JRadioButton destroyerButton = new JRadioButton("Destroyer: 2 Tiles");
 
+        carrierButton.setForeground(Color.BLACK);
+        battleshipButton.setForeground(Color.GRAY);
+        cruiserButton.setForeground(new Color(200,150,0));
+        submarineButton.setForeground(Color.BLUE);
+        destroyerButton.setForeground(new Color(215,0,215));
+
         carrierButton.setActionCommand("Carrier");
         battleshipButton.setActionCommand("Battleship");
         cruiserButton.setActionCommand("Cruiser");
