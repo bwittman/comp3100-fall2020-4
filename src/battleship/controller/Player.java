@@ -616,7 +616,9 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        opponent.resetGame();
+        if (opponent != null) {
+            opponent.resetGame();
+        }
         updateAllBoards();
         enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
@@ -672,7 +674,9 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        opponent.resetGame();
+        if (opponent != null) {
+            opponent.resetGame();
+        }
         updateAllBoards();
         enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
