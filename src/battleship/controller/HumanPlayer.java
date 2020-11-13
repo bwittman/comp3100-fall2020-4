@@ -25,11 +25,11 @@ public class HumanPlayer extends Player {
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private List<ShipType> placedShips = new ArrayList<>(5);
-	private boolean isComputerGame;
+
 
 	public HumanPlayer(ViewManager viewManager){
 		super(viewManager);
-		if (!isComputerGame){
+		if (!isComputerGame()){
 			networking = new Networking();
 		}
 		setUserBoardActionListeners();
@@ -315,7 +315,7 @@ public class HumanPlayer extends Player {
 	 */
     @Override
     public void makeGuess(int row, int column) {
-		if (isComputerGame){
+		if (isComputerGame()){
 			Results results = opponent.processGuess(row, column);
 			processResults(results);
 		}else{
@@ -333,9 +333,5 @@ public class HumanPlayer extends Player {
 
 	public Networking getNetworking(){
 		return networking;
-	}
-
-	public void setComputerGame(boolean isComputerGame){
-		this.isComputerGame = isComputerGame;
 	}
 }

@@ -284,8 +284,8 @@ class PlayerTest {
             ship.setStart(new Point(0, 0));
             ship.setEnd(new Point(0, 1));
             Player.PlayerTesting.addShipToGameState(player, ship);
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(0,0), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(0,1), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.DESTROYER, player.getGameState().getTile(0,0), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.DESTROYER, player.getGameState().getTile(0,1), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(0,2), "GameState not updated correctly");
             player.getGameState().reset();
 
@@ -293,9 +293,9 @@ class PlayerTest {
             ship.setStart(new Point(3, 2));
             ship.setEnd(new Point(5,2));
             Player.PlayerTesting.addShipToGameState(player, ship);
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(3,2), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(4,2), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(5,2), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CRUISER, player.getGameState().getTile(3,2), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CRUISER, player.getGameState().getTile(4,2), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CRUISER, player.getGameState().getTile(5,2), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(2,2), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(6,2), "GameState not updated correctly");
             player.getGameState().reset();
@@ -304,10 +304,10 @@ class PlayerTest {
             ship.setStart(new Point(9,7));
             ship.setEnd(new Point(9,4));
             Player.PlayerTesting.addShipToGameState(player, ship);
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(9,7), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(9,4), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(9,6), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(9,5), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.BATTLESHIP, player.getGameState().getTile(9,7), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.BATTLESHIP, player.getGameState().getTile(9,4), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.BATTLESHIP, player.getGameState().getTile(9,6), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.BATTLESHIP, player.getGameState().getTile(9,5), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(9,8), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(9,3), "GameState not updated correctly");
             player.getGameState().reset();
@@ -316,11 +316,11 @@ class PlayerTest {
             ship.setStart(new Point(0,9));
             ship.setEnd(new Point(4,9));
             Player.PlayerTesting.addShipToGameState(player, ship);
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(0,9), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(4,9), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(1,9), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(2,9), "GameState not updated correctly");
-            Assertions.assertEquals(Player.Tile.SHIP, player.getGameState().getTile(3,9), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CARRIER, player.getGameState().getTile(0,9), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CARRIER, player.getGameState().getTile(4,9), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CARRIER, player.getGameState().getTile(1,9), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CARRIER, player.getGameState().getTile(2,9), "GameState not updated correctly");
+            Assertions.assertEquals(Player.Tile.CARRIER, player.getGameState().getTile(3,9), "GameState not updated correctly");
             Assertions.assertEquals(Player.Tile.WATER, player.getGameState().getTile(5,9), "GameState not updated correctly");
             player.getGameState().reset();
 

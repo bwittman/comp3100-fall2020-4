@@ -32,7 +32,11 @@ public abstract class Player {
      * The types of tiles that we have encounter
      */
     public enum Tile {
-        SHIP,
+        CARRIER,
+        BATTLESHIP,
+        CRUISER,
+        SUBMARINE,
+        DESTROYER,
         HIT,
         MISS,
         WATER
@@ -45,7 +49,6 @@ public abstract class Player {
     protected boolean isMyTurn;
     protected ViewManager viewManager;
     protected Player opponent = null;
-    private ComputerPlayer computer;
     protected boolean opponentPlacedShips = false;
     protected boolean playerStarted = false;
 
@@ -223,8 +226,29 @@ public abstract class Player {
                         currentButton.setIcon(MISS_ICON);
                         currentButton.setDisabledIcon(MISS_ICON);
                         break;
-                    case SHIP:
-                        currentButton.setIcon(SHIP_ICON);
+                    case CARRIER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.BLACK);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case BATTLESHIP:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.GRAY);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case CRUISER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(new Color(200,150,0));
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case SUBMARINE:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(Color.BLUE);
+                        currentButton.setDisabledIcon(SHIP_ICON);
+                        break;
+                    case DESTROYER:
+                        currentButton.setIcon(null);
+                        currentButton.setBackground(new Color(215,0,215));
                         currentButton.setDisabledIcon(SHIP_ICON);
                         break;
                 }
@@ -283,18 +307,30 @@ public abstract class Player {
      * @throws ShipPlacementException if the start or end points are at the same point
      */
     protected void addShipToGameState(Ship ship) throws ShipPlacementException {
+        Tile shipTile = null;
+        if(ship.getName().equals("Carrier")){
+            shipTile = Tile.CARRIER;
+        }else if(ship.getName().equals("Battleship")){
+            shipTile = Tile.BATTLESHIP;
+        }else if(ship.getName().equals("Cruiser")){
+            shipTile = Tile.CRUISER;
+        }else if(ship.getName().equals("Submarine")){
+            shipTile = Tile.SUBMARINE;
+        }else{
+            shipTile =Tile.DESTROYER;
+        }
         if (ship.getLength() == 2){
-            gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-            gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
+            gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y);
+            gameState.setTile(shipTile, ship.getEnd().x, ship.getEnd().y);
         //then it is horizontal
         }else if(ship.getStart().x - ship.getEnd().x == 0){
             if (ship.getStart().y < ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y+i);
                 }
             }else if (ship.getStart().y > ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y-i);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -303,11 +339,11 @@ public abstract class Player {
         }else{
             if (ship.getStart().x < ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x+i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x+i, ship.getStart().y);
                 }
             }else if (ship.getStart().x > ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x-i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x-i, ship.getStart().y);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -561,6 +597,18 @@ public abstract class Player {
         for (Ship ship: ships){
             ship.reset();
         }
+
+        if (viewManager != null){
+            viewManager.getMainMenu().reset();
+        }
+    }
+
+    /**
+     * Determines if a game is a computer game
+     * @return if it computer game
+     */
+    public boolean isComputerGame(){
+        return opponent != null;
     }
 
     /**
@@ -596,7 +644,14 @@ public abstract class Player {
             updateAllBoards();
             enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
             if (opponentWon) {
-                opponentWon();
+                SwingWorker <Void, Void> swingWorker = new SwingWorker <Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        opponentWon();
+                        return null;
+                    }
+                };
+                swingWorker.execute();
             }
         }
 
@@ -609,7 +664,9 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play again?", "Opponent won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        opponent.resetGame();
+        if (isComputerGame()) {
+            opponent.resetGame();
+        }
         updateAllBoards();
         enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
@@ -617,12 +674,17 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            computer.placeComputerShips();
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
+                computer.placeComputerShips();
+            }
         }else{
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            opponent.setOpponent(null);
-            opponent = null;
+            if (isComputerGame()) {
+                opponent.setOpponent(null);
+                opponent = null;
+            }
         }
     }
 
@@ -653,8 +715,8 @@ public abstract class Player {
         }
 
         //play the computers turn now only if we didn't just win
-        if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
-            computer = (ComputerPlayer) opponent;
+        if(isComputerGame() && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
+            ComputerPlayer computer = (ComputerPlayer) opponent;
             computer.playTurn();
         }
     }
@@ -665,7 +727,9 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        opponent.resetGame();
+        if (isComputerGame()) {
+            opponent.resetGame();
+        }
         updateAllBoards();
         enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
@@ -673,12 +737,17 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            computer.placeComputerShips();
-        }else{
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
+                computer.placeComputerShips();
+            }
+        }else {
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            opponent.setOpponent(null);
-            opponent = null;
+            if (isComputerGame()) {
+                opponent.setOpponent(null);
+                opponent = null;
+            }
         }
     }
 
