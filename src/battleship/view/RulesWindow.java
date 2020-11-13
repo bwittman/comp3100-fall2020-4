@@ -31,13 +31,11 @@ public class RulesWindow extends JFrame {
 
         try {
             //read in the rules from the text file
-            FileReader reader = new FileReader(new File("resources/rules.txt"));
+            FileReader reader = new FileReader(new File(String.valueOf(this.getClass().getResource("/rules.txt"))));
             BufferedReader buffer = new BufferedReader(reader);
 
             rulesText.read(buffer, null);
-
             add(rulesText, BorderLayout.CENTER);
-
         }catch(Exception e){
             e.printStackTrace();
         }

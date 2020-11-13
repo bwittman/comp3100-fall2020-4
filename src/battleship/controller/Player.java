@@ -24,9 +24,9 @@ public abstract class Player {
     private static Object[] endOptions = {"Play Again", "Quit"};
 
     private static final Color WATER = new Color(16,129,160);
-    private static ImageIcon MISS_ICON = new ImageIcon("resources/blueX.png");
-    private static ImageIcon HIT_ICON = new ImageIcon("resources/redX.png");
-    private static ImageIcon SHIP_ICON = new ImageIcon("resources/shipTile.png");
+    private ImageIcon MISS_ICON = new ImageIcon(this.getClass().getResource("/blueX.png"));
+    private ImageIcon HIT_ICON = new ImageIcon(this.getClass().getResource("/redX.png"));
+    private ImageIcon SHIP_ICON = new ImageIcon(this.getClass().getResource("/shipTile.png"));
 
     /**
      * The types of tiles that we have encounter
