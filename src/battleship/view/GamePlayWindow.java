@@ -1,7 +1,5 @@
 package battleship.view;
 
-import battleship.controller.Player;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,6 +7,12 @@ import java.awt.*;
  * Graphical interface for placing ships and playing the game
  */
 public class GamePlayWindow extends JFrame {
+
+    private static final Color CARRIER_COLOR = new Color(43,97,16);
+    private static final Color SUBMARINE_COLOR = new Color(220,165,35);
+    private static final Color DESTROYER_COLOR = new Color(91,0,91);
+    private static final Color BATTLESHIP_COLOR = new Color(162,94,32);
+    private static final Color CRUISER_COLOR = new Color(64,60,49);
 
     //variables used for sizing the frames and panels based on the screen size
     private final int frameSize;
@@ -96,11 +100,11 @@ public class GamePlayWindow extends JFrame {
         JRadioButton submarineButton = new JRadioButton("Submarine: 3 Tiles");
         JRadioButton destroyerButton = new JRadioButton("Destroyer: 2 Tiles");
 
-        carrierButton.setForeground(Color.BLACK);
-        battleshipButton.setForeground(Color.GRAY);
-        cruiserButton.setForeground(new Color(200,150,0));
-        submarineButton.setForeground(Color.BLUE);
-        destroyerButton.setForeground(new Color(215,0,215));
+        carrierButton.setForeground(CARRIER_COLOR);
+        battleshipButton.setForeground(BATTLESHIP_COLOR);
+        cruiserButton.setForeground(CRUISER_COLOR);
+        submarineButton.setForeground(SUBMARINE_COLOR);
+        destroyerButton.setForeground(DESTROYER_COLOR);
 
         carrierButton.setActionCommand("Carrier");
         battleshipButton.setActionCommand("Battleship");
@@ -176,5 +180,9 @@ public class GamePlayWindow extends JFrame {
 
     public int getButtonSize(){
         return buttonSize;
+    }
+
+    public Color[] getColors(){
+        return new Color[]{DESTROYER_COLOR, CRUISER_COLOR, SUBMARINE_COLOR, BATTLESHIP_COLOR, CARRIER_COLOR};
     }
 }

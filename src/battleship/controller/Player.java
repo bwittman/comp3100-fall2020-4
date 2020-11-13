@@ -24,6 +24,11 @@ public abstract class Player {
     private static Object[] endOptions = {"Play Again", "Quit"};
 
     private static final Color WATER = new Color(16,129,160);
+    private static final Color CARRIER_COLOR = new Color(43,97,16);
+    private static final Color SUBMARINE_COLOR = new Color(220,165,35);
+    private static final Color DESTROYER_COLOR = new Color(91,0,91);
+    private static final Color BATTLESHIP_COLOR = new Color(162,94,32);
+    private static final Color CRUISER_COLOR = new Color(64,60,49);
     private ImageIcon MISS_ICON = new ImageIcon(this.getClass().getResource("/blueX.png"));
     private ImageIcon HIT_ICON = new ImageIcon(this.getClass().getResource("/redX.png"));
     private ImageIcon SHIP_ICON = new ImageIcon(this.getClass().getResource("/shipTile.png"));
@@ -73,6 +78,11 @@ public abstract class Player {
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
         SHIP_ICON = new ImageIcon((SHIP_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+    }
+
+    private void setupColors(){
+        Color[] colors = viewManager.getGameScreen().getColors();
+
     }
 
     /**
@@ -228,28 +238,23 @@ public abstract class Player {
                         break;
                     case CARRIER:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(Color.BLACK);
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                        currentButton.setBackground(CARRIER_COLOR);
                         break;
                     case BATTLESHIP:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(Color.GRAY);
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                        currentButton.setBackground(BATTLESHIP_COLOR);
                         break;
                     case CRUISER:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(new Color(200,150,0));
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                        currentButton.setBackground(CRUISER_COLOR);
                         break;
                     case SUBMARINE:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(Color.BLUE);
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                        currentButton.setBackground(SUBMARINE_COLOR);
                         break;
                     case DESTROYER:
                         currentButton.setIcon(null);
-                        currentButton.setBackground(new Color(215,0,215));
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                        currentButton.setBackground(DESTROYER_COLOR);
                         break;
                 }
             }
