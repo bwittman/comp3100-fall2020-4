@@ -65,6 +65,11 @@ public class MainMenu extends JFrame {
     public int getFrameSize(){
         return frameSize;
     }
+
+    public void reset(){
+        networkButton.setEnabled(true);
+        onePlayerButton.setEnabled(true);
+    }
 }
 
 /**

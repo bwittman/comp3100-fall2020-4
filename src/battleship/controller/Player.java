@@ -597,6 +597,10 @@ public abstract class Player {
         for (Ship ship: ships){
             ship.reset();
         }
+
+        if (viewManager != null){
+            viewManager.getMainMenu().reset();
+        }
     }
 
     /**
