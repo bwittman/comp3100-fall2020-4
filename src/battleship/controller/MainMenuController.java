@@ -47,7 +47,6 @@ public class MainMenuController {
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				humanPlayer.setTurn(true);
-				humanPlayer.setComputerGame(false);
 				menu.getNetworkButton().setEnabled(false);
 				menu.getOnePlayerButton().setEnabled(false);
 			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
@@ -95,7 +94,6 @@ public class MainMenuController {
 			}
 
 			humanPlayer.setTurn(true);
-			humanPlayer.setComputerGame(true);
 
 			computerPlayer.setOpponent(humanPlayer);
 			humanPlayer.setOpponent(computerPlayer);
