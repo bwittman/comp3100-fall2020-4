@@ -3,11 +3,7 @@ package battleship.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  * Networking screen for a client connecting to a host
@@ -34,8 +30,10 @@ public class NetworkingClient extends JFrame {
 		connectButton = new JButton("Connect!");
 		
 		topPanel.add(statusLabel);
+		topPanel.setBorder(BorderFactory.createEmptyBorder(30, 0,0,0));
 		middlePanel.add(IPinput);
 		bottomPanel.add(connectButton);
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0,30,00));
 		outerPanel.add(topPanel, BorderLayout.NORTH);
 		outerPanel.add(middlePanel, BorderLayout.CENTER);
 		outerPanel.add(bottomPanel, BorderLayout.SOUTH);

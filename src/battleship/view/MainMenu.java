@@ -26,6 +26,7 @@ public class MainMenu extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(1,3));
         JPanel outerPanel = new JPanel(new BorderLayout());
 
+
         rulesButton = new JButton("Rules");
         networkButton = new JButton("Networking");
         onePlayerButton = new JButton("Play Against Computer");

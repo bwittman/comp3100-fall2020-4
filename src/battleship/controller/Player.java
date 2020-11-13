@@ -187,7 +187,7 @@ public abstract class Player {
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
             if(this instanceof HumanPlayer && opponent == null){
-                ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other Player has placed ships!");
+                ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other player has placed ships.");
                 ((HumanPlayer) this).getNetworking().sendMessage("START");//tell the other player we are ready to start
             }
 
@@ -665,8 +665,8 @@ public abstract class Player {
 
     private void opponentWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
-        logMessage("Enemy has Won!");
-        int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+        logMessage("Enemy has won!");
+        int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play again?", "Opponent won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
         if (isComputerGame()) {
@@ -700,11 +700,11 @@ public abstract class Player {
     public void processResults(Results results){
         if (results.isTileHit()){
             enemyGameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You HIT! : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
+            String logMessage = "You HIT: " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }else{
             enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You MISSED : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
+            String logMessage = "You MISSED: " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }
 
