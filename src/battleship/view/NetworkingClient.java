@@ -19,7 +19,7 @@ public class NetworkingClient extends JFrame {
 	private JLabel statusLabel;
 	
 	public NetworkingClient() {
-		setTitle("Battleship - Host");
+		setTitle("Battleship - Client");
 		setSize(400,200);
         setMinimumSize(new Dimension(400,200));
 		setResizable(false);
