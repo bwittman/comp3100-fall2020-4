@@ -142,6 +142,7 @@ public class GamePlayWindow extends JFrame {
         return userBoard;
     }
 
+
     public Board getEnemyBoard() {
         return enemyBoard;
     }
