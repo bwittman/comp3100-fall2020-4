@@ -19,7 +19,7 @@ public class MainMenu extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frameSize = (int) (screenSize.getHeight()*.9);
 
-        ImageIcon background = new ImageIcon(new ImageIcon("resources/shipMainWindow.png").getImage()
+        ImageIcon background = new ImageIcon(new ImageIcon(this.getClass().getResource("/shipMainWindow.png")).getImage()
                 .getScaledInstance(frameSize, frameSize, Image.SCALE_SMOOTH));
 
         JPanel backgroundPanel = new PanelWithBackgroundImage(background.getImage());
