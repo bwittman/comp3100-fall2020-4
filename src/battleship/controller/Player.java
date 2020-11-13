@@ -45,7 +45,6 @@ public abstract class Player {
     protected boolean isMyTurn;
     protected ViewManager viewManager;
     protected Player opponent = null;
-    private ComputerPlayer computer;
     protected boolean opponentPlacedShips = false;
     protected boolean playerStarted = false;
 
@@ -564,6 +563,14 @@ public abstract class Player {
     }
 
     /**
+     * Determines if a game is a computer game
+     * @return if it computer game
+     */
+    public boolean isComputerGame(){
+        return opponent != null;
+    }
+
+    /**
      * Processes enemy guess and returns the results of the guess
      * @param row row coordinate
      * @param column column coordinate
@@ -616,7 +623,7 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        if (opponent != null) {
+        if (isComputerGame()) {
             opponent.resetGame();
         }
         updateAllBoards();
@@ -626,13 +633,14 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            if (computer != null) {
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
             }
         }else{
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            if (opponent != null) {
+            if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
             }
@@ -666,8 +674,8 @@ public abstract class Player {
         }
 
         //play the computers turn now only if we didn't just win
-        if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
-            computer = (ComputerPlayer) opponent;
+        if(isComputerGame() && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
+            ComputerPlayer computer = (ComputerPlayer) opponent;
             computer.playTurn();
         }
     }
@@ -678,7 +686,7 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        if (opponent != null) {
+        if (isComputerGame()) {
             opponent.resetGame();
         }
         updateAllBoards();
@@ -688,13 +696,14 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            if (computer != null) {
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
             }
         }else {
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            if (opponent != null) {
+            if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
             }
