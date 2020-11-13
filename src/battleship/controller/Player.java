@@ -596,7 +596,14 @@ public abstract class Player {
             updateAllBoards();
             enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
             if (opponentWon) {
-                opponentWon();
+                SwingWorker <Void, Void> swingWorker = new SwingWorker <Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        opponentWon();
+                        return null;
+                    }
+                };
+                swingWorker.execute();
             }
         }
 
