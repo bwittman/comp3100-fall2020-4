@@ -626,12 +626,16 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            computer.placeComputerShips();
+            if (computer != null) {
+                computer.placeComputerShips();
+            }
         }else{
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            opponent.setOpponent(null);
-            opponent = null;
+            if (opponent != null) {
+                opponent.setOpponent(null);
+                opponent = null;
+            }
         }
     }
 
@@ -684,12 +688,16 @@ public abstract class Player {
         playerStarted = false;
 
         if(endDecision == 0){
-            computer.placeComputerShips();
-        }else{
+            if (computer != null) {
+                computer.placeComputerShips();
+            }
+        }else {
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            opponent.setOpponent(null);
-            opponent = null;
+            if (opponent != null) {
+                opponent.setOpponent(null);
+                opponent = null;
+            }
         }
     }
 
