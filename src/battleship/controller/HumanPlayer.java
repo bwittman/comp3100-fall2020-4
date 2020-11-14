@@ -164,6 +164,9 @@ public class HumanPlayer extends Player {
 					setShipEnd(shipToPlace);
 					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().x + 'A')+ (shipToPlace.getStart().y + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().x + 'A') + (shipToPlace.getEnd().y + 1);
 					logMessage(logMessage);
+					if (shipToPlace.getShipType() == ShipType.SUBMARINE){
+						playSound("/YellowSub.wav");
+					}
 			}else{
 				throw new ShipPlacementException("Illegal Position Selected");
 			}
@@ -214,7 +217,6 @@ public class HumanPlayer extends Player {
 		viewManager.getGameScreen().getShipButtonGroup().getSelection().setEnabled(false);
 		viewManager.getGameScreen().getShipButtonGroup().clearSelection();
 
-		boolean allShipsPlaced = true;
 		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
 
 		while (shipButtons.hasMoreElements()) {
@@ -240,7 +242,6 @@ public class HumanPlayer extends Player {
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
 			if(shipButton.isEnabled()) {
-				allShipsPlaced = false;
 				shipButton.setSelected(true);
 			}
 		}
@@ -248,7 +249,7 @@ public class HumanPlayer extends Player {
 		//reset first and second click counter
 		startPositionPoint = null;
 		endPositionPoint = null;
-		if (allShipsPlaced){
+		if (allShipsPlaced()){
 			disableBoard(viewManager.getGameScreen().getUserBoard());
 		}else{
 			enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());

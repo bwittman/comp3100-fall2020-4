@@ -6,13 +6,16 @@ import battleship.model.Ship;
 import battleship.view.*;
 import battleship.model.Ship.ShipType;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Controls interactions between the view and the model of a user's game.
@@ -92,9 +95,15 @@ public abstract class Player {
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
     }
 
-    private void setupColors(){
-        Color[] colors = viewManager.getGameScreen().getColors();
-
+    protected void playSound(String fileName)  {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource(fileName));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -654,7 +663,9 @@ public abstract class Player {
                 }
             }
         }
-        if(sunkShip != null) logMessage("My " + sunkShip.name() + " was sunk!");
+        if(sunkShip != null) {
+            logMessage("My " + sunkShip.name() + " was sunk!");
+        }
 
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
