@@ -19,8 +19,6 @@ import battleship.view.ViewManager;
  */
 public class HumanPlayer extends Player {
 
-	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
-
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
@@ -196,7 +194,7 @@ public class HumanPlayer extends Player {
 
 			for (Point current : legalEndPoints) {
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
-				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setBackground(LEGAL_ENDPOINT);
+				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setIcon(LEGAL_ENDPOINT_ICON);
 			}
 		} else{
 			startPositionPoint = null;

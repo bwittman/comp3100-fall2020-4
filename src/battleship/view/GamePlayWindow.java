@@ -12,7 +12,7 @@ public class GamePlayWindow extends JFrame {
     private static final Color SUBMARINE_COLOR = new Color(220,165,35);
     private static final Color DESTROYER_COLOR = new Color(91,0,91);
     private static final Color BATTLESHIP_COLOR = new Color(162,94,32);
-    private static final Color CRUISER_COLOR = new Color(64,60,49);
+    private static final Color CRUISER_COLOR = new Color(164,60,49);
 
     //variables used for sizing the frames and panels based on the screen size
     private final int frameSize;

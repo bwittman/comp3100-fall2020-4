@@ -21,17 +21,17 @@ import java.util.concurrent.ExecutionException;
 public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
-    private static Object[] endOptions = {"Play Again", "Quit"};
+    private static final Object[] endOptions = {"Play Again", "Quit"};
 
-    private static final Color WATER = new Color(16,129,160);
-    private static final Color CARRIER_COLOR = new Color(43,97,16);
-    private static final Color SUBMARINE_COLOR = new Color(220,165,35);
-    private static final Color DESTROYER_COLOR = new Color(91,0,91);
-    private static final Color BATTLESHIP_COLOR = new Color(162,94,32);
-    private static final Color CRUISER_COLOR = new Color(64,60,49);
+    private ImageIcon CARRIER_ICON = new ImageIcon(this.getClass().getResource("/carrier.png"));
+    private ImageIcon SUBMARINE_ICON = new ImageIcon(this.getClass().getResource("/submarine.png"));
+    private ImageIcon DESTROYER_ICON = new ImageIcon(this.getClass().getResource("/destroyer.png"));
+    private ImageIcon BATTLESHIP_ICON = new ImageIcon(this.getClass().getResource("/battleship.png"));
+    private ImageIcon CRUISER_ICON = new ImageIcon(this.getClass().getResource("/cruiser.png"));
+    private ImageIcon WATER_ICON = new ImageIcon(this.getClass().getResource("/water.png"));
+    protected ImageIcon LEGAL_ENDPOINT_ICON = new ImageIcon(this.getClass().getResource("/legalEndpoint.png"));
     private ImageIcon MISS_ICON = new ImageIcon(this.getClass().getResource("/blueX.png"));
     private ImageIcon HIT_ICON = new ImageIcon(this.getClass().getResource("/redX.png"));
-    private ImageIcon SHIP_ICON = new ImageIcon(this.getClass().getResource("/shipTile.png"));
 
     /**
      * The types of tiles that we have encounter
@@ -76,7 +76,19 @@ public abstract class Player {
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
         HIT_ICON = new ImageIcon((HIT_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
-        SHIP_ICON = new ImageIcon((SHIP_ICON.getImage()
+        WATER_ICON = new ImageIcon((WATER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        LEGAL_ENDPOINT_ICON = new ImageIcon((LEGAL_ENDPOINT_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        CARRIER_ICON = new ImageIcon((CARRIER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        SUBMARINE_ICON = new ImageIcon((SUBMARINE_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        DESTROYER_ICON = new ImageIcon((DESTROYER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        BATTLESHIP_ICON = new ImageIcon((BATTLESHIP_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        CRUISER_ICON = new ImageIcon((CRUISER_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
     }
 
@@ -225,8 +237,8 @@ public abstract class Player {
                 JButton currentButton = board.getButton(j,i);
                 switch(currentTile){
                     case WATER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(WATER);
+                        currentButton.setIcon(WATER_ICON);
+                        currentButton.setDisabledIcon(WATER_ICON);
                         break;
                     case HIT:
                         currentButton.setIcon(HIT_ICON);
@@ -237,24 +249,24 @@ public abstract class Player {
                         currentButton.setDisabledIcon(MISS_ICON);
                         break;
                     case CARRIER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(CARRIER_COLOR);
+                        currentButton.setIcon(CARRIER_ICON);
+                        currentButton.setDisabledIcon(CARRIER_ICON);
                         break;
                     case BATTLESHIP:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(BATTLESHIP_COLOR);
+                        currentButton.setIcon(BATTLESHIP_ICON);
+                        currentButton.setDisabledIcon(BATTLESHIP_ICON);
                         break;
                     case CRUISER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(CRUISER_COLOR);
+                        currentButton.setIcon(CRUISER_ICON);
+                        currentButton.setDisabledIcon(CRUISER_ICON);
                         break;
                     case SUBMARINE:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(SUBMARINE_COLOR);
+                        currentButton.setIcon(SUBMARINE_ICON);
+                        currentButton.setDisabledIcon(SUBMARINE_ICON);
                         break;
                     case DESTROYER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(DESTROYER_COLOR);
+                        currentButton.setIcon(DESTROYER_ICON);
+                        currentButton.setDisabledIcon(DESTROYER_ICON);
                         break;
                 }
             }
