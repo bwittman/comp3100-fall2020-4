@@ -9,9 +9,7 @@ import battleship.model.Ship.ShipType;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -59,6 +57,7 @@ public abstract class Player {
     protected Player opponent = null;
     protected boolean opponentPlacedShips = false;
     protected boolean playerStarted = false;
+    protected boolean opponentPlayAgain = false;
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -207,7 +206,7 @@ public abstract class Player {
             playerStarted = true;
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
-            if(this instanceof HumanPlayer && opponent == null){
+            if(this instanceof HumanPlayer && !isComputerGame()){
                 ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other player has placed ships.");
                 ((HumanPlayer) this).getNetworking().sendMessage("START");//tell the other player we are ready to start
             }
@@ -695,8 +694,13 @@ public abstract class Player {
         if (isComputerGame()) {
             opponent.resetGame();
         }
+
         updateAllBoards();
-        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+
+        if (opponentPlayAgain || isComputerGame()){
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        }
+
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
         opponentPlacedShips = false;
         playerStarted = false;
@@ -705,6 +709,8 @@ public abstract class Player {
             if (isComputerGame()) {
                 ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
+            }else{
+                ((HumanPlayer)this).getNetworking().sendMessage("PLAY AGAIN");
             }
         }else{
             viewManager.getGameScreen().setVisible(false);
@@ -758,8 +764,13 @@ public abstract class Player {
         if (isComputerGame()) {
             opponent.resetGame();
         }
+
         updateAllBoards();
-        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+
+        if (opponentPlayAgain || isComputerGame()){
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        }
+
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
         opponentPlacedShips = false;
         playerStarted = false;
@@ -768,6 +779,8 @@ public abstract class Player {
             if (isComputerGame()) {
                 ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
+            }else{
+                ((HumanPlayer)this).getNetworking().sendMessage("PLAY AGAIN");
             }
         }else {
             viewManager.getGameScreen().setVisible(false);

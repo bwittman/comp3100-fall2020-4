@@ -80,6 +80,9 @@ public class HumanPlayer extends Player {
 				if (playerStarted && isMyTurn){
 					enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
 				}
+			}else if (message.startsWith("PLAY AGAIN")) {
+				opponentPlayAgain = true;
+				enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
 			}else if(message.startsWith("RESULTS: ")){
 				String[] parts = message.split(": ");
 				Results results = new Results(parts[1]);
@@ -144,7 +147,6 @@ public class HumanPlayer extends Player {
 		}
 		viewManager.getGameScreen().getLog().setText("");
 		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
-		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
 
 	/**
