@@ -19,6 +19,7 @@ public class RulesWindow extends JFrame {
     public RulesWindow(){
 
         JTextPane rulesText = new JTextPane();
+        rulesText.setEditable(false);
         closeButton = new JButton("Close");
 
         add(closeButton, BorderLayout.SOUTH);

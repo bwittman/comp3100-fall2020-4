@@ -4,7 +4,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
 
-import battleship.view.GamePlayWindow;
 import battleship.view.MainMenu;
 import battleship.view.ViewManager;
 
@@ -12,6 +11,8 @@ import battleship.view.ViewManager;
  * Initializes the main menu and game
  */
 public class MainMenuController {
+
+	private static final String[] hostingOptions = {"Host", "Join"};
 
 	private ViewManager viewManager;
 	private HumanPlayer humanPlayer;
@@ -42,33 +43,33 @@ public class MainMenuController {
 	 * Set up all the action listeners for buttons on the main menu screen
 	 */
 	private void setMainMenuActionListeners(){
-		MainMenu menu = viewManager.getMainMenu();
+		MainMenu mainMenu = viewManager.getMainMenu();
 
-		menu.getRulesButton().addActionListener(e->{
+		mainMenu.getRulesItem().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(true);
 		});
 
 		//Networking Button Action Listener
-		menu.getNetworkButton().addActionListener(e->{
+		mainMenu.getNetworkingItem().addActionListener(e->{
 			humanPlayer = new HumanPlayer(viewManager);
-			int userAnswer = JOptionPane.showConfirmDialog(null, "Are you going to be hosting the game?", "Networking Dialog", JOptionPane.YES_NO_OPTION);
+			int hostingDecision = JOptionPane.showOptionDialog(null,"Will you be hosing or joining the game?", "Host or Join Game",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, hostingOptions, null);
 
-			if(userAnswer == JOptionPane.YES_OPTION) { 			//User Selected YES
-				System.out.println("User Selected Yes: they are the host");
+			if(hostingDecision == 0) {//User Selected host
+				System.out.println("User Selected host");
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				humanPlayer.setTurn(true);
-				menu.getNetworkButton().setEnabled(false);
-				menu.getOnePlayerButton().setEnabled(false);
-			}else if (userAnswer == JOptionPane.NO_OPTION) { 	//User Selected NO
-				System.out.println("User Selected No: they are client");
+				mainMenu.getNetworkingItem().setEnabled(false);
+				mainMenu.getComputerItem().setEnabled(false);
+			}else if (hostingDecision == 1) {//User Selected Join
+				System.out.println("User Selected client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
 				humanPlayer.setTurn(false);
-				menu.getNetworkButton().setEnabled(false);
-				menu.getOnePlayerButton().setEnabled(false);
+				mainMenu.getNetworkingItem().setEnabled(false);
+				mainMenu.getComputerItem().setEnabled(false);
 			}else{
-				menu.getNetworkButton().setEnabled(true);
-				menu.getOnePlayerButton().setEnabled(true);
+				mainMenu.getNetworkingItem().setEnabled(true);
+				mainMenu.getComputerItem().setEnabled(true);
 			}
 		});
 		
@@ -81,21 +82,21 @@ public class MainMenuController {
 						humanPlayer.disconnect();
 					}
 					System.out.println("hostConnectionWorker canceled");
-					menu.getNetworkButton().setEnabled(true);
-					menu.getOnePlayerButton().setEnabled(true);
+					mainMenu.getNetworkingItem().setEnabled(true);
+					mainMenu.getComputerItem().setEnabled(true);
 				}
 			}
 		});
 
 		viewManager.getNetworkingClientWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				viewManager.getMainMenu().getOnePlayerButton().setEnabled(true);
-				viewManager.getMainMenu().getNetworkButton().setEnabled(true);
+				viewManager.getMainMenu().getComputerItem().setEnabled(true);
+				viewManager.getMainMenu().getNetworkingItem().setEnabled(true);
 			}
 		});
 
 		//one player button action listener
-		menu.getOnePlayerButton().addActionListener(e->{
+		mainMenu.getComputerItem().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
 
@@ -112,7 +113,7 @@ public class MainMenuController {
 			computerPlayer.placeComputerShips();
 
 			viewManager.getGameScreen().setVisible(true);
-			menu.setVisible(false);
+			mainMenu.setVisible(false);
 		});
 	}
 

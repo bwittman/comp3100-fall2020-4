@@ -11,9 +11,10 @@ public class MainMenu extends JFrame {
     //for sizing the frames and panels based on the screen size
     private final int frameSize;
 
-    private final JButton rulesButton;
-    private final JButton networkButton;
-    private final JButton onePlayerButton;
+    private JMenuItem rulesMenu;
+    private JMenuItem howToPlay;
+    private JMenuItem networkingItem;
+    private JMenuItem computerItem;
 
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -26,18 +27,10 @@ public class MainMenu extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(1,3));
         JPanel outerPanel = new JPanel(new BorderLayout());
 
-
-        rulesButton = new JButton("Rules");
-        networkButton = new JButton("Networking");
-        onePlayerButton = new JButton("Play Against Computer");
-        onePlayerButton.setFocusPainted(false);
-
-        buttonPanel.add(onePlayerButton);
-        buttonPanel.add(rulesButton);
-        buttonPanel.add(networkButton);
-
         outerPanel.add(backgroundPanel, BorderLayout.CENTER);
         outerPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        this.setJMenuBar(setupMenuBar());
 
         setTitle("Battleship: Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,17 +43,59 @@ public class MainMenu extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
-    public JButton getNetworkButton() {
-    	return networkButton;
+
+    private JMenuBar setupMenuBar(){
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu playMenu = new JMenu("Play Game");
+        computerItem = new JMenuItem("Against Computer");
+        networkingItem = new JMenuItem("Through Networking");
+        playMenu.add(computerItem);
+        playMenu.add(networkingItem);
+        menuBar.add(playMenu);
+
+        JMenu helpMenu = new JMenu("Help");
+        rulesMenu = new JMenuItem("Rules");
+        howToPlay = new JMenuItem("How to Play");
+        helpMenu.add(rulesMenu);
+        helpMenu.add(howToPlay);
+        menuBar.add(helpMenu);
+
+        JMenu settingsMenu = new JMenu("Settings");
+
+        JMenu computerDifficultyMenu = new JMenu("Computer Difficulty");
+        ButtonGroup group = new ButtonGroup();
+        JRadioButtonMenuItem hardComputer = new JRadioButtonMenuItem("Hard");
+        hardComputer.setSelected(true);
+        group.add(hardComputer);
+        JRadioButtonMenuItem easyComputer = new JRadioButtonMenuItem("Easy");
+        group.add(easyComputer);
+        computerDifficultyMenu.add(hardComputer);
+        computerDifficultyMenu.add(easyComputer);
+        settingsMenu.add(computerDifficultyMenu);
+
+        JCheckBoxMenuItem soundsItem = new JCheckBoxMenuItem("Sound Effects");
+        settingsMenu.add(soundsItem);
+        soundsItem.setSelected(true);
+        menuBar.add(settingsMenu);
+
+        return menuBar;
     }
     
-    public JButton getOnePlayerButton() {
-    	return onePlayerButton;
+    public JMenuItem getNetworkingItem() {
+    	return networkingItem;
     }
     
-    public JButton getRulesButton() {
-    	return rulesButton;
+    public JMenuItem getComputerItem() {
+    	return computerItem;
+    }
+    
+    public JMenuItem getRulesItem() {
+    	return rulesMenu;
+    }
+
+    public JMenuItem getHowToPlayItem(){
+        return howToPlay;
     }
 
     public int getFrameSize(){
@@ -68,8 +103,8 @@ public class MainMenu extends JFrame {
     }
 
     public void reset(){
-        networkButton.setEnabled(true);
-        onePlayerButton.setEnabled(true);
+        networkingItem.setEnabled(true);
+        computerItem.setEnabled(true);
     }
 }
 
