@@ -19,6 +19,7 @@ public class MainMenuController {
 	private ComputerPlayer computerPlayer;
 	private SwingWorker <Void, Void> hostConnectionWorker;
 	private boolean initialStart = true;
+	private MainMenu menu;
 
     public MainMenuController(){
         viewManager = new ViewManager();
@@ -31,7 +32,7 @@ public class MainMenuController {
 	 * Set up all the action listeners for buttons on the main menu screen
 	 */
 	private void setMainMenuActionListeners(){
-		MainMenu menu = viewManager.getMainMenu();
+		menu = viewManager.getMainMenu();
 
 		menu.getRulesButton().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(true);
@@ -39,7 +40,7 @@ public class MainMenuController {
 
 		//Networking Button Action Listener
 		menu.getNetworkButton().addActionListener(e->{
-			humanPlayer = new HumanPlayer(viewManager);
+			humanPlayer = new HumanPlayer(viewManager, this);
 			int userAnswer = JOptionPane.showConfirmDialog(null, "Are you going to be hosting the game?", "Networking Dialog", JOptionPane.YES_NO_OPTION);
 
 			if(userAnswer == JOptionPane.YES_OPTION) { 			//User Selected YES
@@ -65,15 +66,7 @@ public class MainMenuController {
 		//If the player closes the host window without connecting this closes the socket
 		viewManager.getNetworkingHostWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				if(hostConnectionWorker != null) {
-					hostConnectionWorker.cancel(true);
-					if(humanPlayer != null) {
-						humanPlayer.disconnect();
-					}
-					System.out.println("hostConnectionWorker canceled");
-					menu.getNetworkButton().setEnabled(true);
-					menu.getOnePlayerButton().setEnabled(true);
-				}
+				resetMainMenu();
 			}
 		});
 
@@ -90,7 +83,7 @@ public class MainMenuController {
 			computerPlayer.setTurn(false);
 
 			if(initialStart) {
-				humanPlayer = new HumanPlayer(viewManager);
+				humanPlayer = new HumanPlayer(viewManager, this);
 				initialStart = false;
 			}
 
@@ -164,5 +157,17 @@ public class MainMenuController {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
+	}
+
+	public void resetMainMenu(){
+		if(hostConnectionWorker != null) {
+			hostConnectionWorker.cancel(true);
+			if(humanPlayer != null) {
+				humanPlayer.disconnect();
+			}
+			System.out.println("hostConnectionWorker canceled");
+		}
+		menu.getNetworkButton().setEnabled(true);
+		menu.getOnePlayerButton().setEnabled(true);
 	}
 }
