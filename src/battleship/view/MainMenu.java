@@ -15,6 +15,8 @@ public class MainMenu extends JFrame {
     private JMenuItem howToPlay;
     private JMenuItem networkingItem;
     private JMenuItem computerItem;
+    private JCheckBoxMenuItem soundsItem;
+    private JRadioButtonMenuItem hardComputer;
 
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -65,7 +67,7 @@ public class MainMenu extends JFrame {
 
         JMenu computerDifficultyMenu = new JMenu("Computer Difficulty");
         ButtonGroup group = new ButtonGroup();
-        JRadioButtonMenuItem hardComputer = new JRadioButtonMenuItem("Hard");
+        hardComputer = new JRadioButtonMenuItem("Hard");
         hardComputer.setSelected(true);
         group.add(hardComputer);
         JRadioButtonMenuItem easyComputer = new JRadioButtonMenuItem("Easy");
@@ -74,7 +76,7 @@ public class MainMenu extends JFrame {
         computerDifficultyMenu.add(easyComputer);
         settingsMenu.add(computerDifficultyMenu);
 
-        JCheckBoxMenuItem soundsItem = new JCheckBoxMenuItem("Sound Effects");
+        soundsItem = new JCheckBoxMenuItem("Sound Effects");
         settingsMenu.add(soundsItem);
         soundsItem.setSelected(true);
         menuBar.add(settingsMenu);
@@ -96,6 +98,14 @@ public class MainMenu extends JFrame {
 
     public JMenuItem getHowToPlayItem(){
         return howToPlay;
+    }
+
+    public boolean soundsSelected(){
+        return soundsItem.isSelected();
+    }
+
+    public boolean isHardComputerDifficulty(){
+        return hardComputer.isSelected();
     }
 
     public int getFrameSize(){

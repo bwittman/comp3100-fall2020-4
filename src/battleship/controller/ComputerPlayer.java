@@ -240,15 +240,17 @@ public class ComputerPlayer extends Player {
      * Strategy of generating the next tile that the computer will guess
      */
     private Point generateGuess(){
-        //if we hit a ship and did not sink it find the next best guess
-        if (previousGuess != null) {
-            if (getEnemyGameState().getTile(previousGuess.x, previousGuess.y) == Tile.HIT) {
-                if (!shipSunk) {
-                    //toSearch.clear();
-                    findNextGuesses(previousGuess);
-                    //if we sunk a ship start over guessing randomly
-                } else {
-                    toSearch.clear();
+        if (opponent.viewManager.getMainMenu().isHardComputerDifficulty()) {
+            //if we hit a ship and did not sink it find the next best guess
+            if (previousGuess != null) {
+                if (getEnemyGameState().getTile(previousGuess.x, previousGuess.y) == Tile.HIT) {
+                    if (!shipSunk) {
+                        //toSearch.clear();
+                        findNextGuesses(previousGuess);
+                        //if we sunk a ship start over guessing randomly
+                    } else {
+                        toSearch.clear();
+                    }
                 }
             }
         }
