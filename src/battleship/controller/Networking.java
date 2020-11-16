@@ -108,11 +108,7 @@ public class Networking {
 	 * @return returns the string from the socket if possible. Otherwise returns an empty string.
 	 */
 	public String receiveMessage() {
-		if(socket != null && socket.isConnected() && input.hasNext()) {
-			return input.nextLine();
-		}else {
-			return "";
-		}
+		return input.nextLine();
 	}
 	
 	/**
@@ -144,6 +140,10 @@ public class Networking {
 			System.out.println("Could not clean up serverSocket IOException thrown");
 			e.printStackTrace();
 		}
+		output = null;
+		input = null;
+		socket = null;
+		serverSocket = null;
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public class Networking {
 	 */
 	public boolean isConnected() {
 		if(socket != null) {
-			return socket.isConnected();
+			return !socket.isClosed() && socket.isConnected();
 		}else {
 			return false;
 		}

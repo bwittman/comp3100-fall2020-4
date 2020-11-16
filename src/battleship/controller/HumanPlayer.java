@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.NoSuchElementException;
 import javax.swing.*;
 
 import battleship.model.Results;
@@ -19,19 +20,25 @@ import battleship.view.ViewManager;
  */
 public class HumanPlayer extends Player {
 
+	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
+
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private List<ShipType> placedShips = new ArrayList<>(5);
+	private boolean isComputerGame;
+	private MainMenuController mainMenuController;
 
-
-	public HumanPlayer(ViewManager viewManager){
+	public HumanPlayer(ViewManager viewManager, MainMenuController mainMenuController){
 		super(viewManager);
 		if (!isComputerGame()){
 			networking = new Networking();
 		}
 		setUserBoardActionListeners();
+		this.mainMenuController = mainMenuController;
 	}
+
+
 
 	/*
 	 * Listens on the socket on a separate thread so that the GUI does not freeze
@@ -40,14 +47,20 @@ public class HumanPlayer extends Player {
 	private class MessageListener extends Thread {
 		@Override
 		public void run() {
-			while(networking.isConnected()) {
-				System.out.println("IsConnected: " + networking.isConnected());
-				String message = networking.receiveMessage();
-				if(!message.equals("")) {
-					SwingUtilities.invokeLater(new MessageDispatcher(message));
+			try {
+				while (networking.isConnected()) {
+					String message = networking.receiveMessage();
+					if (!message.equals("")) {
+						SwingUtilities.invokeLater(new MessageDispatcher(message));
+					}
 				}
-			}
+			}catch(NoSuchElementException | IllegalStateException e){}
 			System.err.println("MessageListener: Connection Ended!");
+			JOptionPane.showMessageDialog(null, "Your connection has ended.");
+			resetGame();
+			viewManager.getGameScreen().setVisible(false);
+			viewManager.getMainMenu().setVisible(true);
+			mainMenuController.resetMainMenu();
 		}
 	}
 	
@@ -97,6 +110,7 @@ public class HumanPlayer extends Player {
 	public void listenForNewMessages() {
 		MessageListener messageListener = new MessageListener();
 		messageListener.start();
+
 	}
 
 	/**
@@ -104,6 +118,7 @@ public class HumanPlayer extends Player {
 	 */
     public void disconnect() {
     	networking.cleanUp();
+
     }
 
 	/**
@@ -147,6 +162,7 @@ public class HumanPlayer extends Player {
 		}
 		viewManager.getGameScreen().getLog().setText("");
 		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
+		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}
 
 	/**

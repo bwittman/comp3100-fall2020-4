@@ -19,6 +19,7 @@ public class MainMenuController {
 	private ComputerPlayer computerPlayer;
 	private SwingWorker <Void, Void> hostConnectionWorker;
 	private boolean initialStart = true;
+	private MainMenu menu;
 
     public MainMenuController(){
     	setLookAndFeel();
@@ -43,15 +44,15 @@ public class MainMenuController {
 	 * Set up all the action listeners for buttons on the main menu screen
 	 */
 	private void setMainMenuActionListeners(){
-		MainMenu mainMenu = viewManager.getMainMenu();
+		menu = viewManager.getMainMenu();
 
-		mainMenu.getRulesItem().addActionListener(e->{
+		menu.getRulesItem().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(true);
 		});
 
 		//Networking Button Action Listener
-		mainMenu.getNetworkingItem().addActionListener(e->{
-			humanPlayer = new HumanPlayer(viewManager);
+		menu.getNetworkingItem().addActionListener(e->{
+			humanPlayer = new HumanPlayer(viewManager, this);
 			int hostingDecision = JOptionPane.showOptionDialog(null,"Will you be hosing or joining the game?", "Host or Join Game",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, hostingOptions, null);
 
 			if(hostingDecision == 0) {//User Selected host
@@ -59,32 +60,24 @@ public class MainMenuController {
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
 				humanPlayer.setTurn(true);
-				mainMenu.getNetworkingItem().setEnabled(false);
-				mainMenu.getComputerItem().setEnabled(false);
+				menu.getNetworkingItem().setEnabled(false);
+				menu.getComputerItem().setEnabled(false);
 			}else if (hostingDecision == 1) {//User Selected Join
 				System.out.println("User Selected client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
 				humanPlayer.setTurn(false);
-				mainMenu.getNetworkingItem().setEnabled(false);
-				mainMenu.getComputerItem().setEnabled(false);
+				menu.getNetworkingItem().setEnabled(false);
+				menu.getComputerItem().setEnabled(false);
 			}else{
-				mainMenu.getNetworkingItem().setEnabled(true);
-				mainMenu.getComputerItem().setEnabled(true);
+				menu.getNetworkingItem().setEnabled(true);
+				menu.getComputerItem().setEnabled(true);
 			}
 		});
 		
 		//If the player closes the host window without connecting this closes the socket
 		viewManager.getNetworkingHostWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				if(hostConnectionWorker != null) {
-					hostConnectionWorker.cancel(true);
-					if(humanPlayer != null) {
-						humanPlayer.disconnect();
-					}
-					System.out.println("hostConnectionWorker canceled");
-					mainMenu.getNetworkingItem().setEnabled(true);
-					mainMenu.getComputerItem().setEnabled(true);
-				}
+				resetMainMenu();
 			}
 		});
 
@@ -96,12 +89,12 @@ public class MainMenuController {
 		});
 
 		//one player button action listener
-		mainMenu.getComputerItem().addActionListener(e->{
+		menu.getComputerItem().addActionListener(e->{
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
 
 			if(initialStart) {
-				humanPlayer = new HumanPlayer(viewManager);
+				humanPlayer = new HumanPlayer(viewManager, this);
 				initialStart = false;
 			}
 
@@ -113,7 +106,7 @@ public class MainMenuController {
 			computerPlayer.placeComputerShips();
 
 			viewManager.getGameScreen().setVisible(true);
-			mainMenu.setVisible(false);
+			menu.setVisible(false);
 		});
 	}
 
@@ -174,5 +167,17 @@ public class MainMenuController {
 				JOptionPane.showMessageDialog(null, "Connection Successful!");
 			}
 		});
+	}
+
+	public void resetMainMenu(){
+		if(hostConnectionWorker != null) {
+			hostConnectionWorker.cancel(true);
+			if(humanPlayer != null) {
+				humanPlayer.disconnect();
+			}
+			System.out.println("hostConnectionWorker canceled");
+		}
+		menu.getNetworkingItem().setEnabled(true);
+		menu.getComputerItem().setEnabled(true);
 	}
 }
