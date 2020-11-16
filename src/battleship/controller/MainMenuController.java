@@ -2,8 +2,7 @@ package battleship.controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
 import battleship.view.GamePlayWindow;
 import battleship.view.MainMenu;
@@ -21,10 +20,22 @@ public class MainMenuController {
 	private boolean initialStart = true;
 
     public MainMenuController(){
+    	setLookAndFeel();
         viewManager = new ViewManager();
         setMainMenuActionListeners();
         setRulesWindowActionListener();
 		setNetworkingClientActionListener();
+	}
+
+	private void setLookAndFeel(){
+        try {
+            //Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getCrossPlatformLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 	}
 
 	/*
