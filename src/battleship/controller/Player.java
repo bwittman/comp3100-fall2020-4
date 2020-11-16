@@ -6,13 +6,14 @@ import battleship.model.Ship;
 import battleship.view.*;
 import battleship.model.Ship.ShipType;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Controls interactions between the view and the model of a user's game.
@@ -21,18 +22,27 @@ import java.util.concurrent.ExecutionException;
 public abstract class Player {
     public static final int ROWS = 10;
     public static final int COLUMNS = 10;
-    private static Object[] endOptions = {"Play Again", "Quit"};
+    private static final Object[] endOptions = {"Play Again", "Quit"};
 
-    private static final Color WATER = new Color(16,129,160);
+    private ImageIcon CARRIER_ICON = new ImageIcon(this.getClass().getResource("/carrier.png"));
+    private ImageIcon SUBMARINE_ICON = new ImageIcon(this.getClass().getResource("/submarine.png"));
+    private ImageIcon DESTROYER_ICON = new ImageIcon(this.getClass().getResource("/destroyer.png"));
+    private ImageIcon BATTLESHIP_ICON = new ImageIcon(this.getClass().getResource("/battleship.png"));
+    private ImageIcon CRUISER_ICON = new ImageIcon(this.getClass().getResource("/cruiser.png"));
+    private ImageIcon WATER_ICON = new ImageIcon(this.getClass().getResource("/water.png"));
+    protected ImageIcon LEGAL_ENDPOINT_ICON = new ImageIcon(this.getClass().getResource("/legalEndpoint.png"));
     private ImageIcon MISS_ICON = new ImageIcon(this.getClass().getResource("/blueX.png"));
     private ImageIcon HIT_ICON = new ImageIcon(this.getClass().getResource("/redX.png"));
-    private ImageIcon SHIP_ICON = new ImageIcon(this.getClass().getResource("/shipTile.png"));
 
     /**
      * The types of tiles that we have encounter
      */
     public enum Tile {
-        SHIP,
+        CARRIER,
+        BATTLESHIP,
+        CRUISER,
+        SUBMARINE,
+        DESTROYER,
         HIT,
         MISS,
         WATER
@@ -45,9 +55,9 @@ public abstract class Player {
     protected boolean isMyTurn;
     protected ViewManager viewManager;
     protected Player opponent = null;
-    private ComputerPlayer computer;
     protected boolean opponentPlacedShips = false;
     protected boolean playerStarted = false;
+    protected boolean opponentPlayAgain = false;
 
     protected Player(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -68,8 +78,31 @@ public abstract class Player {
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
         HIT_ICON = new ImageIcon((HIT_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
-        SHIP_ICON = new ImageIcon((SHIP_ICON.getImage()
+        WATER_ICON = new ImageIcon((WATER_ICON.getImage()
                 .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        LEGAL_ENDPOINT_ICON = new ImageIcon((LEGAL_ENDPOINT_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        CARRIER_ICON = new ImageIcon((CARRIER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        SUBMARINE_ICON = new ImageIcon((SUBMARINE_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        DESTROYER_ICON = new ImageIcon((DESTROYER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        BATTLESHIP_ICON = new ImageIcon((BATTLESHIP_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+        CRUISER_ICON = new ImageIcon((CRUISER_ICON.getImage()
+                .getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH)));
+    }
+
+    protected void playSound(String fileName)  {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource(fileName));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -134,6 +167,7 @@ public abstract class Player {
     private void setResetActionListener(){
         viewManager.getGameScreen().getResetButton().addActionListener(e ->{
             resetGame();
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
             updateAllBoards();
             viewManager.getGameScreen().getPlayGameButton().setEnabled(false);
             logMessage("Game was reset.");
@@ -173,8 +207,8 @@ public abstract class Player {
             playerStarted = true;
             logMessage("=========== Battleship ===========");
             disableBoard(viewManager.getGameScreen().getUserBoard());
-            if(this instanceof HumanPlayer && opponent == null){
-                ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other Player has placed ships!");
+            if(this instanceof HumanPlayer && !isComputerGame()){
+                ((HumanPlayer) this).getNetworking().sendMessage("LOG: Other player has placed ships.");
                 ((HumanPlayer) this).getNetworking().sendMessage("START");//tell the other player we are ready to start
             }
 
@@ -212,8 +246,8 @@ public abstract class Player {
                 JButton currentButton = board.getButton(j,i);
                 switch(currentTile){
                     case WATER:
-                        currentButton.setIcon(null);
-                        currentButton.setBackground(WATER);
+                        currentButton.setIcon(WATER_ICON);
+                        currentButton.setDisabledIcon(WATER_ICON);
                         break;
                     case HIT:
                         currentButton.setIcon(HIT_ICON);
@@ -223,9 +257,25 @@ public abstract class Player {
                         currentButton.setIcon(MISS_ICON);
                         currentButton.setDisabledIcon(MISS_ICON);
                         break;
-                    case SHIP:
-                        currentButton.setIcon(SHIP_ICON);
-                        currentButton.setDisabledIcon(SHIP_ICON);
+                    case CARRIER:
+                        currentButton.setIcon(CARRIER_ICON);
+                        currentButton.setDisabledIcon(CARRIER_ICON);
+                        break;
+                    case BATTLESHIP:
+                        currentButton.setIcon(BATTLESHIP_ICON);
+                        currentButton.setDisabledIcon(BATTLESHIP_ICON);
+                        break;
+                    case CRUISER:
+                        currentButton.setIcon(CRUISER_ICON);
+                        currentButton.setDisabledIcon(CRUISER_ICON);
+                        break;
+                    case SUBMARINE:
+                        currentButton.setIcon(SUBMARINE_ICON);
+                        currentButton.setDisabledIcon(SUBMARINE_ICON);
+                        break;
+                    case DESTROYER:
+                        currentButton.setIcon(DESTROYER_ICON);
+                        currentButton.setDisabledIcon(DESTROYER_ICON);
                         break;
                 }
             }
@@ -283,18 +333,30 @@ public abstract class Player {
      * @throws ShipPlacementException if the start or end points are at the same point
      */
     protected void addShipToGameState(Ship ship) throws ShipPlacementException {
+        Tile shipTile = null;
+        if(ship.getName().equals("Carrier")){
+            shipTile = Tile.CARRIER;
+        }else if(ship.getName().equals("Battleship")){
+            shipTile = Tile.BATTLESHIP;
+        }else if(ship.getName().equals("Cruiser")){
+            shipTile = Tile.CRUISER;
+        }else if(ship.getName().equals("Submarine")){
+            shipTile = Tile.SUBMARINE;
+        }else{
+            shipTile =Tile.DESTROYER;
+        }
         if (ship.getLength() == 2){
-            gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y);
-            gameState.setTile(Tile.SHIP, ship.getEnd().x, ship.getEnd().y);
+            gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y);
+            gameState.setTile(shipTile, ship.getEnd().x, ship.getEnd().y);
         //then it is horizontal
         }else if(ship.getStart().x - ship.getEnd().x == 0){
             if (ship.getStart().y < ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y+i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y+i);
                 }
             }else if (ship.getStart().y > ship.getEnd().y){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x, ship.getStart().y-i);
+                    gameState.setTile(shipTile, ship.getStart().x, ship.getStart().y-i);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -303,11 +365,11 @@ public abstract class Player {
         }else{
             if (ship.getStart().x < ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x+i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x+i, ship.getStart().y);
                 }
             }else if (ship.getStart().x > ship.getEnd().x){
                 for (int i = 0; i < ship.getLength(); i++){
-                    gameState.setTile(Tile.SHIP, ship.getStart().x-i, ship.getStart().y);
+                    gameState.setTile(shipTile, ship.getStart().x-i, ship.getStart().y);
                 }
             }else {
                 throw new ShipPlacementException("Start and End were the same position");
@@ -561,6 +623,18 @@ public abstract class Player {
         for (Ship ship: ships){
             ship.reset();
         }
+
+        if (viewManager != null){
+            viewManager.getMainMenu().reset();
+        }
+    }
+
+    /**
+     * Determines if a game is a computer game
+     * @return if it computer game
+     */
+    public boolean isComputerGame(){
+        return opponent != null;
     }
 
     /**
@@ -589,7 +663,9 @@ public abstract class Player {
                 }
             }
         }
-        if(sunkShip != null) logMessage("My " + sunkShip.name() + " was sunk!");
+        if(sunkShip != null) {
+            logMessage("My " + sunkShip.name() + " was sunk!");
+        }
 
         boolean opponentWon = checkForWin();
         if (viewManager != null) {
@@ -612,27 +688,35 @@ public abstract class Player {
 
     private void opponentWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
-        logMessage("Enemy has Won!");
-        int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play Again?", "Opponent Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+        logMessage("Enemy has won!");
+        int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play again?", "Opponent won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        if (opponent != null) {
+        if (isComputerGame()) {
             opponent.resetGame();
         }
+
         updateAllBoards();
-        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+
+        if (opponentPlayAgain || isComputerGame()){
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        }
+
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
         opponentPlacedShips = false;
         playerStarted = false;
 
         if(endDecision == 0){
-            if (computer != null) {
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
+            }else{
+                ((HumanPlayer)this).getNetworking().sendMessage("PLAY AGAIN");
             }
         }else{
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            if (opponent != null) {
+            if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
             }
@@ -646,11 +730,11 @@ public abstract class Player {
     public void processResults(Results results){
         if (results.isTileHit()){
             enemyGameState.setTile(Tile.HIT, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You HIT! : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
+            String logMessage = "You HIT: " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }else{
             enemyGameState.setTile(Tile.MISS, results.getGuessedTile().x, results.getGuessedTile().y);
-            String logMessage = "You MISSED : " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
+            String logMessage = "You MISSED: " + (char)(results.getGuessedTile().x + 'A') + (results.getGuessedTile().y + 1);
             logMessage(logMessage);
         }
 
@@ -666,8 +750,8 @@ public abstract class Player {
         }
 
         //play the computers turn now only if we didn't just win
-        if(opponent != null && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
-            computer = (ComputerPlayer) opponent;
+        if(isComputerGame() && opponent instanceof ComputerPlayer && !results.hasPlayerWon()){
+            ComputerPlayer computer = (ComputerPlayer) opponent;
             computer.playTurn();
         }
     }
@@ -678,23 +762,31 @@ public abstract class Player {
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
-        if (opponent != null) {
+        if (isComputerGame()) {
             opponent.resetGame();
         }
+
         updateAllBoards();
-        enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+
+        if (opponentPlayAgain || isComputerGame()){
+            enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
+        }
+
         viewManager.getGameScreen().getOptionButtons().setVisible(true);
         opponentPlacedShips = false;
         playerStarted = false;
 
         if(endDecision == 0){
-            if (computer != null) {
+            if (isComputerGame()) {
+                ComputerPlayer computer = (ComputerPlayer) opponent;
                 computer.placeComputerShips();
+            }else{
+                ((HumanPlayer)this).getNetworking().sendMessage("PLAY AGAIN");
             }
         }else {
             viewManager.getGameScreen().setVisible(false);
             viewManager.getMainMenu().setVisible(true);
-            if (opponent != null) {
+            if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
             }

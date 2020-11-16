@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.NoSuchElementException;
 import javax.swing.*;
 
 import battleship.model.Results;
@@ -13,7 +12,6 @@ import battleship.model.Ship.ShipType;
 import battleship.view.Board;
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
-import jdk.nashorn.internal.scripts.JO;
 
 /**
  * Manages all human interactions with the graphical user interface as well as
@@ -32,7 +30,7 @@ public class HumanPlayer extends Player {
 
 	public HumanPlayer(ViewManager viewManager, MainMenuController mainMenuController){
 		super(viewManager);
-		if (!isComputerGame){
+		if (!isComputerGame()){
 			networking = new Networking();
 		}
 		setUserBoardActionListeners();
@@ -94,6 +92,9 @@ public class HumanPlayer extends Player {
 				if (playerStarted && isMyTurn){
 					enableBoard(getEnemyGameState(), viewManager.getGameScreen().getEnemyBoard());
 				}
+			}else if (message.startsWith("PLAY AGAIN")) {
+				opponentPlayAgain = true;
+				enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
 			}else if(message.startsWith("RESULTS: ")){
 				String[] parts = message.split(": ");
 				Results results = new Results(parts[1]);
@@ -180,6 +181,9 @@ public class HumanPlayer extends Player {
 					setShipEnd(shipToPlace);
 					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().x + 'A')+ (shipToPlace.getStart().y + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().x + 'A') + (shipToPlace.getEnd().y + 1);
 					logMessage(logMessage);
+					if (shipToPlace.getShipType() == ShipType.SUBMARINE){
+						playSound("/YellowSub.wav");
+					}
 			}else{
 				throw new ShipPlacementException("Illegal Position Selected");
 			}
@@ -210,7 +214,7 @@ public class HumanPlayer extends Player {
 
 			for (Point current : legalEndPoints) {
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
-				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setBackground(LEGAL_ENDPOINT);
+				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setIcon(LEGAL_ENDPOINT_ICON);
 			}
 		} else{
 			startPositionPoint = null;
@@ -230,7 +234,6 @@ public class HumanPlayer extends Player {
 		viewManager.getGameScreen().getShipButtonGroup().getSelection().setEnabled(false);
 		viewManager.getGameScreen().getShipButtonGroup().clearSelection();
 
-		boolean allShipsPlaced = true;
 		Enumeration<AbstractButton> shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
 
 		while (shipButtons.hasMoreElements()) {
@@ -256,7 +259,6 @@ public class HumanPlayer extends Player {
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
 			if(shipButton.isEnabled()) {
-				allShipsPlaced = false;
 				shipButton.setSelected(true);
 			}
 		}
@@ -264,7 +266,7 @@ public class HumanPlayer extends Player {
 		//reset first and second click counter
 		startPositionPoint = null;
 		endPositionPoint = null;
-		if (allShipsPlaced){
+		if (allShipsPlaced()){
 			disableBoard(viewManager.getGameScreen().getUserBoard());
 		}else{
 			enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
@@ -329,7 +331,7 @@ public class HumanPlayer extends Player {
 	 */
     @Override
     public void makeGuess(int row, int column) {
-		if (isComputerGame){
+		if (isComputerGame()){
 			Results results = opponent.processGuess(row, column);
 			processResults(results);
 		}else{
@@ -347,9 +349,5 @@ public class HumanPlayer extends Player {
 
 	public Networking getNetworking(){
 		return networking;
-	}
-
-	public void setComputerGame(boolean isComputerGame){
-		this.isComputerGame = isComputerGame;
 	}
 }
