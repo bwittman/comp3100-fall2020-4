@@ -9,6 +9,7 @@ public class ViewManager {
     private RulesWindow rulesWindow;
     private NetworkingClient networkingClientWindow;
     private NetworkingHost networkingHostWindow;
+    private HowToPlayWindow howToPlayWindow;
 
     public ViewManager(){
         mainMenu = new MainMenu();//must be set up first because of the frame sizing
@@ -16,6 +17,7 @@ public class ViewManager {
         rulesWindow = new RulesWindow();
         networkingClientWindow = new NetworkingClient();
         networkingHostWindow = new NetworkingHost();
+        howToPlayWindow = new HowToPlayWindow();
     }
 
     public GamePlayWindow getGameScreen() {
@@ -28,6 +30,9 @@ public class ViewManager {
 
     public RulesWindow getRulesWindow() {
         return rulesWindow;
+    }
+    public HowToPlayWindow getHowToPlayWindow() {
+        return howToPlayWindow;
     }
 
     public NetworkingClient getNetworkingClientWindow() {

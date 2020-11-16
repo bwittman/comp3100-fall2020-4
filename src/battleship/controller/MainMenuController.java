@@ -27,6 +27,7 @@ public class MainMenuController {
         setMainMenuActionListeners();
         setRulesWindowActionListener();
 		setNetworkingClientActionListener();
+		setHowToPlayWindowActionListener();
 	}
 
 	private void setLookAndFeel(){
@@ -48,6 +49,10 @@ public class MainMenuController {
 
 		menu.getRulesItem().addActionListener(e->{
 			viewManager.getRulesWindow().setVisible(true);
+		});
+
+		menu.getHowToPlayItem().addActionListener(e->{
+			viewManager.getHowToPlayWindow().setVisible(true);
 		});
 
 		//Networking Button Action Listener
@@ -140,6 +145,15 @@ public class MainMenuController {
 			}
 		};//end swing worker
 		hostConnectionWorker.execute();
+	}
+
+	/*
+	 * Close the how to play window when close button is clicked
+	 */
+	private void setHowToPlayWindowActionListener(){
+		viewManager.getHowToPlayWindow().getCloseButton().addActionListener(e->{
+			viewManager.getHowToPlayWindow().setVisible(false);
+		});
 	}
 
 	/*
