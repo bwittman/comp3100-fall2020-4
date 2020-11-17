@@ -1,5 +1,8 @@
 package battleship.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 /**
  * Manages all of the view windows
  */
@@ -10,6 +13,7 @@ public class ViewManager {
     private NetworkingClient networkingClientWindow;
     private NetworkingHost networkingHostWindow;
     private HowToPlayWindow howToPlayWindow;
+
 
     public ViewManager(){
         mainMenu = new MainMenu();//must be set up first because of the frame sizing
