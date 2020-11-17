@@ -20,13 +20,10 @@ import battleship.view.ViewManager;
  */
 public class HumanPlayer extends Player {
 
-	private static final Color LEGAL_ENDPOINT = new Color(49,192,234);
-
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
 	private List<String> placedShips = new ArrayList<>(5);
-	private boolean isComputerGame;
 	private MainMenuController mainMenuController;
 
 	public HumanPlayer(ViewManager viewManager, MainMenuController mainMenuController){
@@ -37,8 +34,6 @@ public class HumanPlayer extends Player {
 		setUserBoardActionListeners();
 		this.mainMenuController = mainMenuController;
 	}
-
-
 
 	/*
 	 * Listens on the socket on a separate thread so that the GUI does not freeze
@@ -110,7 +105,6 @@ public class HumanPlayer extends Player {
 	public void listenForNewMessages() {
 		MessageListener messageListener = new MessageListener();
 		messageListener.start();
-
 	}
 
 	/**
@@ -118,7 +112,6 @@ public class HumanPlayer extends Player {
 	 */
     public void disconnect() {
     	networking.cleanUp();
-
     }
 
 	/**
@@ -205,6 +198,26 @@ public class HumanPlayer extends Player {
 		ship.setStart(startPositionPoint);
 		placedShips.add(ship.getName());
 
+		ImageIcon shipIcon = null;
+		switch (ship.getShipType()){
+			case CARRIER:
+				shipIcon = CARRIER_ICON;
+				break;
+			case BATTLESHIP:
+				shipIcon = BATTLESHIP_ICON;
+				break;
+			case CRUISER:
+				shipIcon = CRUISER_ICON;
+				break;
+			case SUBMARINE:
+				shipIcon = SUBMARINE_ICON;
+				break;
+			case DESTROYER:
+				shipIcon = DESTROYER_ICON;
+				break;
+		}
+		viewManager.getGameScreen().getUserBoard().getButton(startPositionPoint.x, startPositionPoint.y).setDisabledIcon(shipIcon);
+
 		List<Point> legalEndPoints = findLegalEndPoints(ship);
 		if(legalEndPoints.size() != 0) {
 			disableBoard(viewManager.getGameScreen().getUserBoard());
@@ -241,18 +254,19 @@ public class HumanPlayer extends Player {
 
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
-			for (Ship checkShipsPlaced: ships) {
-				if (shipButton.getText().contains(checkShipsPlaced.getName()) && !placedShips.contains(checkShipsPlaced.getName())) {
-					shipButton.setEnabled(true);
-				}
+			String[] parts = shipButton.getText().split(": ");
+			if (!placedShips.contains(parts[0])) {
+				shipButton.setEnabled(true);
 			}
 		}
 
 		shipButtons = viewManager.getGameScreen().getShipButtonGroup().getElements();
-		while (shipButtons.hasMoreElements()) {
+		boolean enabledFound = false;
+		while (shipButtons.hasMoreElements() && !enabledFound) {
 			AbstractButton shipButton = shipButtons.nextElement();
 			if(shipButton.isEnabled()) {
 				shipButton.setSelected(true);
+				enabledFound = true;
 			}
 		}
 

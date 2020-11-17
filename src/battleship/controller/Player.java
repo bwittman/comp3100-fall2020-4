@@ -24,11 +24,11 @@ public abstract class Player {
     public static final int COLUMNS = 10;
     private static final Object[] endOptions = {"Play Again", "Quit"};
 
-    private ImageIcon CARRIER_ICON = new ImageIcon(this.getClass().getResource("/carrier.png"));
-    private ImageIcon SUBMARINE_ICON = new ImageIcon(this.getClass().getResource("/submarine.png"));
-    private ImageIcon DESTROYER_ICON = new ImageIcon(this.getClass().getResource("/destroyer.png"));
-    private ImageIcon BATTLESHIP_ICON = new ImageIcon(this.getClass().getResource("/battleship.png"));
-    private ImageIcon CRUISER_ICON = new ImageIcon(this.getClass().getResource("/cruiser.png"));
+    protected ImageIcon CARRIER_ICON = new ImageIcon(this.getClass().getResource("/carrier.png"));
+    protected ImageIcon SUBMARINE_ICON = new ImageIcon(this.getClass().getResource("/submarine.png"));
+    protected ImageIcon DESTROYER_ICON = new ImageIcon(this.getClass().getResource("/destroyer.png"));
+    protected ImageIcon BATTLESHIP_ICON = new ImageIcon(this.getClass().getResource("/battleship.png"));
+    protected ImageIcon CRUISER_ICON = new ImageIcon(this.getClass().getResource("/cruiser.png"));
     private ImageIcon WATER_ICON = new ImageIcon(this.getClass().getResource("/water.png"));
     protected ImageIcon LEGAL_ENDPOINT_ICON = new ImageIcon(this.getClass().getResource("/legalEndpoint.png"));
     private ImageIcon MISS_ICON = new ImageIcon(this.getClass().getResource("/blueX.png"));
