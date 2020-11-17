@@ -25,7 +25,7 @@ public class HumanPlayer extends Player {
 	private Networking networking = null;
 	private Point startPositionPoint;
 	private Point endPositionPoint;
-	private List<ShipType> placedShips = new ArrayList<>(5);
+	private List<String> placedShips = new ArrayList<>(5);
 	private boolean isComputerGame;
 	private MainMenuController mainMenuController;
 
@@ -203,7 +203,7 @@ public class HumanPlayer extends Player {
      */
     private void setShipStart(Ship ship){
 		ship.setStart(startPositionPoint);
-		placedShips.add(ship.getShipType());
+		placedShips.add(ship.getName());
 
 		List<Point> legalEndPoints = findLegalEndPoints(ship);
 		if(legalEndPoints.size() != 0) {
@@ -241,20 +241,10 @@ public class HumanPlayer extends Player {
 
 		while (shipButtons.hasMoreElements()) {
 			AbstractButton shipButton = shipButtons.nextElement();
-			if(shipButton.getText().contains("Carrier") && !placedShips.contains(Ship.ShipType.CARRIER)){
-				shipButton.setEnabled(true);
-			}
-			if(shipButton.getText().contains("Battleship") && !placedShips.contains(Ship.ShipType.BATTLESHIP)){
-				shipButton.setEnabled(true);
-			}
-			if(shipButton.getText().contains("Cruiser") && !placedShips.contains(Ship.ShipType.CRUISER)){
-				shipButton.setEnabled(true);
-			}
-			if(shipButton.getText().contains("Submarine") && !placedShips.contains(Ship.ShipType.SUBMARINE)){
-				shipButton.setEnabled(true);
-			}
-			if(shipButton.getText().contains("Destroyer") && !placedShips.contains(Ship.ShipType.DESTROYER)){
-				shipButton.setEnabled(true);
+			for (Ship checkShipsPlaced: ships) {
+				if (shipButton.getText().contains(checkShipsPlaced.getName()) && !placedShips.contains(checkShipsPlaced.getName())) {
+					shipButton.setEnabled(true);
+				}
 			}
 		}
 
