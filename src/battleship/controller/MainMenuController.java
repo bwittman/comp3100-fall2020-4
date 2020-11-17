@@ -57,10 +57,14 @@ public class MainMenuController {
 
 		//Networking Button Action Listener
 		menu.getNetworkingItem().addActionListener(e->{
-			int hostingDecision = JOptionPane.showOptionDialog(null,"Will you be hosing or joining the game?", "Host or Join Game",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, hostingOptions, null);
+			if(initialStart) {
+				humanPlayer = new HumanPlayer(viewManager, this);
+				initialStart = false;
+			}
+
+			int hostingDecision = JOptionPane.showOptionDialog(null,"Will you be hosting or joining the game?", "Host or Join Game",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, hostingOptions, null);
 
 			if(hostingDecision == 0) {//User Selected host
-				humanPlayer = new HumanPlayer(viewManager, this);
 				System.out.println("User Selected host");
 				setUpHostWindow();
 				viewManager.getNetworkingHostWindow().setVisible(true);
@@ -68,7 +72,6 @@ public class MainMenuController {
 				menu.getNetworkingItem().setEnabled(false);
 				menu.getComputerItem().setEnabled(false);
 			}else if (hostingDecision == 1) {//User Selected Join
-				humanPlayer = new HumanPlayer(viewManager, this);
 				System.out.println("User Selected client");
 				viewManager.getNetworkingClientWindow().setVisible(true);
 				humanPlayer.setTurn(false);
@@ -89,8 +92,7 @@ public class MainMenuController {
 
 		viewManager.getNetworkingClientWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				viewManager.getMainMenu().getComputerItem().setEnabled(true);
-				viewManager.getMainMenu().getNetworkingItem().setEnabled(true);
+				menu.reset();
 			}
 		});
 
