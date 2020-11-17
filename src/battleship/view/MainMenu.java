@@ -82,6 +82,7 @@ public class MainMenu extends JFrame {
         soundsItem = new JCheckBoxMenuItem("Sound Effects");
         settingsMenu.add(soundsItem);
         soundsItem.setSelected(true);
+        soundsItem.setEnabled(false);
         menuBar.add(settingsMenu);
 
         return menuBar;
