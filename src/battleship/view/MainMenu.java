@@ -10,17 +10,19 @@ public class MainMenu extends JFrame {
 
     //for sizing the frames and panels based on the screen size
     private final int frameSize;
-
+    private JMenuBar menuBar;
     private JMenuItem rulesMenu;
     private JMenuItem howToPlay;
     private JMenuItem networkingItem;
     private JMenuItem computerItem;
     private JCheckBoxMenuItem soundsItem;
-    private JRadioButtonMenuItem hardComputer;
+    private JRadioButtonMenuItem hardComputerItem;
+    protected boolean soundsClicked;
+    protected boolean hardComputer;
 
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frameSize = (int) (screenSize.getHeight()*.9);
+        frameSize = (int) (screenSize.getHeight()*.95);
 
         ImageIcon background = new ImageIcon(new ImageIcon(this.getClass().getResource("/shipMainWindow.png")).getImage()
                 .getScaledInstance(frameSize, frameSize, Image.SCALE_SMOOTH));
@@ -32,7 +34,8 @@ public class MainMenu extends JFrame {
         outerPanel.add(backgroundPanel, BorderLayout.CENTER);
         outerPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        this.setJMenuBar(setupMenuBar());
+        setupMenuBar();
+        this.setJMenuBar(menuBar);
 
         setTitle("Battleship: Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,7 +50,7 @@ public class MainMenu extends JFrame {
     }
 
     private JMenuBar setupMenuBar(){
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
 
         JMenu playMenu = new JMenu("Play Game");
         computerItem = new JMenuItem("Against Computer");
@@ -67,12 +70,12 @@ public class MainMenu extends JFrame {
 
         JMenu computerDifficultyMenu = new JMenu("Computer Difficulty");
         ButtonGroup group = new ButtonGroup();
-        hardComputer = new JRadioButtonMenuItem("Hard");
-        hardComputer.setSelected(true);
-        group.add(hardComputer);
+        hardComputerItem = new JRadioButtonMenuItem("Hard");
+        hardComputerItem.setSelected(true);
+        group.add(hardComputerItem);
         JRadioButtonMenuItem easyComputer = new JRadioButtonMenuItem("Easy");
         group.add(easyComputer);
-        computerDifficultyMenu.add(hardComputer);
+        computerDifficultyMenu.add(hardComputerItem);
         computerDifficultyMenu.add(easyComputer);
         settingsMenu.add(computerDifficultyMenu);
 
@@ -100,12 +103,11 @@ public class MainMenu extends JFrame {
         return howToPlay;
     }
 
-    public boolean soundsSelected(){
-        return soundsItem.isSelected();
-    }
-
     public boolean isHardComputerDifficulty(){
-        return hardComputer.isSelected();
+        return hardComputerItem.isSelected();
+    }
+    public JMenuBar getMainMenuBar(){
+        return menuBar;
     }
 
     public int getFrameSize(){
