@@ -70,6 +70,16 @@ public abstract class Player {
         }
     }
 
+    private void setupMenuBarActionListeners(){
+        viewManager.getGameScreen().getRulesItem().addActionListener(e->{
+            viewManager.getRulesWindow().setVisible(true);
+        });
+
+        viewManager.getGameScreen().getHowToPlayItem().addActionListener(e->{
+            viewManager.getHowToPlayWindow().setVisible(true);
+        });
+    }
+
     /*
      * Scale the icons based on the size of the button
      */
@@ -141,6 +151,7 @@ public abstract class Player {
      * Set all the action listeners for the windows
      */
     private void setUpView(){
+        setupMenuBarActionListeners();
         setEnemyActionListeners();
         setResetActionListener();
         setRandomActionListener();

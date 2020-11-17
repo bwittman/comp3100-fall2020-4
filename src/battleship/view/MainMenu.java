@@ -1,5 +1,7 @@
 package battleship.view;
 
+import javafx.beans.property.BooleanProperty;
+
 import  javax.swing.*;
 import java.awt.*;
 
@@ -79,6 +81,7 @@ public class MainMenu extends JFrame {
         soundsItem = new JCheckBoxMenuItem("Sound Effects");
         settingsMenu.add(soundsItem);
         soundsItem.setSelected(true);
+        soundsItem.setEnabled(false);
         menuBar.add(settingsMenu);
 
         return menuBar;
@@ -98,10 +101,6 @@ public class MainMenu extends JFrame {
 
     public JMenuItem getHowToPlayItem(){
         return howToPlay;
-    }
-
-    public boolean soundsSelected(){
-        return soundsItem.isSelected();
     }
 
     public boolean isHardComputerDifficulty(){

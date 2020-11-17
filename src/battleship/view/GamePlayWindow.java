@@ -31,6 +31,10 @@ public class GamePlayWindow extends JFrame {
     private JButton resetButton;
     private JButton randomButton;
     private JButton playGameButton;
+    private JMenuItem rulesMenu;
+    private JMenuItem howToPlay;
+    private JCheckBoxMenuItem soundsItem;
+
 
     public GamePlayWindow(int frameSize){
         this.frameSize = frameSize;
@@ -48,6 +52,7 @@ public class GamePlayWindow extends JFrame {
         setVisible(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setJMenuBar(setupGamePlayBar());
 
         add(logPanel, BorderLayout.CENTER);
         add(boardPanel, BorderLayout.WEST);
@@ -147,11 +152,49 @@ public class GamePlayWindow extends JFrame {
         optionButtons.add(randomButton);
         optionButtons.add(playGameButton);
     }
+    private JMenuBar setupGamePlayBar(){
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu playMenu = new JMenu("Play Game");
+        playMenu.setEnabled(false);
+        menuBar.add(playMenu);
+
+        JMenu helpMenu = new JMenu("Help");
+        rulesMenu = new JMenuItem("Rules");
+        howToPlay = new JMenuItem("How to Play");
+        helpMenu.add(rulesMenu);
+        helpMenu.add(howToPlay);
+        menuBar.add(helpMenu);
+
+        JMenu settingsMenu = new JMenu("Settings");
+
+        JMenu computerDifficultyMenu = new JMenu("Computer Difficulty");
+        computerDifficultyMenu.setEnabled(false);
+        settingsMenu.add(computerDifficultyMenu);
+
+        soundsItem = new JCheckBoxMenuItem("Sound Effects");
+        settingsMenu.add(soundsItem);
+        soundsItem.setSelected(true);
+        menuBar.add(settingsMenu);
+
+        return menuBar;
+    }
+
+    public JMenuItem getRulesItem() {
+        return rulesMenu;
+    }
+
+    public JMenuItem getHowToPlayItem(){
+        return howToPlay;
+    }
+
+    public boolean soundsSelected(){
+        return soundsItem.isSelected();
+    }
 
     public Board getUserBoard() {
         return userBoard;
     }
-
 
     public Board getEnemyBoard() {
         return enemyBoard;

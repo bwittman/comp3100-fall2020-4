@@ -182,7 +182,7 @@ public class HumanPlayer extends Player {
 					setShipEnd(shipToPlace);
 					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().x + 'A')+ (shipToPlace.getStart().y + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().x + 'A') + (shipToPlace.getEnd().y + 1);
 					logMessage(logMessage);
-					if (viewManager.getMainMenu().soundsSelected()) {
+					if (viewManager.getGameScreen().soundsSelected()) {
 						if (shipToPlace.getShipType() == ShipType.SUBMARINE) {
 							playSound("/YellowSub.wav");
 						}
