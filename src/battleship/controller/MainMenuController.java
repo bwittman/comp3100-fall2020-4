@@ -25,9 +25,7 @@ public class MainMenuController {
     	setLookAndFeel();
         viewManager = new ViewManager();
         setMainMenuActionListeners();
-        setRulesWindowActionListener();
 		setNetworkingClientActionListener();
-		setHowToPlayWindowActionListener();
 	}
 
 	private void setLookAndFeel(){
@@ -149,23 +147,6 @@ public class MainMenuController {
 		hostConnectionWorker.execute();
 	}
 
-	/*
-	 * Close the how to play window when close button is clicked
-	 */
-	private void setHowToPlayWindowActionListener(){
-		viewManager.getHowToPlayWindow().getCloseButton().addActionListener(e->{
-			viewManager.getHowToPlayWindow().setVisible(false);
-		});
-	}
-
-	/*
-	 * Close the rules window when close button is clicked
-	 */
-	private void setRulesWindowActionListener(){
-		viewManager.getRulesWindow().getCloseButton().addActionListener(e->{
-			viewManager.getRulesWindow().setVisible(false);
-		});
-	}
 
 	/*
 	 * Initialize the networking client window with input fields

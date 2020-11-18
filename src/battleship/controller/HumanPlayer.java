@@ -51,7 +51,7 @@ public class HumanPlayer extends Player {
 				}
 			}catch(NoSuchElementException | IllegalStateException e){}
 			System.err.println("MessageListener: Connection Ended!");
-			JOptionPane.showMessageDialog(null, "Your connection has ended.");
+			JOptionPane.showMessageDialog(null, "Other user has disconnected.");
 			resetGame();
 			viewManager.getGameScreen().setVisible(false);
 			viewManager.getMainMenu().setVisible(true);

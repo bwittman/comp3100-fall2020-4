@@ -10,15 +10,14 @@ import java.io.File;
 import java.io.FileReader;
 
 public class HowToPlayWindow extends JFrame{
-    JButton closeButton;
+
 
     public HowToPlayWindow(){
 
         JTextPane howToPlayText = new JTextPane();
+        JScrollPane scrollPane = new JScrollPane(howToPlayText);
         howToPlayText.setEditable(false);
-        closeButton = new JButton("Close");
-
-        add(closeButton, BorderLayout.SOUTH);
+        getContentPane().add( scrollPane );
 
         setTitle("Battleship: How to Play");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -29,22 +28,20 @@ public class HowToPlayWindow extends JFrame{
 
         try {
             //read in the how to play from the text file
-            FileReader reader = new FileReader(new File(this.getClass().getResource("/howToPlay.txt").toURI()));
+            FileReader reader = new FileReader(new File(this.getClass().getResource("/How to play.txt").toURI()));
             BufferedReader buffer = new BufferedReader(reader);
             howToPlayText.read(buffer, null);
             StyledDocument style  = howToPlayText.getStyledDocument();
             SimpleAttributeSet center = new SimpleAttributeSet();
-            StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+            StyleConstants.setAlignment(center, StyleConstants.ALIGN_LEFT);
             style.setParagraphAttributes(0, style.getLength(), center, false);
-            add(howToPlayText, BorderLayout.CENTER);
+            add(scrollPane, BorderLayout.CENTER);
             howToPlayText.setBorder(BorderFactory.createEmptyBorder(20, 20,20,20));
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    public JButton getCloseButton(){
-        return closeButton;
-    }
+
 }
 

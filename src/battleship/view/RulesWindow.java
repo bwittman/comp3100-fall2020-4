@@ -20,9 +20,6 @@ public class RulesWindow extends JFrame {
 
         JTextPane rulesText = new JTextPane();
         rulesText.setEditable(false);
-        closeButton = new JButton("Close");
-
-        add(closeButton, BorderLayout.SOUTH);
 
         setTitle("Battleship: Rules");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
