@@ -434,7 +434,7 @@ public abstract class Player {
         logMessage("Ships were placed randomly.");
     }
 
-    /*
+    /**
      * Check if two ships intersect each other.
      * There are four cases that mirror each other,
      * the difference is if we loop from start to end or end to start for each ship
@@ -536,7 +536,7 @@ public abstract class Player {
         return result;
     }
 
-    /*
+    /**
      * Check if the point is in the bounds of the board
      */
     private static boolean checkPlaceInBounds(Point place){
@@ -800,6 +800,8 @@ public abstract class Player {
             if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
+            }else{
+                ((HumanPlayer) this).getNetworking().sendMessage("QUITS");
             }
         }
     }

@@ -18,7 +18,7 @@ import battleship.view.ViewManager;
  * Manages all human interactions with the graphical user interface as well as
  * all game play actions and networking if a two player game
  */
-public class HumanPlayer extends Player {
+public class  HumanPlayer extends Player {
 
 	private Networking networking = null;
 	private Point startPositionPoint;
@@ -52,13 +52,12 @@ public class HumanPlayer extends Player {
 			}catch(NoSuchElementException | IllegalStateException e){}
 			System.err.println("MessageListener: Connection Ended!");
 			JOptionPane.showMessageDialog(null, "Other user has disconnected.");
-			resetGame();
-			viewManager.getGameScreen().setVisible(false);
-			viewManager.getMainMenu().setVisible(true);
-			mainMenuController.resetMainMenu();
+			returnToMainMenu();
 		}
 	}
-	
+
+
+
 	/*
 	 * Notifies responsible classes with the correct messages
 	 * EXAMPLE: If the MessageListener receives a win game message then it will notify gameState
@@ -91,10 +90,13 @@ public class HumanPlayer extends Player {
 			}else if (message.startsWith("PLAY AGAIN")) {
 				opponentPlayAgain = true;
 				enableBoard(getGameState(), viewManager.getGameScreen().getUserBoard());
+				logMessage("Other player would like to play again.");
 			}else if(message.startsWith("RESULTS: ")){
 				String[] parts = message.split(": ");
 				Results results = new Results(parts[1]);
 				SwingUtilities.invokeLater(()->processResults(results));
+			}else if(message.startsWith("QUITS")){
+				returnToMainMenu();
 			}
 		}
 	}
@@ -356,5 +358,15 @@ public class HumanPlayer extends Player {
 
 	public Networking getNetworking(){
 		return networking;
+	}
+
+	/**
+	 * Returns to the main menu anc disconnects
+	 */
+	private void returnToMainMenu() {
+		resetGame();
+		viewManager.getGameScreen().setVisible(false);
+		viewManager.getMainMenu().setVisible(true);
+		mainMenuController.resetMainMenu();
 	}
 }
