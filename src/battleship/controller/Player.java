@@ -687,6 +687,12 @@ public abstract class Player {
                     }
                 };
                 swingWorker.execute();
+            }else if(viewManager.getGameScreen().soundsSelected()){
+                if (sunkShip != null) {
+                    playSound("/sunkShip.wav");
+                } else {
+                    playSound("/guess.wav");
+                }
             }
         }
 
@@ -696,6 +702,11 @@ public abstract class Player {
     private void opponentWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("Enemy has won!");
+
+        if (viewManager.getGameScreen().soundsSelected()){
+            playSound("/lose.wav");
+        }
+
         int endDecision = JOptionPane.showOptionDialog(null,"You lost! Play again?", "Opponent won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
@@ -753,6 +764,12 @@ public abstract class Player {
             updateAllBoards();
             if (results.hasPlayerWon()){
                 playerWon();
+            }else if(viewManager.getGameScreen().soundsSelected()){
+                if (results.getSunkShip() != null) {
+                    playSound("/sunkShip.wav");
+                } else {
+                    playSound("/guess.wav");
+                }
             }
         }
 
@@ -766,6 +783,11 @@ public abstract class Player {
     private void playerWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("You have won!");
+
+        if (viewManager.getGameScreen().soundsSelected()){
+            playSound("/victoryNoise.wav");
+        }
+
         int endDecision = JOptionPane.showOptionDialog(null,"You win! Play again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();

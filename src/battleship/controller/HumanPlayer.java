@@ -51,7 +51,7 @@ public class  HumanPlayer extends Player {
 				}
 			}catch(NoSuchElementException | IllegalStateException e){}
 			System.err.println("MessageListener: Connection Ended!");
-			JOptionPane.showMessageDialog(null, "Other user has disconnected.");
+			JOptionPane.showMessageDialog(null, "User has disconnected.");
 			returnToMainMenu();
 		}
 	}
