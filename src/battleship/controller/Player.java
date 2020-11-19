@@ -535,10 +535,10 @@ public abstract class Player {
         return result;
     }
 
-    /**
+    /*
      * Check if the point is in the bounds of the board
      */
-    private static boolean checkPlaceInBounds(Point place){
+    private boolean checkPlaceInBounds(Point place){
         return (place.x >= 0 && place.x < COLUMNS && place.y >= 0 && place.y < ROWS);
     }
 
@@ -577,13 +577,10 @@ public abstract class Player {
         return false;
     }
 
-    /**
+    /*
      * Checks if this point intersects this ship
-     * @param point the point on the board you want to check
-     * @param ship1 The ship that your point may intersect
-     * @return if the ship does intersect with the point
      */
-    boolean pointIntersectsShip(Point point, Ship ship1){
+    private boolean pointIntersectsShip(Point point, Ship ship1){
         //first ship is vertical
         if (ship1.getStart().y == ship1.getEnd().y) {
             if (ship1.getStart().x > ship1.getEnd().x) {
@@ -769,7 +766,7 @@ public abstract class Player {
     private void playerWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("You have won!");
-        int endDecision = JOptionPane.showOptionDialog(null,"You win! Play Again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
+        int endDecision = JOptionPane.showOptionDialog(null,"You win! Play again?", "Player Won",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, endOptions, endOptions[0]);
 
         resetGame();
         if (isComputerGame()) {

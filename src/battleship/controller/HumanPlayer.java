@@ -361,7 +361,7 @@ public class  HumanPlayer extends Player {
 		return networking;
 	}
 
-	/**
+	/*
 	 * Returns to the main menu anc disconnects
 	 */
 	private void returnToMainMenu() {
