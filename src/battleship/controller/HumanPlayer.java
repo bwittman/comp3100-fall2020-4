@@ -33,6 +33,8 @@ public class  HumanPlayer extends Player {
 		}
 		setUserBoardActionListeners();
 		this.mainMenuController = mainMenuController;
+		//Adds instructions to log for ship placement screen
+		logMessage("To place your ships:\n1. Select which ship you would like to place.\n2. Select the starting point of where you would like to place that ship.\n3. Select one of the highlighted spaces to place the ship in that direction.");
 	}
 
 	/*
