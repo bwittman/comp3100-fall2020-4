@@ -1,6 +1,7 @@
 package battleship.view;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 
 import battleship.controller.Player;
@@ -48,6 +49,7 @@ public class Board extends JPanel {
             this.add(label);
             for (int j = 0; j < COLUMNS; j++) {
                 CoordinateButton button = new CoordinateButton(new Point(j,i));
+                button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
                 button.setPreferredSize(new Dimension(buttonSize, buttonSize));
                 buttonArray[i][j] = button;
                 this.add(button);
