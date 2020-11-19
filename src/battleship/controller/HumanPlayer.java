@@ -157,7 +157,7 @@ public class  HumanPlayer extends Player {
 			AbstractButton shipButton = shipButtons.nextElement();
 			shipButton.setEnabled(true);
 		}
-		viewManager.getGameScreen().getLog().setText("");
+		viewManager.getGameScreen().getLog().setText("Place your ships on the lower grid \n");
 		viewManager.getGameScreen().getShipButtonGroup().getElements().nextElement().setSelected(true);
 		enableBoard(this.getGameState(), viewManager.getGameScreen().getUserBoard());
 	}

@@ -81,6 +81,7 @@ public class GamePlayWindow extends JFrame {
      */
     private void setupLogPanel(){
         log = new JTextArea(20,20);
+        log.setText("Place your ships on the lower grid \n");
         log.setEditable(false);
 
         scrollPane = new JScrollPane(log);

@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 
 public class HowToPlayWindow extends JFrame{
 
@@ -28,7 +29,7 @@ public class HowToPlayWindow extends JFrame{
 
         try {
             //read in the how to play from the text file
-            FileReader reader = new FileReader(new File(this.getClass().getResource("/How to play.txt").toURI()));
+            InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/howToPlay.txt"));
             BufferedReader buffer = new BufferedReader(reader);
             howToPlayText.read(buffer, null);
             StyledDocument style  = howToPlayText.getStyledDocument();

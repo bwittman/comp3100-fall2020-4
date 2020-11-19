@@ -1,0 +1,27 @@
+TO START A GAME:
+
+Click "Through networking":
+This option allows for two players to connect over the Internet and play against each other. Both users will select "Through Networking" option to start the game. One user must be the host while the other will join. The user opting to be the host will select "Host" at which point the game will show the host's Outside IP address and Local IP address. The Local IP address is for if both users are on the same WIFI connection, while the Outside IP address if for if the users are not on the same WIFI connection. The host must communicate the appropriate IP address to the other player. The user that selected to join will receive a prompt to enter the host's IP address and connect. Once you have received the IP address from the host, enter it and select "Connect". Once connection is made the ship placement screen will appear for each player. If you are having issues with connection via internet see the manual for further instructions.
+
+Click "Against computer":
+Selecting "Against Computer" will start a game against a computer opponent and take the user to the ship placement screen. See ship placement for instructions.
+
+TO PLACE YOUR SHIPS:
+
+On the ship placement screen, the user will see two grids, a message log box in the top right of the screen and a key of the ships in the lower right corner of the screen. A user places ships by clicking on a ship and then clicking on any tile in the lower grid. Once a tile has been selected one to four light blue colored tiles will appear indicating a legal place to place your ship. The user may select any of these tiles and their ship will be placed accordingly and the log area will update to show the placement of the ship.
+
+ Reset: Clicking the "Reset" button will clear all the ship that are currently placed and start the ship placement process again.
+
+ Random: Clicking the "Random" button provides a random computer-generated placement of ships.
+
+ Play Game:
+ Once all ships are placed click the "Play Game" button. The user will be prompted to confirm they are happy with current ship placement. Once the user clicks "Yes" a log message appears, symbolizing the start of the game.
+
+TO START GUESSING:
+
+The user must now make their first guess by selecting a tile in the top grid which represents the opponent's battlefield. Users are not permitted to guess a tile if it is not their turn or if their opponent has not finished preparing their battlefield. An "X" in a blue tile indicates a miss, while an "X" in a red tile indicates a hit. This is also indicated in the message log box above the ship key. The opponent's guess will update on the lower grid.
+
+WIN/LOSE:
+
+In a computer game, a message will appear telling the user whether they won or lost and ask them if they want to play again or quit. A networking game is similar, displaying a win message to the winner of the game and lose message to the loser, the messages ask both users if they want to play again or quit. Answering "Play Again", the user will be taken back to the ship placement screen and "Quit" will bring the user back to the main menu. However, in a networking game, if one user clicks "Play Again" and the other clicks "Quit", the user that chose to play again will be displayed a message that says "Other user has disconnected" and return them to the menu screen.
+

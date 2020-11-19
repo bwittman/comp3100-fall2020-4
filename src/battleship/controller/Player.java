@@ -181,7 +181,6 @@ public abstract class Player {
             enableBoard(gameState, viewManager.getGameScreen().getUserBoard());
             updateAllBoards();
             viewManager.getGameScreen().getPlayGameButton().setEnabled(false);
-            logMessage("Game was reset.");
         });
     }
 

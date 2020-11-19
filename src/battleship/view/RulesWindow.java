@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 
 /**
  * Frame for displaying the background and rules of the game
@@ -30,7 +31,7 @@ public class RulesWindow extends JFrame {
 
         try {
             //read in the rules from the text file
-            FileReader reader = new FileReader(new File(this.getClass().getResource("/rules.txt").toURI()));
+            InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/rules.txt"));
             BufferedReader buffer = new BufferedReader(reader);
             rulesText.read(buffer, null);
             StyledDocument style  = rulesText.getStyledDocument();
