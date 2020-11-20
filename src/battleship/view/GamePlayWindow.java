@@ -38,7 +38,7 @@ public class GamePlayWindow extends JFrame {
 
     public GamePlayWindow(int frameSize){
         this.frameSize = frameSize;
-        boardPanelHeight = (int) (frameSize*.9);
+        boardPanelHeight = (int) (frameSize*.85);
         buttonSize = (boardPanelHeight/2)/11;
 
         setupBoardPanel();
@@ -91,7 +91,7 @@ public class GamePlayWindow extends JFrame {
         logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.NORTH);
 
-        logPanel.setBorder(BorderFactory.createEmptyBorder(5, (int) (frameSize *.1),5,0));
+        logPanel.setBorder(BorderFactory.createEmptyBorder(5, (int) (frameSize *.1),5,5));
 
         setupShipPanel();
     }
@@ -142,7 +142,8 @@ public class GamePlayWindow extends JFrame {
      * Set up the options that are available only during the ship placement phase
      */
     private void setupShipPlacementOptionsPanel(){
-        optionButtons = new JPanel(new GridLayout(1, 3));
+        optionButtons = new JPanel(new GridLayout(1, 3, 10, 0));
+        optionButtons.setBorder(BorderFactory.createEmptyBorder(0, 5,5,5));
 
         resetButton = new JButton("Reset");
         randomButton = new JButton("Random");
@@ -153,6 +154,7 @@ public class GamePlayWindow extends JFrame {
         optionButtons.add(randomButton);
         optionButtons.add(playGameButton);
     }
+
     private JMenuBar setupGamePlayBar(){
         JMenuBar menuBar = new JMenuBar();
 
