@@ -178,6 +178,7 @@ public class MainMenuController {
 			hostConnectionWorker.cancel(true);
 			if(humanPlayer != null) {
 				humanPlayer.disconnect();
+				System.out.println("Human Player Disconnected called");
 			}
 			System.out.println("hostConnectionWorker canceled");
 		}

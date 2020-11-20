@@ -52,6 +52,7 @@ public class  HumanPlayer extends Player {
 			}catch(NoSuchElementException | IllegalStateException e){}
 			System.err.println("MessageListener: Connection Ended!");
 			JOptionPane.showMessageDialog(null, "User has disconnected.");
+			networking.cleanUp();
 			returnToMainMenu();
 		}
 	}
@@ -96,6 +97,7 @@ public class  HumanPlayer extends Player {
 				Results results = new Results(parts[1]);
 				SwingUtilities.invokeLater(()->processResults(results));
 			}else if(message.startsWith("QUITS")){
+				JOptionPane.showMessageDialog(null, "Other user has quit the game.");
 				returnToMainMenu();
 			}
 		}
