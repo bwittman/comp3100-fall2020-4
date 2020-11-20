@@ -87,6 +87,7 @@ public class GamePlayWindow extends JFrame {
         scrollPane = new JScrollPane(log);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setSize(frameSize/2, frameSize/2);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Messages"));
 
         logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.NORTH);
@@ -106,12 +107,6 @@ public class GamePlayWindow extends JFrame {
         JRadioButton submarineButton = new JRadioButton("Submarine: 3 Tiles");
         JRadioButton destroyerButton = new JRadioButton("Destroyer: 2 Tiles");
 
-        carrierButton.setForeground(CARRIER_COLOR);
-        battleshipButton.setForeground(BATTLESHIP_COLOR);
-        cruiserButton.setForeground(CRUISER_COLOR);
-        submarineButton.setForeground(SUBMARINE_COLOR);
-        destroyerButton.setForeground(DESTROYER_COLOR);
-
         carrierButton.setActionCommand("Carrier");
         battleshipButton.setActionCommand("Battleship");
         cruiserButton.setActionCommand("Cruiser");
@@ -127,15 +122,52 @@ public class GamePlayWindow extends JFrame {
 
         shipButtonGroup.setSelected(carrierButton.getModel(), true);
 
-        shipPanel = new JPanel(new GridLayout(5, 1));
+        JPanel carrierPanel = new JPanel(new BorderLayout());
+        JPanel battleshipPanel = new JPanel(new BorderLayout());
+        JPanel cruiserPanel = new JPanel(new BorderLayout());
+        JPanel submarinePanel = new JPanel(new BorderLayout());
+        JPanel destroyerPanel = new JPanel(new BorderLayout());
 
-        shipPanel.add(carrierButton);
-        shipPanel.add(battleshipButton);
-        shipPanel.add(cruiserButton);
-        shipPanel.add(submarineButton);
-        shipPanel.add(destroyerButton);
 
-        logPanel.add(shipPanel, BorderLayout.CENTER);
+        JLabel carrierColor = new JLabel("    ");
+        JLabel battleShipColor = new JLabel("    ");
+        JLabel cruiserColor = new JLabel("    ");
+        JLabel submarineColor = new JLabel("    ");
+        JLabel destroyerColor = new JLabel("    ");
+
+        carrierColor.setBackground(CARRIER_COLOR);
+        battleShipColor.setBackground(BATTLESHIP_COLOR);
+        cruiserColor.setBackground(CRUISER_COLOR);
+        submarineColor.setBackground(SUBMARINE_COLOR);
+        destroyerColor.setBackground(DESTROYER_COLOR);
+
+        carrierColor.setOpaque(true);
+        battleShipColor.setOpaque(true);
+        cruiserColor.setOpaque(true);
+        submarineColor.setOpaque(true);
+        destroyerColor.setOpaque(true);
+
+        carrierPanel.add(carrierColor, BorderLayout.WEST);
+        battleshipPanel.add(battleShipColor, BorderLayout.WEST);
+        cruiserPanel.add(cruiserColor, BorderLayout.WEST);
+        submarinePanel.add(submarineColor, BorderLayout.WEST);
+        destroyerPanel.add(destroyerColor, BorderLayout.WEST);
+
+        carrierPanel.add(carrierButton, BorderLayout.CENTER);
+        battleshipPanel.add(battleshipButton, BorderLayout.CENTER);
+        cruiserPanel.add(cruiserButton, BorderLayout.CENTER);
+        submarinePanel.add(submarineButton, BorderLayout.CENTER);
+        destroyerPanel.add(destroyerButton, BorderLayout.CENTER);
+
+        shipPanel = new JPanel(new GridLayout(5, 1, 0, 50));
+
+        shipPanel.add(carrierPanel);
+        shipPanel.add(battleshipPanel);
+        shipPanel.add(cruiserPanel);
+        shipPanel.add(submarinePanel);
+        shipPanel.add(destroyerPanel);
+
+        logPanel.add(shipPanel, BorderLayout.SOUTH);
     }
 
     /*
