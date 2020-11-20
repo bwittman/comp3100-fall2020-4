@@ -128,7 +128,6 @@ public class GamePlayWindow extends JFrame {
         JPanel submarinePanel = new JPanel(new BorderLayout());
         JPanel destroyerPanel = new JPanel(new BorderLayout());
 
-
         JLabel carrierColor = new JLabel("    ");
         JLabel battleShipColor = new JLabel("    ");
         JLabel cruiserColor = new JLabel("    ");
@@ -159,7 +158,7 @@ public class GamePlayWindow extends JFrame {
         submarinePanel.add(submarineButton, BorderLayout.CENTER);
         destroyerPanel.add(destroyerButton, BorderLayout.CENTER);
 
-        shipPanel = new JPanel(new GridLayout(5, 1, 0, (int) (frameSize *.07)));
+        shipPanel = new JPanel(new GridLayout(5, 1, 0, (int) (frameSize *.05)));
 
         shipPanel.add(carrierPanel);
         shipPanel.add(battleshipPanel);
@@ -167,7 +166,9 @@ public class GamePlayWindow extends JFrame {
         shipPanel.add(submarinePanel);
         shipPanel.add(destroyerPanel);
 
-        logPanel.add(shipPanel, BorderLayout.SOUTH);
+        shipPanel.setBorder(BorderFactory.createEmptyBorder(5, 0,0,0));
+
+        logPanel.add(shipPanel, BorderLayout.CENTER);
     }
 
     /*

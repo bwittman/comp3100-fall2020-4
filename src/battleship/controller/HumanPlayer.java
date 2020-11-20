@@ -180,11 +180,6 @@ public class  HumanPlayer extends Player {
 					setShipEnd(shipToPlace);
 					String logMessage = shipToPlace.getName() + " was placed:\nStart: " + (char)(shipToPlace.getStart().x + 'A')+ (shipToPlace.getStart().y + 1)   +  "\nEnd:  " + (char)(shipToPlace.getEnd().x + 'A') + (shipToPlace.getEnd().y + 1);
 					logMessage(logMessage);
-					if (viewManager.getGameScreen().soundsSelected()) {
-						if (shipToPlace.getShipType() == ShipType.SUBMARINE) {
-							playSound("/YellowSub.wav");
-						}
-					}
 			}else{
 				throw new ShipPlacementException("Illegal Position Selected");
 			}
@@ -236,6 +231,7 @@ public class  HumanPlayer extends Player {
 			for (Point current : legalEndPoints) {
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setEnabled(true);
 				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setIcon(LEGAL_ENDPOINT_ICON);
+				viewManager.getGameScreen().getUserBoard().getButton(current.x, current.y).setRolloverIcon(shipIcon);
 			}
 		} else{
 			startPositionPoint = null;

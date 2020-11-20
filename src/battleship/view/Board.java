@@ -49,7 +49,6 @@ public class Board extends JPanel {
             for (int j = 0; j < COLUMNS; j++) {
                 CoordinateButton button = new CoordinateButton(new Point(j,i));
                 button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-                button.setRolloverIcon(new ImageIcon(this.getClass().getResource("/hoverWater.png")));
                 button.setPreferredSize(new Dimension(buttonSize, buttonSize));
                 buttonArray[i][j] = button;
                 this.add(button);

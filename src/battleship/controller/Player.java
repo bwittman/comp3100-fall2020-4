@@ -24,6 +24,7 @@ public abstract class Player {
     public static final int COLUMNS = 10;
     private static final Object[] endOptions = {"Play Again", "Quit"};
 
+    protected ImageIcon HOVER_ICON = new ImageIcon(this.getClass().getResource("/hoverWater.png"));
     protected ImageIcon CARRIER_ICON = new ImageIcon(this.getClass().getResource("/carrier.png"));
     protected ImageIcon SUBMARINE_ICON = new ImageIcon(this.getClass().getResource("/submarine.png"));
     protected ImageIcon DESTROYER_ICON = new ImageIcon(this.getClass().getResource("/destroyer.png"));
@@ -258,6 +259,7 @@ public abstract class Player {
                     case WATER:
                         currentButton.setIcon(WATER_ICON);
                         currentButton.setDisabledIcon(WATER_ICON);
+                        currentButton.setRolloverIcon(HOVER_ICON);
                         break;
                     case HIT:
                         currentButton.setIcon(HIT_ICON);
