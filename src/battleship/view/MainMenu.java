@@ -1,7 +1,9 @@
 package battleship.view;
 
+import javax.sound.sampled.*;
 import  javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Displays the Main Menu and handles interactions with the user until they leave the main menu
@@ -17,14 +19,11 @@ public class MainMenu extends JFrame {
     private JMenuItem computerItem;
     private JCheckBoxMenuItem soundsItem;
     private JRadioButtonMenuItem hardComputerItem;
-    protected boolean soundsClicked;
-    protected boolean hardComputer;
+    private Clip clip;
 
     public MainMenu() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frameSize = (int) (screenSize.getHeight()*.95);
-
-
 
         ImageIcon background = new ImageIcon(new ImageIcon(this.getClass().getResource("/shipMainWindow.png")).getImage()
                 .getScaledInstance(frameSize, frameSize, Image.SCALE_SMOOTH));
@@ -87,7 +86,25 @@ public class MainMenu extends JFrame {
         soundsItem.setEnabled(false);
         menuBar.add(settingsMenu);
 
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("/sonarSound.wav"));
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e){
+            e.printStackTrace();
+        }
+
         return menuBar;
+    }
+
+    public void startIntroSound(){
+        clip.start();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    public void stopIntroSound(){
+        clip.stop();
     }
     
     public JMenuItem getNetworkingItem() {
@@ -108,9 +125,6 @@ public class MainMenu extends JFrame {
 
     public boolean isHardComputerDifficulty(){
         return hardComputerItem.isSelected();
-    }
-    public JMenuBar getMainMenuBar(){
-        return menuBar;
     }
 
     public int getFrameSize(){

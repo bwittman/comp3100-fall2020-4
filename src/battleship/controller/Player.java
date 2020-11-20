@@ -737,7 +737,10 @@ public abstract class Player {
             if (isComputerGame()) {
                 opponent.setOpponent(null);
                 opponent = null;
+            }else{
+                ((HumanPlayer) this).getNetworking().sendMessage("QUITS");
             }
+            viewManager.getMainMenu().startIntroSound();
         }
     }
 
@@ -821,6 +824,7 @@ public abstract class Player {
             }else{
                 ((HumanPlayer) this).getNetworking().sendMessage("QUITS");
             }
+            viewManager.getMainMenu().startIntroSound();
         }
     }
 

@@ -362,12 +362,13 @@ public class  HumanPlayer extends Player {
 	}
 
 	/*
-	 * Returns to the main menu anc disconnects
+	 * Returns to the main menu and disconnects
 	 */
 	private void returnToMainMenu() {
 		resetGame();
 		viewManager.getGameScreen().setVisible(false);
 		viewManager.getMainMenu().setVisible(true);
 		mainMenuController.resetMainMenu();
+		viewManager.getMainMenu().startIntroSound();
 	}
 }

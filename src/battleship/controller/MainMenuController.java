@@ -26,6 +26,7 @@ public class MainMenuController {
         viewManager = new ViewManager();
         setMainMenuActionListeners();
 		setNetworkingClientActionListener();
+		viewManager.getMainMenu().startIntroSound();
 	}
 
 	private void setLookAndFeel(){
@@ -55,6 +56,7 @@ public class MainMenuController {
 
 		//Networking Button Action Listener
 		menu.getNetworkingItem().addActionListener(e->{
+			viewManager.getMainMenu().stopIntroSound();
 			if(initialStart) {
 				humanPlayer = new HumanPlayer(viewManager, this);
 				initialStart = false;
@@ -78,6 +80,7 @@ public class MainMenuController {
 			}else{
 				menu.getNetworkingItem().setEnabled(true);
 				menu.getComputerItem().setEnabled(true);
+				viewManager.getMainMenu().startIntroSound();
 			}
 		});
 		
@@ -85,17 +88,20 @@ public class MainMenuController {
 		viewManager.getNetworkingHostWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
 				resetMainMenu();
+				viewManager.getMainMenu().startIntroSound();
 			}
 		});
 
 		viewManager.getNetworkingClientWindow().addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				menu.reset();
+				resetMainMenu();
+				viewManager.getMainMenu().startIntroSound();
 			}
 		});
 
 		//one player button action listener
 		menu.getComputerItem().addActionListener(e->{
+			viewManager.getMainMenu().stopIntroSound();
 			computerPlayer = new ComputerPlayer(null);
 			computerPlayer.setTurn(false);
 
