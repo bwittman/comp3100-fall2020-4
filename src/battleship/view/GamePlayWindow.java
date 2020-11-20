@@ -159,7 +159,7 @@ public class GamePlayWindow extends JFrame {
         submarinePanel.add(submarineButton, BorderLayout.CENTER);
         destroyerPanel.add(destroyerButton, BorderLayout.CENTER);
 
-        shipPanel = new JPanel(new GridLayout(5, 1, 0, 50));
+        shipPanel = new JPanel(new GridLayout(5, 1, 0, (int) (frameSize *.07)));
 
         shipPanel.add(carrierPanel);
         shipPanel.add(battleshipPanel);
