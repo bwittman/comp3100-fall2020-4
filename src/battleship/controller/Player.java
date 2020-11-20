@@ -49,10 +49,11 @@ public abstract class Player {
         WATER
     }
 
-    protected List<Ship> ships = new ArrayList<>();
     private List<ShipType> previousShipsSunk = new ArrayList<>();
     private GameState gameState;
     private GameState enemyGameState;
+    private Clip clip;
+    protected List<Ship> ships = new ArrayList<>();
     protected boolean isMyTurn;
     protected ViewManager viewManager;
     protected Player opponent = null;
@@ -107,8 +108,12 @@ public abstract class Player {
 
     protected void playSound(String fileName)  {
         try {
+            if (clip != null) {
+                clip.stop();
+            }
+
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource(fileName));
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e){
@@ -689,11 +694,13 @@ public abstract class Player {
                     }
                 };
                 swingWorker.execute();
-            }else if(viewManager.getGameScreen().soundsSelected()){
+            }else if(!isComputerGame() && viewManager.getGameScreen().soundsSelected()){
                 if (sunkShip != null) {
-                    playSound("/sunkShip.wav");
-                } else {
-                    playSound("/guess.wav");
+                    playSound("/shipSunkSound.wav");
+                } else if(hit){
+                    playSound("/hitSound.wav");
+                }else{
+                    playSound("/missSound.wav");
                 }
             }
         }
@@ -771,9 +778,11 @@ public abstract class Player {
                 playerWon();
             }else if(viewManager.getGameScreen().soundsSelected()){
                 if (results.getSunkShip() != null) {
-                    playSound("/sunkShip.wav");
-                } else {
-                    playSound("/guess.wav");
+                    playSound("/shipSunkSound.wav");
+                } else if(results.isTileHit()){
+                    playSound("/hitSound.wav");
+                }else{
+                    playSound("/missSound.wav");
                 }
             }
         }
