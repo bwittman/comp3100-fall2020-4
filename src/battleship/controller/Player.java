@@ -111,7 +111,6 @@ public abstract class Player {
             if (clip != null) {
                 clip.stop();
             }
-
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource(fileName));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -440,7 +439,7 @@ public abstract class Player {
         logMessage("Ships were placed randomly.");
     }
 
-    /**
+    /*
      * Check if two ships intersect each other.
      * There are four cases that mirror each other,
      * the difference is if we loop from start to end or end to start for each ship
@@ -708,6 +707,9 @@ public abstract class Player {
         return new Results(new Point(column, row), hit, opponentWon, sunkShip);
     }
 
+    /*
+     * Messages, sounds, and post game options if opponent won
+     */
     private void opponentWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("Enemy has won!");
@@ -794,6 +796,9 @@ public abstract class Player {
         }
     }
 
+    /*
+     * Messages, sounds, and post game options if player won
+     */
     private void playerWon(){
         disableBoard(viewManager.getGameScreen().getEnemyBoard());
         logMessage("You have won!");
