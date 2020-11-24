@@ -29,6 +29,9 @@ public class MainMenuController {
 		viewManager.getMainMenu().startIntroSound();
 	}
 
+	/*
+	 * Set the look and feel for all the windows
+	 */
 	private void setLookAndFeel(){
         try {
             //Set cross-platform Java L&F (also called "Metal")
@@ -173,6 +176,9 @@ public class MainMenuController {
 		});
 	}
 
+	/**
+	 * Reset the main menu screen and disconnect appropriately
+	 */
 	public void resetMainMenu(){
 		if(hostConnectionWorker != null) {
 			hostConnectionWorker.cancel(true);

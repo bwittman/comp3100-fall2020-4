@@ -9,7 +9,6 @@ import javax.swing.*;
 
 import battleship.model.Results;
 import battleship.model.Ship;
-import battleship.model.Ship.ShipType;
 import battleship.view.Board;
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
@@ -49,15 +48,15 @@ public class  HumanPlayer extends Player {
 						SwingUtilities.invokeLater(new MessageDispatcher(message));
 					}
 				}
-			}catch(NoSuchElementException | IllegalStateException e){}
+			}catch(NoSuchElementException | IllegalStateException e){
+				//do nothing
+			}
 			System.err.println("MessageListener: Connection Ended!");
 			JOptionPane.showMessageDialog(null, "Connection Ended.");
 			networking.cleanUp();
 			returnToMainMenu();
 		}
 	}
-
-
 
 	/*
 	 * Notifies responsible classes with the correct messages
@@ -355,10 +354,6 @@ public class  HumanPlayer extends Player {
 		networking.sendMessage("RESULTS: " + results.toString());
 	}
 
-	public Networking getNetworking(){
-		return networking;
-	}
-
 	/*
 	 * Returns to the main menu and disconnects
 	 */
@@ -368,5 +363,9 @@ public class  HumanPlayer extends Player {
 		viewManager.getMainMenu().setVisible(true);
 		mainMenuController.resetMainMenu();
 		viewManager.getMainMenu().startIntroSound();
+	}
+
+	public Networking getNetworking(){
+		return networking;
 	}
 }

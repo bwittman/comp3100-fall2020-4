@@ -36,6 +36,20 @@ public class Ship {
         this.hits = 0;
     }
 
+    /**
+     * Check if this ship is sunk
+     * @return if this ship is sunk
+     */
+    public boolean checkForSunk(){
+        return hits == shipType.length;
+    }
+
+    public void reset(){
+        hits = 0;
+        end = null;
+        start = null;
+    }
+
     public void setEnd(Point end){
         this.end = end;
     }
@@ -66,20 +80,6 @@ public class Ship {
 
     public ShipType getShipType(){
         return shipType;
-    }
-
-    public void reset(){
-        hits = 0;
-        end = null;
-        start = null;
-    }
-
-    /**
-     * Check if this ship is sunk
-     * @return if this ship is sunk
-     */
-    public boolean checkForSunk(){
-        return hits == shipType.length;
     }
 
     //for testing only

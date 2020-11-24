@@ -35,7 +35,6 @@ public class GamePlayWindow extends JFrame {
     private JMenuItem howToPlay;
     private JCheckBoxMenuItem soundsItem;
 
-
     public GamePlayWindow(int frameSize){
         this.frameSize = frameSize;
         boardPanelHeight = (int) (frameSize*.85);
@@ -188,6 +187,9 @@ public class GamePlayWindow extends JFrame {
         optionButtons.add(playGameButton);
     }
 
+    /*
+     * Setup the menu bar for this frame
+     */
     private JMenuBar setupGamePlayBar(){
         JMenuBar menuBar = new JMenuBar();
 
@@ -216,16 +218,20 @@ public class GamePlayWindow extends JFrame {
         return menuBar;
     }
 
+    /**
+     * Property for determining to play the sound effects or not
+     * @return if the sounds option is selected
+     */
+    public boolean soundsSelected(){
+        return soundsItem.isSelected();
+    }
+
     public JMenuItem getRulesItem() {
         return rulesMenu;
     }
 
     public JMenuItem getHowToPlayItem(){
         return howToPlay;
-    }
-
-    public boolean soundsSelected(){
-        return soundsItem.isSelected();
     }
 
     public Board getUserBoard() {
@@ -260,9 +266,5 @@ public class GamePlayWindow extends JFrame {
 
     public int getButtonSize(){
         return buttonSize;
-    }
-
-    public Color[] getColors(){
-        return new Color[]{DESTROYER_COLOR, CRUISER_COLOR, SUBMARINE_COLOR, BATTLESHIP_COLOR, CARRIER_COLOR};
     }
 }

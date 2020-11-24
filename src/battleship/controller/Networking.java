@@ -16,12 +16,13 @@ import java.util.Scanner;
  * Holds all the Networking Components for a two player game
  */
 public class Networking {
-	
+
+	private static final int PORT = 7777;
+
 	private String hostIpAddressLocal;
 	private String hostIpAddressExternal;
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private static final int PORT = 7777;
 	private Scanner input;
 	private PrintWriter output;
 
@@ -48,11 +49,11 @@ public class Networking {
 	    
 	    // Gets External IP Address from AWS website
 	    try {
-	    URL whatIsMyIp = new URL("http://checkip.amazonaws.com"); //Asks this address for our IP
-	    BufferedReader in = new BufferedReader(new InputStreamReader(
-	                    whatIsMyIp.openStream()));
-	    hostIpAddressExternal = in.readLine(); //you get the IP as a String
-	    System.out.println(hostIpAddressExternal);
+			//Asks this address for our IP
+	    	URL whatIsMyIp = new URL("http://checkip.amazonaws.com");
+			BufferedReader in = new BufferedReader(new InputStreamReader(whatIsMyIp.openStream()));
+			hostIpAddressExternal = in.readLine(); //you get the IP as a String
+			System.out.println(hostIpAddressExternal);
 	    }catch(MalformedURLException e) {
 	    	System.err.println("MalformedURLException thrown in Networking Constructor");
 	    }

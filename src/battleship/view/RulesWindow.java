@@ -6,16 +6,12 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 
 /**
  * Frame for displaying the background and rules of the game
  */
 public class RulesWindow extends JFrame {
-
-    JButton closeButton;
 
     public RulesWindow(){
 
@@ -44,9 +40,5 @@ public class RulesWindow extends JFrame {
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-    public JButton getCloseButton(){
-        return closeButton;
     }
 }

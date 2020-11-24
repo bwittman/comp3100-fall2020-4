@@ -38,12 +38,18 @@ public class ComputerPlayer extends Player {
         makeGuess(guess.y, guess.x);
     }
 
+    /*
+     * Find the next best tiles to guess
+     */
     private void findNextGuesses(Point previousGuess){
         findNextGuessesOnEdgeColumns(previousGuess);
         findNextGuessesOnEdgeRows(previousGuess);
         findNextGuessesInMiddle(previousGuess);
     }
 
+    /*
+     * Find the next best tiles to guess in the middle tiles
+     */
     private void findNextGuessesInMiddle(Point previousGuess){
         GameState enemyState = getEnemyGameState();
         //if its in the middle
@@ -86,6 +92,10 @@ public class ComputerPlayer extends Player {
             }
         }
     }
+
+    /*
+     * Find the next bess tiles to guess on the edge columns
+     */
     private void findNextGuessesOnEdgeColumns(Point previousGuess){
         GameState enemyState = getEnemyGameState();
         //if its on one of the edge columns
@@ -178,6 +188,9 @@ public class ComputerPlayer extends Player {
         }
     }
 
+    /*
+     * Find the next bess tiles to guess on the edge rows
+     */
     private void findNextGuessesOnEdgeRows(Point previousGuess){
         GameState enemyState = getEnemyGameState();
         //if its on one of the edge rows
@@ -278,10 +291,9 @@ public class ComputerPlayer extends Player {
     }
 
     /**
-     * Make a guess and wait for the results of that guess from the opponent
+     * Make a guess and process the results of that guess received from the opponent
      * @param row the row of the guessed tile
      * @param column the column of the guessed tile
-     * @return the results of our guess
      */
     @Override
     public void makeGuess(int row, int column) {

@@ -6,12 +6,12 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 
+/**
+ * Frame for explaining how to use the product and play the game
+ */
 public class HowToPlayWindow extends JFrame{
-
 
     public HowToPlayWindow(){
 
@@ -42,7 +42,5 @@ public class HowToPlayWindow extends JFrame{
             e.printStackTrace();
         }
     }
-
-
 }
 

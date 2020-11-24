@@ -14,12 +14,8 @@ public class Results {
     private boolean playerWon;
     private ShipType sunkShip;
 
-    /**
+    /*
      * Constructor for creating an object to send to the opponent
-     * @param guessedTile the tile that was guessed
-     * @param tileHit if the tile was a hit or miss
-     * @param playerWon if the player who guessed has won
-     * @param sunkShip which ship wa sunk if any
      */
     public Results(Point guessedTile, boolean tileHit, boolean playerWon, ShipType sunkShip){
         this.guessedTile = guessedTile;
@@ -28,9 +24,8 @@ public class Results {
         this.sunkShip = sunkShip;
     }
 
-    /**
+    /*
      * Constructor for creating an object from a message received via networking
-     * @param string the string representation of this object received via networking
      */
     public Results (String string){
         String[] parts = string.split(" ");

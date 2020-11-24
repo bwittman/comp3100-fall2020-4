@@ -2,7 +2,6 @@ package battleship.view;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 /**
  * Networking screen for a user to host a game
