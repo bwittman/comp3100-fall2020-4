@@ -645,7 +645,7 @@ public abstract class Player {
 
     /**
      * Determines if a game is a computer game
-     * @return if it computer game
+     * @return if it is a computer game
      */
     public boolean isComputerGame(){
         return opponent != null;
@@ -699,7 +699,7 @@ public abstract class Player {
                     playSound("/shipSunkSound.wav");
                 } else if(hit){
                     playSound("/hitSound.wav");
-                }else{
+                }else {
                     playSound("/missSound.wav");
                 }
             }

@@ -1,5 +1,7 @@
 TO START A GAME:
 
+Note that the sound effects can only be changed during a game, and thus not in the main menu screen, while the computer difficulty can only be changed before a game in the main menu.
+
 Click "Through networking":
 This option allows for two players to connect over the Internet and play against each other. Both users will select "Through Networking" option to start the game. One user must be the host while the other will join. The user opting to be the host will select "Host" at which point the game will show the host's Outside IP address and Local IP address. The Local IP address is for if both users are on the same WIFI connection, while the Outside IP address if for if the users are not on the same WIFI connection. The host must communicate the appropriate IP address to the other player. The user that selected to join will receive a prompt to enter the host's IP address and connect. Once you have received the IP address from the host, enter it and select "Connect". Once connection is made the ship placement screen will appear for each player. If you are having issues with connection via internet see the manual for further instructions.
 

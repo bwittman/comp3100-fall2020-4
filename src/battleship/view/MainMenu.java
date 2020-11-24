@@ -12,6 +12,7 @@ public class MainMenu extends JFrame {
 
     //for sizing the frames and panels based on the screen size
     private final int frameSize;
+
     private JMenuBar menuBar;
     private JMenuItem rulesMenu;
     private JMenuItem howToPlay;
