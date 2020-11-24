@@ -51,7 +51,10 @@ public class MainMenu extends JFrame {
         setVisible(true);
     }
 
-    private JMenuBar setupMenuBar(){
+    /*
+     * Creates menu bar
+     */
+    private void setupMenuBar(){
         menuBar = new JMenuBar();
 
         JMenu playMenu = new JMenu("Play Game");
@@ -95,8 +98,6 @@ public class MainMenu extends JFrame {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e){
             e.printStackTrace();
         }
-
-        return menuBar;
     }
 
     public void startIntroSound(){
@@ -106,6 +107,15 @@ public class MainMenu extends JFrame {
 
     public void stopIntroSound(){
         clip.stop();
+    }
+
+    public boolean isHardComputerDifficulty(){
+        return hardComputerItem.isSelected();
+    }
+
+    public void reset(){
+        networkingItem.setEnabled(true);
+        computerItem.setEnabled(true);
     }
     
     public JMenuItem getNetworkingItem() {
@@ -124,17 +134,8 @@ public class MainMenu extends JFrame {
         return howToPlay;
     }
 
-    public boolean isHardComputerDifficulty(){
-        return hardComputerItem.isSelected();
-    }
-
     public int getFrameSize(){
         return frameSize;
-    }
-
-    public void reset(){
-        networkingItem.setEnabled(true);
-        computerItem.setEnabled(true);
     }
 }
 
