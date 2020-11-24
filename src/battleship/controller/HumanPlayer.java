@@ -9,7 +9,6 @@ import javax.swing.*;
 
 import battleship.model.Results;
 import battleship.model.Ship;
-import battleship.model.Ship.ShipType;
 import battleship.view.Board;
 import battleship.view.CoordinateButton;
 import battleship.view.ViewManager;
@@ -56,8 +55,6 @@ public class  HumanPlayer extends Player {
 			returnToMainMenu();
 		}
 	}
-
-
 
 	/*
 	 * Notifies responsible classes with the correct messages

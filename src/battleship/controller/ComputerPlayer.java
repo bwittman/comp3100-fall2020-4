@@ -86,6 +86,7 @@ public class ComputerPlayer extends Player {
             }
         }
     }
+
     private void findNextGuessesOnEdgeColumns(Point previousGuess){
         GameState enemyState = getEnemyGameState();
         //if its on one of the edge columns
